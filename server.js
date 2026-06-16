@@ -365,19 +365,11 @@ function renderAmenities(page) {
   </section>`;
 }
 
-function renderEligibility(page) {
+function renderEligibility(page, data) {
   const info = page.eligibility || {};
+  const applyLink = applyHref(data);
   const requirements = (info.requirements || [])
     .map((item) => `<article><h3>${esc(item.title)}</h3><p>${esc(item.body)}</p></article>`)
-    .join("");
-  const readyCards = (info.readyCards || [])
-    .map(
-      (item) => `<article>
-        <h3>${esc(item.title)}</h3>
-        <p>${esc(item.body)}</p>
-        ${String(item.buttonLabel || "").trim() ? `<a class="text-button" href="${esc(item.buttonUrl || "#")}">${esc(item.buttonLabel)}</a>` : ""}
-      </article>`
-    )
     .join("");
   return `<section class="eligibility-section">
     <div class="section-heading">
@@ -412,11 +404,9 @@ function renderEligibility(page) {
       <p>${esc(info.applyBody)}</p>
     </article>
     <div class="requirement-grid">${requirements}</div>
-    <div class="section-heading ready-heading">
-      <h2>${esc(info.readyTitle)}</h2>
-      <p>${esc(info.readySubtitle)}</p>
+    <div class="eligibility-apply">
+      <a class="primary-button apply-pulse" href="${esc(applyLink)}">${esc(data.site.applyLabel || "Apply now")}</a>
     </div>
-    <div class="ready-card-grid">${readyCards}</div>
   </section>`;
 }
 
@@ -510,7 +500,7 @@ Object.entries(readContent().pages).forEach(([route]) => {
           : route === "/community"
             ? renderAmenities(page)
             : route === "/eligibility"
-              ? renderEligibility(page)
+              ? renderEligibility(page, data)
               : route === "/neiborhub"
                 ? renderNeighborhood(page)
                 : route === "/floor-plans"

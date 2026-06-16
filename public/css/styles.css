@@ -478,8 +478,7 @@ h3 {
 
 .eligibility-panel,
 .eligibility-note,
-.requirement-grid article,
-.ready-card-grid article {
+.requirement-grid article {
   border: 1px solid var(--line);
   border-radius: 6px;
   background: var(--surface);
@@ -493,15 +492,13 @@ h3 {
 
 .eligibility-panel h3,
 .eligibility-note h2,
-.requirement-grid h3,
-.ready-card-grid h3 {
+.requirement-grid h3 {
   font-size: clamp(1.25rem, 2vw, 1.65rem);
 }
 
 .eligibility-panel p,
 .eligibility-note p,
-.requirement-grid p,
-.ready-card-grid p {
+.requirement-grid p {
   color: var(--muted);
   line-height: 1.65;
 }
@@ -542,38 +539,21 @@ h3 {
   margin-top: 24px;
 }
 
-.requirement-grid,
-.ready-card-grid {
+.requirement-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
   margin-top: 24px;
 }
 
-.ready-card-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.requirement-grid article,
-.ready-card-grid article {
+.requirement-grid article {
   padding: 24px;
 }
 
-.ready-heading {
-  margin-top: 46px !important;
-}
-
-.text-button {
-  display: inline-flex;
-  align-items: center;
+.eligibility-apply {
+  display: flex;
   justify-content: center;
-  min-height: 42px;
-  margin-top: 18px;
-  padding: 0 16px;
-  border-radius: 6px;
-  color: #fff;
-  background: var(--orange);
-  font-weight: 800;
+  margin-top: 48px;
 }
 
 .map-copy {
@@ -1095,8 +1075,7 @@ h3 {
 
   .features-card ul,
   .amenities-section ul,
-  .requirement-grid,
-  .ready-card-grid {
+  .requirement-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -1178,8 +1157,7 @@ h3 {
 
   .features-card ul,
   .amenities-section ul,
-  .requirement-grid,
-  .ready-card-grid {
+  .requirement-grid {
     grid-template-columns: 1fr;
   }
 

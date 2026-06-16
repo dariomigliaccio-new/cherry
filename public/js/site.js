@@ -15,7 +15,7 @@ menuButton?.addEventListener("click", () => setMenu(true));
 closeButton?.addEventListener("click", () => setMenu(false));
 backdrop?.addEventListener("click", () => setMenu(false));
 
-document.querySelectorAll(".nav-apply[href='#'], .primary-button[href='#'], .footer-cta[href='#'], .text-button[href='#']").forEach((link) => {
+document.querySelectorAll(".nav-apply[href='#'], .primary-button[href='#'], .footer-cta[href='#']").forEach((link) => {
   link.addEventListener("click", (event) => event.preventDefault());
 });
 
