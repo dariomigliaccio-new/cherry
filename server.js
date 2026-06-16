@@ -103,19 +103,21 @@ function renderLayout({ title, content, activePath = "/", home = false }) {
     </head>
     <body>
       <header class="site-header">
-        <div class="brand-row">
-          <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false" data-menu-button>
-            <span></span><span></span><span></span>
-          </button>
-          <a class="brand" href="/">
-            <span class="brand-mark">CS</span>
-            <span>
-              <strong>Cherry Street</strong>
-              <small>Affordable Homes</small>
-            </span>
-          </a>
+        <div class="header-inner">
+          <div class="brand-row">
+            <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false" data-menu-button>
+              <span></span><span></span><span></span>
+            </button>
+            <a class="brand" href="/">
+              <span class="brand-mark">CS</span>
+              <span>
+                <strong>Cherry Street</strong>
+                <small>Affordable Homes</small>
+              </span>
+            </a>
+          </div>
+          <nav class="desktop-nav" aria-label="Primary navigation">${nav}</nav>
         </div>
-        <nav class="desktop-nav" aria-label="Primary navigation">${nav}</nav>
       </header>
       <aside class="side-menu" aria-hidden="true" data-side-menu>
         <div class="side-menu-top">
