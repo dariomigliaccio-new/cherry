@@ -15,6 +15,10 @@ menuButton?.addEventListener("click", () => setMenu(true));
 closeButton?.addEventListener("click", () => setMenu(false));
 backdrop?.addEventListener("click", () => setMenu(false));
 
+document.querySelectorAll(".nav-apply[href='#'], .primary-button[href='#'], .footer-cta[href='#']").forEach((link) => {
+  link.addEventListener("click", (event) => event.preventDefault());
+});
+
 const slides = Array.from(document.querySelectorAll(".slide"));
 const dots = Array.from(document.querySelectorAll(".dot"));
 let activeSlide = 0;

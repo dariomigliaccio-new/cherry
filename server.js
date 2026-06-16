@@ -136,13 +136,18 @@ function renderMenuIcon(data) {
   return "<span></span><span></span><span></span>";
 }
 
+function applyHref(data) {
+  return data.site.applyUrl?.trim() || "#";
+}
+
 function renderLayout({ title, content, activePath = "/", home = false }) {
   const data = readContent();
+  const applyLink = applyHref(data);
   const nav = data.nav
     .map((item) => {
       const active = item.href === activePath ? " active" : "";
       const cta = item.href === "/contact" ? " nav-apply" : "";
-      const href = item.href === "/contact" ? data.site.applyUrl : item.href;
+      const href = item.href === "/contact" ? applyLink : item.href;
       const label = item.href === "/contact" ? data.site.applyLabel : item.label;
       return `<a class="nav-link${active}${cta}" href="${esc(href)}">${esc(label)}</a>`;
     })
@@ -201,9 +206,10 @@ function renderLayout({ title, content, activePath = "/", home = false }) {
 }
 
 function renderFooter(data) {
+  const applyLink = applyHref(data);
   const links = data.nav
     .map((item) => {
-      const href = item.href === "/contact" ? data.site.applyUrl : item.href;
+      const href = item.href === "/contact" ? applyLink : item.href;
       const label = item.href === "/contact" ? data.site.applyLabel : item.label;
       return `<a href="${esc(href)}">${esc(label)}</a>`;
     })
@@ -231,7 +237,7 @@ function renderFooter(data) {
       ${footerLogo}
       <h2>${esc(data.footer.headline)}</h2>
       <p>${esc(data.footer.body)}</p>
-      <a class="footer-cta apply-pulse" href="${esc(data.site.applyUrl)}">${esc(data.site.applyLabel)}</a>
+      <a class="footer-cta apply-pulse" href="${esc(applyLink)}">${esc(data.site.applyLabel)}</a>
     </div>
     <div class="footer-column">
       <h3>Explore</h3>
@@ -320,6 +326,7 @@ function renderAmenities(page) {
 
 app.get("/", (_req, res) => {
   const data = readContent();
+  const applyLink = applyHref(data);
   const slides = data.home.slides
     .map(
       (slide, index) => `<div class="slide${index === 0 ? " active" : ""}" style="background-image:url('${esc(slide.image)}')">
@@ -327,7 +334,7 @@ app.get("/", (_req, res) => {
         <p class="eyebrow">${esc(slide.eyebrow)}</p>
         <h1>${esc(slide.title)}</h1>
         <p>${esc(slide.body)}</p>
-        <a class="primary-button apply-pulse" href="${esc(data.site.applyUrl)}">${esc(data.site.applyLabel)}</a>
+        <a class="primary-button apply-pulse" href="${esc(applyLink)}">${esc(data.site.applyLabel)}</a>
       </div>
     </div>`
     )
@@ -360,6 +367,7 @@ Object.entries(readContent().pages).forEach(([route]) => {
   app.get(route, (_req, res) => {
     const data = readContent();
     const page = data.pages[route];
+    const applyLink = applyHref(data);
     const cardMarkup = page.cards
       .map((card) => `<article>${renderCardMedia(card.image, card.title)}<div class="card-body"><h3>${esc(card.title)}</h3><p>${esc(card.body)}</p></div></article>`)
       .join("");
@@ -399,7 +407,7 @@ Object.entries(readContent().pages).forEach(([route]) => {
           <p class="eyebrow">${esc(page.eyebrow)}</p>
           <h1>${esc(page.title)}</h1>
           <p>${esc(page.body)}</p>
-          <a class="primary-button apply-pulse" href="${esc(data.site.applyUrl)}">${esc(data.site.applyLabel)}</a>
+          <a class="primary-button apply-pulse" href="${esc(applyLink)}">${esc(data.site.applyLabel)}</a>
         </div>
       </section>
       ${bodyContent}
