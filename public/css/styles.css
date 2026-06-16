@@ -610,6 +610,13 @@ h3 {
   color: var(--muted);
 }
 
+.map-copy h3 {
+  margin: 14px 0 0;
+  color: var(--green);
+  font-size: clamp(1.08rem, 2vw, 1.4rem);
+  line-height: 1.35;
+}
+
 .property-map {
   width: 100%;
   height: 620px;

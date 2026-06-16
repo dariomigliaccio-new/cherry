@@ -291,6 +291,7 @@ function mapSection(data) {
     <div class="map-copy">
       <p class="eyebrow">${esc(data.location.eyebrow)}</p>
       <h2>${esc(data.location.title)}</h2>
+      <h3>${esc(data.location.address)}</h3>
       <p>${esc(data.location.body)}</p>
     </div>
     <div class="property-map" id="property-map" role="img" aria-label="Interactive map showing ${esc(data.location.address)}"></div>
