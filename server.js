@@ -214,6 +214,7 @@ function renderLayout({ title, content, activePath = "/", home = false }) {
       <script src="/js/site.js" defer></script>
     </head>
     <body>
+      ${renderAnnouncement(data)}
       <header class="site-header">
         <div class="header-inner">
           <div class="brand-row">
@@ -227,7 +228,6 @@ function renderLayout({ title, content, activePath = "/", home = false }) {
           <nav class="desktop-nav" aria-label="Primary navigation">${nav}</nav>
         </div>
       </header>
-      ${renderAnnouncement(data)}
       <aside class="side-menu" aria-hidden="true" data-side-menu>
         <div class="side-menu-top">
           <strong class="side-menu-brand">${esc(data.site.name)}</strong>
