@@ -24,7 +24,8 @@
         "title": "Cherry Street Commons",
         "body": "Modern, welcoming homes designed for comfort, access, and community.",
         "buttonLabel": "Apply now",
-        "buttonUrl": "/contact",
+        "buttonUrl": "",
+        "hidden": false,
         "image": "/assets/hero-cherry.png"
       },
       {
@@ -32,7 +33,8 @@
         "title": "A practical place to call home",
         "body": "Thoughtful layouts, shared green space, and a location built around daily needs.",
         "buttonLabel": "Apply now",
-        "buttonUrl": "/contact",
+        "buttonUrl": "",
+        "hidden": false,
         "image": "/assets/hero-cherry.png"
       },
       {
@@ -40,7 +42,8 @@
         "title": "Comfort with community nearby",
         "body": "Explore affordable housing created for stability, belonging, and long-term value.",
         "buttonLabel": "Apply now",
-        "buttonUrl": "/contact",
+        "buttonUrl": "",
+        "hidden": false,
         "image": "/assets/hero-cherry.png"
       }
     ],

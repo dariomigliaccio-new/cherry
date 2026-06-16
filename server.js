@@ -126,6 +126,12 @@ function renderCardMedia(image, alt, fallback = "") {
   return `<div class="card-image-placeholder"><span>${esc(fallback || alt)}</span></div>`;
 }
 
+function optionalTag(tag, className, value) {
+  if (!String(value || "").trim()) return "";
+  const classAttr = className ? ` class="${esc(className)}"` : "";
+  return `<${tag}${classAttr}>${esc(value)}</${tag}>`;
+}
+
 function renderBrandMark(data, extraClass = "") {
   return `<span class="brand-mark image-mark ${esc(extraClass)}"><img src="${esc(officialLogo)}" alt="${esc(data.site.name)}"></span>`;
 }
@@ -139,6 +145,10 @@ function renderMenuIcon(data) {
 
 function applyHref(data) {
   return data.site.applyUrl?.trim() || "#";
+}
+
+function slideHref(slide) {
+  return slide.buttonUrl?.trim() || "#";
 }
 
 function renderLayout({ title, content, activePath = "/", home = false }) {
@@ -327,20 +337,20 @@ function renderAmenities(page) {
 
 app.get("/", (_req, res) => {
   const data = readContent();
-  const applyLink = applyHref(data);
-  const slides = data.home.slides
+  const activeSlides = data.home.slides.filter((slide) => !slide.hidden);
+  const slides = activeSlides
     .map(
       (slide, index) => `<div class="slide${index === 0 ? " active" : ""}" style="background-image:url('${esc(slide.image)}')">
       <div class="hero-content">
-        <p class="eyebrow">${esc(slide.eyebrow)}</p>
-        <h1>${esc(slide.title)}</h1>
-        <p>${esc(slide.body)}</p>
-        <a class="primary-button apply-pulse" href="${esc(applyLink)}">${esc(data.site.applyLabel)}</a>
+        ${optionalTag("p", "eyebrow", slide.eyebrow)}
+        ${optionalTag("h1", "", slide.title)}
+        ${optionalTag("p", "", slide.body)}
+        ${String(slide.buttonLabel || "").trim() ? `<a class="primary-button apply-pulse" href="${esc(slideHref(slide))}">${esc(slide.buttonLabel)}</a>` : ""}
       </div>
     </div>`
     )
     .join("");
-  const dots = data.home.slides
+  const dots = activeSlides
     .map((_, index) => `<button class="dot${index === 0 ? " active" : ""}" type="button" aria-label="Show slide ${index + 1}"></button>`)
     .join("");
   const cards = data.home.cards
@@ -351,7 +361,7 @@ app.get("/", (_req, res) => {
 
   const content = `<section class="hero-slider" aria-label="Featured property">
     ${slides}
-    <div class="slider-dots" aria-label="Banner controls">${dots}</div>
+    ${activeSlides.length > 1 ? `<div class="slider-dots" aria-label="Banner controls">${dots}</div>` : ""}
   </section>
   <section class="intro">
     <p class="eyebrow">${esc(data.home.intro.eyebrow)}</p>
@@ -368,7 +378,6 @@ Object.entries(readContent().pages).forEach(([route]) => {
   app.get(route, (_req, res) => {
     const data = readContent();
     const page = data.pages[route];
-    const applyLink = applyHref(data);
     const cardMarkup = page.cards
       .map((card) => `<article>${renderCardMedia(card.image, card.title)}<div class="card-body"><h3>${esc(card.title)}</h3><p>${esc(card.body)}</p></div></article>`)
       .join("");
@@ -405,10 +414,9 @@ Object.entries(readContent().pages).forEach(([route]) => {
 
     const content = `<section class="page-banner" style="background-image:url('${esc(page.bannerImage)}')">
         <div class="page-banner-content">
-          <p class="eyebrow">${esc(page.eyebrow)}</p>
-          <h1>${esc(page.title)}</h1>
-          <p>${esc(page.body)}</p>
-          <a class="primary-button apply-pulse" href="${esc(applyLink)}">${esc(data.site.applyLabel)}</a>
+          ${optionalTag("p", "eyebrow", page.eyebrow)}
+          ${optionalTag("h1", "", page.title)}
+          ${optionalTag("p", "", page.body)}
         </div>
       </section>
       ${bodyContent}
@@ -436,6 +444,11 @@ function field(label, name, data, type = "text") {
 function imageField(label, name, data) {
   const value = getByPath(data, name) || "";
   return `<label><span>${esc(label)}</span><input type="file" name="${esc(name)}" accept="image/*,.svg"><small>${esc(value || "No image selected")}</small></label>`;
+}
+
+function checkboxField(label, name, data) {
+  const checked = getByPath(data, name) ? " checked" : "";
+  return `<label class="checkbox-field"><input type="checkbox" name="${esc(name)}" value="true"${checked}><span>${esc(label)}</span></label>`;
 }
 
 function adminShell(content) {
@@ -467,7 +480,7 @@ app.get("/manager", requireAdmin, (_req, res) => {
   sections.push(`<section><h2>Site</h2>${field("Name", "site.name", data)}${field("Tagline", "site.tagline", data)}${field("Brand initials", "site.brandInitials", data)}${imageField("Affordable Homes / header logo SVG", "site.logoImage", data)}${imageField("Hamburger menu SVG", "site.menuIcon", data)}${field("Apply button label", "site.applyLabel", data)}${field("Apply button URL", "site.applyUrl", data)}</section>`);
   sections.push(`<section><h2>Home Intro</h2>${field("Eyebrow", "home.intro.eyebrow", data)}${field("Title", "home.intro.title", data)}${field("Body", "home.intro.body", data, "textarea")}</section>`);
   data.home.slides.forEach((_, index) => {
-    sections.push(`<section><h2>Home Banner ${index + 1}</h2>${field("Eyebrow", `home.slides.${index}.eyebrow`, data)}${field("Title", `home.slides.${index}.title`, data)}${field("Body", `home.slides.${index}.body`, data, "textarea")}${imageField("Banner image", `home.slides.${index}.image`, data)}</section>`);
+    sections.push(`<section><h2>Home Banner ${index + 1}</h2>${checkboxField("Delete / hide this banner", `home.slides.${index}.hidden`, data)}${field("Eyebrow", `home.slides.${index}.eyebrow`, data)}${field("Title", `home.slides.${index}.title`, data)}${field("Body", `home.slides.${index}.body`, data, "textarea")}${field("Button Label", `home.slides.${index}.buttonLabel`, data)}${field("Button URL", `home.slides.${index}.buttonUrl`, data, "url")}${imageField("Banner image", `home.slides.${index}.image`, data)}</section>`);
   });
   data.home.cards.forEach((_, index) => {
     sections.push(`<section><h2>Home Card ${index + 1}</h2>${field("Number", `home.cards.${index}.number`, data)}${field("Title", `home.cards.${index}.title`, data)}${field("Body", `home.cards.${index}.body`, data, "textarea")}${imageField("Card image", `home.cards.${index}.image`, data)}</section>`);
@@ -513,6 +526,9 @@ app.get("/manager", requireAdmin, (_req, res) => {
 
 app.post("/manager", requireAdmin, upload.any(), (req, res) => {
   const data = readContent();
+  data.home.slides.forEach((slide) => {
+    slide.hidden = false;
+  });
   Object.entries(req.body).forEach(([name, value]) => {
     setByPath(data, name, value);
   });
