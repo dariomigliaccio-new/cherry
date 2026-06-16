@@ -9,6 +9,7 @@ const port = process.env.PORT || 3000;
 const dataPath = process.env.CONTENT_FILE || path.join(__dirname, "data", "site-content.json");
 const defaultDataPath = path.join(__dirname, "data", "site-content.json");
 const uploadsDir = path.join(__dirname, "public", "uploads");
+const adminUser = process.env.ADMIN_USER || "dariomigliaccio@gmail.com";
 const adminPassword = process.env.ADMIN_PASSWORD || "site-content";
 const officialLogo = "/images/logo-1.png";
 const footerOfficialLogos = [
@@ -443,12 +444,12 @@ function adminShell(content) {
 
 app.get("/manager/login", (req, res) => {
   res.send(
-    adminShell(`<main class="login-panel"><h1>Site Manager</h1><form method="post" action="/manager/login"><label>Password<input type="password" name="password" autofocus></label><button>Login</button>${req.query.error ? "<p>Invalid password.</p>" : ""}</form></main>`)
+    adminShell(`<main class="login-panel"><h1>Site Manager</h1><form method="post" action="/manager/login"><label>Email<input type="email" name="email" autocomplete="username" autofocus></label><label>Password<input type="password" name="password" autocomplete="current-password"></label><button>Login</button>${req.query.error ? "<p>Invalid email or password.</p>" : ""}</form></main>`)
   );
 });
 
 app.post("/manager/login", (req, res) => {
-  if (req.body.password === adminPassword) {
+  if (req.body.email === adminUser && req.body.password === adminPassword) {
     req.session.admin = true;
     res.redirect("/manager");
     return;
