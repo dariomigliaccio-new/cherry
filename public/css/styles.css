@@ -254,7 +254,7 @@ a {
   position: relative;
   width: calc(100% - var(--frame-gutter));
   max-width: var(--frame-width);
-  aspect-ratio: 1667 / 661;
+  aspect-ratio: 1668 / 661;
   margin: 0 auto;
   overflow: hidden;
   background: var(--green-dark);
@@ -649,7 +649,7 @@ h3 {
   align-items: flex-end;
   width: calc(100% - var(--frame-gutter));
   max-width: var(--frame-width);
-  aspect-ratio: 1667 / 661;
+  aspect-ratio: 1668 / 661;
   margin: 0 auto;
   padding: clamp(28px, 5vw, 74px);
   overflow: hidden;
@@ -1147,9 +1147,9 @@ h3 {
   }
 
   .hero-slider {
-    height: clamp(430px, 118vw, 560px);
+    height: auto;
     min-height: 0;
-    aspect-ratio: auto;
+    aspect-ratio: 800 / 1000;
   }
 
   .slide {
@@ -1256,9 +1256,9 @@ h3 {
   }
 
   .page-banner {
-    height: clamp(430px, 118vw, 560px);
+    height: auto;
     min-height: 0;
-    aspect-ratio: auto;
+    aspect-ratio: 800 / 1000;
     padding: 34px 18px 52px;
     align-items: flex-end;
   }
@@ -1320,7 +1320,8 @@ h3 {
   .hero-slider,
   .page-banner {
     width: 100%;
-    height: clamp(390px, 120vw, 500px);
+    height: auto;
+    aspect-ratio: 800 / 1000;
   }
 
   .slide,
