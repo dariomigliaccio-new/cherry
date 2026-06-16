@@ -93,14 +93,14 @@ a {
 .brand strong {
   display: block;
   color: var(--green-dark);
-  font-size: clamp(1.35rem, 2.1vw, 2rem);
+  font-size: clamp(1.08rem, 1.55vw, 1.45rem);
   font-weight: 800;
   line-height: 1;
 }
 
 .side-menu-brand {
   color: var(--green-dark);
-  font-size: 1.35rem;
+  font-size: 1.12rem;
   font-weight: 800;
   line-height: 1.1;
 }
