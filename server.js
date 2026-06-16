@@ -481,8 +481,9 @@ app.get("/manager", requireAdmin, (_req, res) => {
   sections.push(`<section><h2>Site</h2>${field("Name", "site.name", data)}${field("Tagline", "site.tagline", data)}${field("Brand initials", "site.brandInitials", data)}${imageField("Affordable Homes / header logo SVG", "site.logoImage", data)}${imageField("Hamburger menu SVG", "site.menuIcon", data)}${field("Apply button label", "site.applyLabel", data)}${field("Apply button URL", "site.applyUrl", data)}</section>`);
   sections.push(`<section><h2>Home Intro</h2>${field("Eyebrow", "home.intro.eyebrow", data)}${field("Title", "home.intro.title", data)}${field("Body", "home.intro.body", data, "textarea")}</section>`);
   data.home.slides.forEach((_, index) => {
-    sections.push(`<section><h2>Home Banner ${index + 1}</h2>${checkboxField("Delete / hide this banner", `home.slides.${index}.hidden`, data)}${field("Eyebrow", `home.slides.${index}.eyebrow`, data)}${field("Title", `home.slides.${index}.title`, data)}${field("Body", `home.slides.${index}.body`, data, "textarea")}${field("Button Label", `home.slides.${index}.buttonLabel`, data)}${field("Button URL", `home.slides.${index}.buttonUrl`, data, "url")}${imageField("Banner image", `home.slides.${index}.image`, data)}</section>`);
+    sections.push(`<section><h2>Home Banner ${index + 1}</h2>${checkboxField("Remove this banner", "removeHomeSlides", { removeHomeSlides: false }).replace('value="true"', `value="${index}"`)}${field("Eyebrow", `home.slides.${index}.eyebrow`, data)}${field("Title", `home.slides.${index}.title`, data)}${field("Body", `home.slides.${index}.body`, data, "textarea")}${field("Button Label", `home.slides.${index}.buttonLabel`, data)}${field("Button URL", `home.slides.${index}.buttonUrl`, data, "url")}${imageField("Banner image", `home.slides.${index}.image`, data)}</section>`);
   });
+  sections.push(`<section><h2>Home Banners</h2><button class="secondary-button" type="submit" name="adminAction" value="addHomeSlide">Add home banner</button></section>`);
   data.home.cards.forEach((_, index) => {
     sections.push(`<section><h2>Home Card ${index + 1}</h2>${checkboxField("Remove this card", "removeHomeCards", { removeHomeCards: false }).replace('value="true"', `value="${index}"`)}${field("Number", `home.cards.${index}.number`, data)}${field("Title", `home.cards.${index}.title`, data)}${field("Body", `home.cards.${index}.body`, data, "textarea")}${imageField("Card image", `home.cards.${index}.image`, data)}</section>`);
   });
@@ -529,21 +530,34 @@ app.get("/manager", requireAdmin, (_req, res) => {
 app.post("/manager", requireAdmin, upload.any(), (req, res) => {
   const data = readContent();
   const action = req.body.adminAction;
+  const removeHomeSlides = req.body.removeHomeSlides;
   const removeHomeCards = req.body.removeHomeCards;
   delete req.body.adminAction;
+  delete req.body.removeHomeSlides;
   delete req.body.removeHomeCards;
-  data.home.slides.forEach((slide) => {
-    slide.hidden = false;
-  });
   Object.entries(req.body).forEach(([name, value]) => {
     setByPath(data, name, value);
   });
   req.files.forEach((file) => {
     setByPath(data, file.fieldname, `/uploads/${file.filename}`);
   });
+  if (removeHomeSlides !== undefined) {
+    const indexes = new Set((Array.isArray(removeHomeSlides) ? removeHomeSlides : [removeHomeSlides]).map((value) => Number(value)));
+    data.home.slides = data.home.slides.filter((_, index) => !indexes.has(index));
+  }
   if (removeHomeCards !== undefined) {
     const indexes = new Set((Array.isArray(removeHomeCards) ? removeHomeCards : [removeHomeCards]).map((value) => Number(value)));
     data.home.cards = data.home.cards.filter((_, index) => !indexes.has(index));
+  }
+  if (action === "addHomeSlide") {
+    data.home.slides.push({
+      eyebrow: "",
+      title: "",
+      body: "",
+      buttonLabel: "Apply now",
+      buttonUrl: "",
+      image: "/assets/hero-cherry.png"
+    });
   }
   if (action === "addHomeCard") {
     data.home.cards.push({
