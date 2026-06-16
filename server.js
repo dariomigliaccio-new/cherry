@@ -71,10 +71,28 @@ function mergeMissing(defaultValue, currentValue) {
 }
 
 function normalizeContent(data) {
+  const desiredNav = [
+    { label: "Home", href: "/" },
+    { label: "About", href: "/about" },
+    { label: "Property Details", href: "/sustainability" },
+    { label: "Amenities", href: "/community" },
+    { label: "Eligibility", href: "/eligibility" },
+    { label: "Neiborhub", href: "/neiborhub" },
+    { label: "Floor Plans", href: "/floor-plans" },
+    { label: "Apply now", href: "/contact" }
+  ];
   data.nav.forEach((item) => {
     if (item.href === "/sustainability" && ["Sustainability", "PROPERTY DETAILS"].includes(item.label)) item.label = "Property Details";
     if (item.href === "/community" && item.label === "Community") item.label = "Amenities";
     if (item.href === "/contact") item.label = "Apply now";
+  });
+  desiredNav.forEach((item) => {
+    if (!data.nav.some((navItem) => navItem.href === item.href)) data.nav.push(item);
+  });
+  data.nav.sort((a, b) => {
+    const aIndex = desiredNav.findIndex((item) => item.href === a.href);
+    const bIndex = desiredNav.findIndex((item) => item.href === b.href);
+    return (aIndex === -1 ? 99 : aIndex) - (bIndex === -1 ? 99 : bIndex);
   });
   data.footer.officialLogos = footerOfficialLogos.map((item, index) => ({
     ...data.footer.officialLogos?.[index],
