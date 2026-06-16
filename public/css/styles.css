@@ -20,11 +20,23 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--ink);
   background: var(--paper);
+}
+
+img,
+svg,
+iframe {
+  max-width: 100%;
 }
 
 a {
@@ -88,15 +100,18 @@ a {
 .brand {
   display: flex;
   align-items: center;
+  max-width: 100%;
   min-width: 0;
 }
 
 .brand strong {
   display: block;
+  max-width: 100%;
   color: var(--green-dark);
   font-size: clamp(1.08rem, 1.55vw, 1.45rem);
   font-weight: 800;
   line-height: 1;
+  overflow-wrap: anywhere;
 }
 
 .side-menu-brand {
@@ -110,6 +125,7 @@ a {
   display: flex;
   align-items: center;
   gap: 4px;
+  min-width: 0;
 }
 
 .nav-link {
@@ -118,6 +134,7 @@ a {
   color: #33423b;
   font-size: 0.92rem;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .nav-link:hover,
@@ -144,6 +161,7 @@ a {
   inset: 0 auto 0 0;
   z-index: 40;
   width: min(360px, 88vw);
+  max-width: 100vw;
   padding: 24px;
   background: var(--surface);
   box-shadow: var(--shadow);
@@ -175,6 +193,7 @@ a {
 .side-menu .nav-link {
   padding: 15px 12px;
   font-size: 1rem;
+  white-space: normal;
 }
 
 .menu-backdrop {
@@ -267,6 +286,7 @@ a {
 .hero-content {
   position: relative;
   z-index: 1;
+  width: min(610px, 100%);
   max-width: 610px;
   color: #fff;
 }
@@ -315,12 +335,15 @@ h3 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  max-width: 100%;
   min-height: 48px;
   padding: 0 22px;
   border-radius: 6px;
   color: #fff;
   background: var(--orange);
   font-weight: 800;
+  line-height: 1.15;
+  text-align: center;
   box-shadow: 0 12px 24px rgba(242, 122, 26, 0.28);
 }
 
@@ -526,6 +549,7 @@ h3 {
   width: 100%;
   margin-top: 18px;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .responsive-table table {
@@ -643,6 +667,7 @@ h3 {
 .page-banner-content {
   position: relative;
   z-index: 1;
+  width: min(660px, 100%);
   max-width: 660px;
   color: #fff;
 }
@@ -1027,16 +1052,22 @@ h3 {
   font-weight: 600;
 }
 
-@media (max-width: 980px) {
+@media (max-width: 1180px) {
   .desktop-nav {
     display: none;
+  }
+
+  .header-inner {
+    justify-content: flex-start;
   }
 
   .side-menu .nav-link.nav-apply {
     margin-left: 0;
     text-align: center;
   }
+}
 
+@media (max-width: 980px) {
   .home-cards,
   .subpage-cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1059,11 +1090,41 @@ h3 {
   .requirement-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .site-footer {
+    grid-template-columns: minmax(0, 1.1fr) minmax(160px, 0.8fr);
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 760px) {
+  .property-details-section {
+    gap: 18px;
+  }
+
+  .units-card,
+  .features-card,
+  .eligibility-panel,
+  .eligibility-note,
+  .requirement-grid article {
+    padding: 22px;
+  }
+
+  .floor-plan-list article {
+    padding: 16px;
+  }
+
+  .footer-logos {
+    justify-content: center;
+  }
 }
 
 @media (max-width: 640px) {
   :root {
-    --frame-gutter: 32px;
+    --frame-gutter: 28px;
   }
 
   .site-header {
@@ -1071,22 +1132,29 @@ h3 {
   }
 
   .header-inner {
+    width: calc(100% - var(--frame-gutter));
     min-height: 72px;
+  }
+
+  .brand-row {
+    width: 100%;
+    gap: 12px;
   }
 
   .brand strong {
     font-size: 0.95rem;
+    line-height: 1.1;
   }
 
   .hero-slider {
-    height: 620px;
-    min-height: 620px;
+    height: clamp(430px, 118vw, 560px);
+    min-height: 0;
     aspect-ratio: auto;
   }
 
   .slide {
     align-items: flex-end;
-    padding: 26px 18px 58px;
+    padding: 26px 18px 52px;
     background-position: center;
   }
 
@@ -1095,22 +1163,67 @@ h3 {
   }
 
   .hero-content h1 {
-    font-size: clamp(1.65rem, 8vw, 2.35rem);
+    font-size: clamp(1.55rem, 7vw, 2.2rem);
+  }
+
+  .hero-content p:not(.eyebrow) {
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .announcement-track {
+    padding: 9px 0;
+  }
+
+  .announcement-track span {
+    padding-right: 24px;
+    font-size: 0.82rem;
   }
 
   .home-cards,
   .subpage-cards {
     grid-template-columns: 1fr;
+    gap: 18px;
+    padding-left: 18px;
+    padding-right: 18px;
     padding-bottom: 46px;
   }
 
+  .card-image,
+  .card-image-placeholder {
+    height: 210px;
+  }
+
   .floor-plan-list {
+    gap: 18px;
     padding-top: 44px;
+    padding-left: 18px;
+    padding-right: 18px;
     padding-bottom: 54px;
   }
 
   .intro {
     padding-top: 44px;
+  }
+
+  .intro h2,
+  .map-copy h2,
+  .eligibility-section .section-heading h2,
+  .neighborhood-section .section-heading h2,
+  .about-detail-section h2,
+  .section-heading h2,
+  .features-card h2 {
+    font-size: clamp(1.75rem, 9vw, 2.45rem);
+  }
+
+  .intro p:not(.eyebrow),
+  .map-copy p:not(.eyebrow),
+  .about-detail-section p:not(.eyebrow),
+  .section-heading p,
+  .eligibility-section .section-heading p:not(.eyebrow),
+  .neighborhood-section .section-heading p:not(.eyebrow) {
+    font-size: 1rem;
+    line-height: 1.65;
   }
 
   .map-copy {
@@ -1127,8 +1240,12 @@ h3 {
 
   .about-detail-section,
   .property-details-section,
-  .amenities-section {
+  .amenities-section,
+  .eligibility-section,
+  .neighborhood-section {
     padding-top: 44px;
+    padding-left: 18px;
+    padding-right: 18px;
     padding-bottom: 54px;
   }
 
@@ -1139,11 +1256,20 @@ h3 {
   }
 
   .page-banner {
-    height: 620px;
-    min-height: 620px;
+    height: clamp(430px, 118vw, 560px);
+    min-height: 0;
     aspect-ratio: auto;
-    padding: 34px 18px 58px;
+    padding: 34px 18px 52px;
     align-items: flex-end;
+  }
+
+  .page-banner-content h1 {
+    font-size: clamp(1.5rem, 7vw, 2.15rem);
+  }
+
+  .page-banner-content p:not(.eyebrow) {
+    font-size: 0.95rem;
+    line-height: 1.55;
   }
 
   .page-banner::before {
@@ -1152,6 +1278,8 @@ h3 {
 
   .site-footer {
     grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 54px 22px 28px;
   }
 
   .footer-brand {
@@ -1159,8 +1287,62 @@ h3 {
     text-align: center;
   }
 
+  .footer-brand .footer-cta {
+    margin-top: 36px;
+  }
+
   .site-footer h2,
   .site-footer p {
     max-width: 100%;
+  }
+
+  .footer-column {
+    text-align: center;
+  }
+}
+
+@media (max-width: 420px) {
+  :root {
+    --frame-gutter: 20px;
+  }
+
+  .menu-button,
+  .close-button {
+    width: 42px;
+    height: 42px;
+  }
+
+  .side-menu {
+    width: 92vw;
+    padding: 20px;
+  }
+
+  .hero-slider,
+  .page-banner {
+    width: 100%;
+    height: clamp(390px, 120vw, 500px);
+  }
+
+  .slide,
+  .page-banner {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .primary-button {
+    width: 100%;
+    min-height: 46px;
+  }
+
+  .responsive-table table {
+    min-width: 560px;
+  }
+
+  .footer-logos {
+    gap: 16px;
+  }
+
+  .footer-logos .official-logo-1 {
+    width: 100%;
   }
 }
