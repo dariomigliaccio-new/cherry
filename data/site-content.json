@@ -7,7 +7,7 @@
     "logoImage": "",
     "menuIcon": "",
     "applyUrl": "/contact",
-    "applyLabel": "Apply for the Property"
+    "applyLabel": "Apply now"
   },
   "nav": [
     { "label": "Home", "href": "/" },
@@ -15,7 +15,7 @@
     { "label": "Property Details", "href": "/sustainability" },
     { "label": "Amenities", "href": "/community" },
     { "label": "Floor Plans", "href": "/floor-plans" },
-    { "label": "Contact", "href": "/contact" }
+    { "label": "Apply now", "href": "/contact" }
   ],
   "home": {
     "slides": [
@@ -23,7 +23,7 @@
         "eyebrow": "Affordable Homes",
         "title": "Cherry Street Commons",
         "body": "Modern, welcoming homes designed for comfort, access, and community.",
-        "buttonLabel": "Apply for the Property",
+        "buttonLabel": "Apply now",
         "buttonUrl": "/contact",
         "image": "/assets/hero-cherry.png"
       },
@@ -31,16 +31,16 @@
         "eyebrow": "Now welcoming applicants",
         "title": "A practical place to call home",
         "body": "Thoughtful layouts, shared green space, and a location built around daily needs.",
-        "buttonLabel": "View Floor Plans",
-        "buttonUrl": "/floor-plans",
+        "buttonLabel": "Apply now",
+        "buttonUrl": "/contact",
         "image": "/assets/hero-cherry.png"
       },
       {
         "eyebrow": "Connected living",
         "title": "Comfort with community nearby",
         "body": "Explore affordable housing created for stability, belonging, and long-term value.",
-        "buttonLabel": "Learn More",
-        "buttonUrl": "/about",
+        "buttonLabel": "Apply now",
+        "buttonUrl": "/contact",
         "image": "/assets/hero-cherry.png"
       }
     ],
@@ -160,7 +160,7 @@
     "address": "1244 Cherry Street, San Carlos, CA",
     "phone": "(555) 555-5555",
     "email": "leasing@1244cherry.com",
-    "ctaLabel": "Apply for the Property",
+    "ctaLabel": "Apply now",
     "ctaUrl": "/contact",
     "copyright": "2026 Cherry Street Commons. All rights reserved.",
     "logoImage": "",

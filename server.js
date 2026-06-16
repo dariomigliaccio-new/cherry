@@ -10,6 +10,7 @@ const dataPath = process.env.CONTENT_FILE || path.join(__dirname, "data", "site-
 const defaultDataPath = path.join(__dirname, "data", "site-content.json");
 const uploadsDir = path.join(__dirname, "public", "uploads");
 const adminPassword = process.env.ADMIN_PASSWORD || "site-content";
+const officialLogo = "/images/logo-1.png";
 
 fs.mkdirSync(path.dirname(dataPath), { recursive: true });
 fs.mkdirSync(uploadsDir, { recursive: true });
@@ -34,6 +35,7 @@ app.use(
   })
 );
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 function readContent() {
   const defaults = JSON.parse(fs.readFileSync(defaultDataPath, "utf8"));
@@ -65,7 +67,16 @@ function normalizeContent(data) {
   data.nav.forEach((item) => {
     if (item.href === "/sustainability" && ["Sustainability", "PROPERTY DETAILS"].includes(item.label)) item.label = "Property Details";
     if (item.href === "/community" && item.label === "Community") item.label = "Amenities";
+    if (item.href === "/contact") item.label = "Apply now";
   });
+  data.site.applyLabel = "Apply now";
+  data.site.applyUrl = "/contact";
+  data.home.slides.forEach((slide) => {
+    slide.buttonLabel = "Apply now";
+    slide.buttonUrl = "/contact";
+  });
+  data.footer.ctaLabel = "Apply now";
+  data.footer.ctaUrl = "/contact";
   if (["Sustainability", "PROPERTY DETAILS"].includes(data.pages["/sustainability"]?.title)) {
     data.pages["/sustainability"].title = "Property Details";
     data.pages["/sustainability"].eyebrow = "Property information";
@@ -113,10 +124,7 @@ function renderCardMedia(image, alt, fallback = "") {
 }
 
 function renderBrandMark(data, extraClass = "") {
-  if (data.site.logoImage) {
-    return `<span class="brand-mark image-mark ${esc(extraClass)}"><img src="${esc(data.site.logoImage)}" alt="${esc(data.site.name)}"></span>`;
-  }
-  return `<span class="brand-mark ${esc(extraClass)}">${esc(data.site.brandInitials)}</span>`;
+  return `<span class="brand-mark image-mark ${esc(extraClass)}"><img src="${esc(officialLogo)}" alt="${esc(data.site.name)}"></span>`;
 }
 
 function renderMenuIcon(data) {
@@ -131,7 +139,8 @@ function renderLayout({ title, content, activePath = "/", home = false }) {
   const nav = data.nav
     .map((item) => {
       const active = item.href === activePath ? " active" : "";
-      return `<a class="nav-link${active}" href="${esc(item.href)}">${esc(item.label)}</a>`;
+      const cta = item.href === "/contact" ? " nav-apply" : "";
+      return `<a class="nav-link${active}${cta}" href="${esc(item.href)}">${esc(item.label)}</a>`;
     })
     .join("");
 
@@ -205,14 +214,14 @@ function renderFooter(data) {
     .join("");
   const footerLogo = data.footer.logoImage
     ? `<img class="footer-logo-image" src="${esc(data.footer.logoImage)}" alt="${esc(data.footer.headline)}">`
-    : renderBrandMark(data);
+    : `<img class="footer-logo-image" src="${esc(officialLogo)}" alt="${esc(data.site.name)}">`;
 
   return `<footer class="site-footer">
     <div class="footer-brand">
       ${footerLogo}
       <h2>${esc(data.footer.headline)}</h2>
       <p>${esc(data.footer.body)}</p>
-      <a class="footer-cta" href="${esc(data.footer.ctaUrl)}">${esc(data.footer.ctaLabel)}</a>
+      <a class="footer-cta apply-pulse" href="${esc(data.footer.ctaUrl)}">${esc(data.footer.ctaLabel)}</a>
     </div>
     <div class="footer-column">
       <h3>Explore</h3>
@@ -308,7 +317,7 @@ app.get("/", (_req, res) => {
         <p class="eyebrow">${esc(slide.eyebrow)}</p>
         <h1>${esc(slide.title)}</h1>
         <p>${esc(slide.body)}</p>
-        <a class="primary-button" href="${esc(slide.buttonUrl)}">${esc(slide.buttonLabel)}</a>
+        <a class="primary-button apply-pulse" href="${esc(slide.buttonUrl)}">${esc(slide.buttonLabel)}</a>
       </div>
     </div>`
     )
@@ -380,7 +389,7 @@ Object.entries(readContent().pages).forEach(([route]) => {
           <p class="eyebrow">${esc(page.eyebrow)}</p>
           <h1>${esc(page.title)}</h1>
           <p>${esc(page.body)}</p>
-          <a class="primary-button" href="${esc(data.site.applyUrl)}">${esc(data.site.applyLabel)}</a>
+          <a class="primary-button apply-pulse" href="${esc(data.site.applyUrl)}">${esc(data.site.applyLabel)}</a>
         </div>
       </section>
       ${bodyContent}
