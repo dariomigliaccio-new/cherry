@@ -13,7 +13,7 @@ const adminUser = process.env.ADMIN_USER || "dariomigliaccio@gmail.com";
 const adminPassword = process.env.ADMIN_PASSWORD || "site-content";
 const officialLogo = "/images/logo-1.png";
 const footerOfficialLogos = [
-  { label: "Equal Housing Opportunity", image: "/images/footer-logo-1.png" },
+  { label: "Equal Housing Opportunity", image: "/images/footer-logo-1.png", url: "https://hiphousing.org" },
   { label: "Accessibility", image: "/images/footer-logo-2.png" },
   { label: "Property Management", image: "/images/footer-logo-3.png" }
 ];
@@ -97,7 +97,8 @@ function normalizeContent(data) {
   data.footer.officialLogos = footerOfficialLogos.map((item, index) => ({
     ...data.footer.officialLogos?.[index],
     label: item.label,
-    image: item.image
+    image: item.image,
+    url: item.url || data.footer.officialLogos?.[index]?.url || ""
   }));
   if (["Sustainability", "PROPERTY DETAILS"].includes(data.pages["/sustainability"]?.title)) {
     data.pages["/sustainability"].title = "Property Details";
@@ -236,9 +237,6 @@ function renderFooter(data) {
       return `<a href="${esc(href)}">${esc(label)}</a>`;
     })
     .join("");
-  const social = data.footer.social
-    .map((item) => `<a class="social-link" href="${esc(item.url)}" target="_blank" rel="noreferrer">${esc(item.label)}</a>`)
-    .join("");
   const officialLogos = (data.footer.officialLogos || [])
     .filter((item) => item.image || item.label)
     .map((item, index) => {
@@ -265,10 +263,6 @@ function renderFooter(data) {
       <p>${esc(data.footer.address)}</p>
       <a href="tel:${esc(data.footer.phone)}">${esc(data.footer.phone)}</a>
       <a href="mailto:${esc(data.footer.email)}">${esc(data.footer.email)}</a>
-    </div>
-    <div class="footer-column">
-      <h3>Social</h3>
-      <div class="social-links">${social}</div>
     </div>
     <div class="footer-logos">${officialLogos}</div>
     <div class="footer-bottom">${esc(data.footer.copyright)}</div>
@@ -616,10 +610,6 @@ app.get("/manager", requireAdmin, (_req, res) => {
   (data.footer.officialLogos || []).forEach((_, index) => {
     sections.push(`<section><h2>Footer Official Logo ${index + 1}</h2>${field("Label", `footer.officialLogos.${index}.label`, data)}${field("URL", `footer.officialLogos.${index}.url`, data, "url")}${imageField("Logo SVG/image", `footer.officialLogos.${index}.image`, data)}</section>`);
   });
-  data.footer.social.forEach((_, index) => {
-    sections.push(`<section><h2>Social ${index + 1}</h2>${field("Label", `footer.social.${index}.label`, data)}${field("URL", `footer.social.${index}.url`, data, "url")}</section>`);
-  });
-
   res.send(
     adminShell(`<header class="admin-header"><h1>Site Manager</h1><div><a href="/" target="_blank">View site</a><form method="post" action="/manager/logout"><button>Logout</button></form></div></header><form class="admin-form" method="post" action="/manager" enctype="multipart/form-data">${sections.join("")}<button class="save-button">Save Changes</button></form>`)
   );
