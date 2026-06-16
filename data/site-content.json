@@ -165,9 +165,9 @@
     "copyright": "2026 Cherry Street Commons. All rights reserved.",
     "logoImage": "",
     "officialLogos": [
-      { "label": "Equal Housing Opportunity", "image": "", "url": "" },
-      { "label": "Accessibility", "image": "", "url": "" },
-      { "label": "Property Management", "image": "", "url": "" }
+      { "label": "Equal Housing Opportunity", "image": "/images/footer-logo-1.png", "url": "" },
+      { "label": "Accessibility", "image": "/images/footer-logo-2.png", "url": "" },
+      { "label": "Property Management", "image": "/images/footer-logo-3.png", "url": "" }
     ],
     "social": [
       { "label": "Facebook", "url": "https://facebook.com" },

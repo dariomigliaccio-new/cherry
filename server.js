@@ -11,6 +11,11 @@ const defaultDataPath = path.join(__dirname, "data", "site-content.json");
 const uploadsDir = path.join(__dirname, "public", "uploads");
 const adminPassword = process.env.ADMIN_PASSWORD || "site-content";
 const officialLogo = "/images/logo-1.png";
+const footerOfficialLogos = [
+  { label: "Equal Housing Opportunity", image: "/images/footer-logo-1.png" },
+  { label: "Accessibility", image: "/images/footer-logo-2.png" },
+  { label: "Property Management", image: "/images/footer-logo-3.png" }
+];
 
 fs.mkdirSync(path.dirname(dataPath), { recursive: true });
 fs.mkdirSync(uploadsDir, { recursive: true });
@@ -77,6 +82,11 @@ function normalizeContent(data) {
   });
   data.footer.ctaLabel = "Apply now";
   data.footer.ctaUrl = "/contact";
+  data.footer.officialLogos = footerOfficialLogos.map((item, index) => ({
+    ...data.footer.officialLogos?.[index],
+    label: item.label,
+    image: item.image
+  }));
   if (["Sustainability", "PROPERTY DETAILS"].includes(data.pages["/sustainability"]?.title)) {
     data.pages["/sustainability"].title = "Property Details";
     data.pages["/sustainability"].eyebrow = "Property information";
