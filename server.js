@@ -74,14 +74,6 @@ function normalizeContent(data) {
     if (item.href === "/community" && item.label === "Community") item.label = "Amenities";
     if (item.href === "/contact") item.label = "Apply now";
   });
-  data.site.applyLabel = "Apply now";
-  data.site.applyUrl = "/contact";
-  data.home.slides.forEach((slide) => {
-    slide.buttonLabel = "Apply now";
-    slide.buttonUrl = "/contact";
-  });
-  data.footer.ctaLabel = "Apply now";
-  data.footer.ctaUrl = "/contact";
   data.footer.officialLogos = footerOfficialLogos.map((item, index) => ({
     ...data.footer.officialLogos?.[index],
     label: item.label,
@@ -150,7 +142,9 @@ function renderLayout({ title, content, activePath = "/", home = false }) {
     .map((item) => {
       const active = item.href === activePath ? " active" : "";
       const cta = item.href === "/contact" ? " nav-apply" : "";
-      return `<a class="nav-link${active}${cta}" href="${esc(item.href)}">${esc(item.label)}</a>`;
+      const href = item.href === "/contact" ? data.site.applyUrl : item.href;
+      const label = item.href === "/contact" ? data.site.applyLabel : item.label;
+      return `<a class="nav-link${active}${cta}" href="${esc(href)}">${esc(label)}</a>`;
     })
     .join("");
 
@@ -207,7 +201,13 @@ function renderLayout({ title, content, activePath = "/", home = false }) {
 }
 
 function renderFooter(data) {
-  const links = data.nav.map((item) => `<a href="${esc(item.href)}">${esc(item.label)}</a>`).join("");
+  const links = data.nav
+    .map((item) => {
+      const href = item.href === "/contact" ? data.site.applyUrl : item.href;
+      const label = item.href === "/contact" ? data.site.applyLabel : item.label;
+      return `<a href="${esc(href)}">${esc(label)}</a>`;
+    })
+    .join("");
   const social = data.footer.social
     .map((item) => `<a class="social-link" href="${esc(item.url)}" target="_blank" rel="noreferrer">${esc(item.label)}</a>`)
     .join("");
@@ -231,7 +231,7 @@ function renderFooter(data) {
       ${footerLogo}
       <h2>${esc(data.footer.headline)}</h2>
       <p>${esc(data.footer.body)}</p>
-      <a class="footer-cta apply-pulse" href="${esc(data.footer.ctaUrl)}">${esc(data.footer.ctaLabel)}</a>
+      <a class="footer-cta apply-pulse" href="${esc(data.site.applyUrl)}">${esc(data.site.applyLabel)}</a>
     </div>
     <div class="footer-column">
       <h3>Explore</h3>
@@ -327,7 +327,7 @@ app.get("/", (_req, res) => {
         <p class="eyebrow">${esc(slide.eyebrow)}</p>
         <h1>${esc(slide.title)}</h1>
         <p>${esc(slide.body)}</p>
-        <a class="primary-button apply-pulse" href="${esc(slide.buttonUrl)}">${esc(slide.buttonLabel)}</a>
+        <a class="primary-button apply-pulse" href="${esc(data.site.applyUrl)}">${esc(data.site.applyLabel)}</a>
       </div>
     </div>`
     )
@@ -455,10 +455,10 @@ app.post("/manager/logout", (req, res) => {
 app.get("/manager", requireAdmin, (_req, res) => {
   const data = readContent();
   const sections = [];
-  sections.push(`<section><h2>Site</h2>${field("Name", "site.name", data)}${field("Tagline", "site.tagline", data)}${field("Brand initials", "site.brandInitials", data)}${imageField("Affordable Homes / header logo SVG", "site.logoImage", data)}${imageField("Hamburger menu SVG", "site.menuIcon", data)}${field("Apply label", "site.applyLabel", data)}${field("Apply URL", "site.applyUrl", data)}</section>`);
+  sections.push(`<section><h2>Site</h2>${field("Name", "site.name", data)}${field("Tagline", "site.tagline", data)}${field("Brand initials", "site.brandInitials", data)}${imageField("Affordable Homes / header logo SVG", "site.logoImage", data)}${imageField("Hamburger menu SVG", "site.menuIcon", data)}${field("Apply button label", "site.applyLabel", data)}${field("Apply button URL", "site.applyUrl", data)}</section>`);
   sections.push(`<section><h2>Home Intro</h2>${field("Eyebrow", "home.intro.eyebrow", data)}${field("Title", "home.intro.title", data)}${field("Body", "home.intro.body", data, "textarea")}</section>`);
   data.home.slides.forEach((_, index) => {
-    sections.push(`<section><h2>Home Banner ${index + 1}</h2>${field("Eyebrow", `home.slides.${index}.eyebrow`, data)}${field("Title", `home.slides.${index}.title`, data)}${field("Body", `home.slides.${index}.body`, data, "textarea")}${field("Button Label", `home.slides.${index}.buttonLabel`, data)}${field("Button URL", `home.slides.${index}.buttonUrl`, data)}${imageField("Banner image", `home.slides.${index}.image`, data)}</section>`);
+    sections.push(`<section><h2>Home Banner ${index + 1}</h2>${field("Eyebrow", `home.slides.${index}.eyebrow`, data)}${field("Title", `home.slides.${index}.title`, data)}${field("Body", `home.slides.${index}.body`, data, "textarea")}${imageField("Banner image", `home.slides.${index}.image`, data)}</section>`);
   });
   data.home.cards.forEach((_, index) => {
     sections.push(`<section><h2>Home Card ${index + 1}</h2>${field("Number", `home.cards.${index}.number`, data)}${field("Title", `home.cards.${index}.title`, data)}${field("Body", `home.cards.${index}.body`, data, "textarea")}${imageField("Card image", `home.cards.${index}.image`, data)}</section>`);
@@ -489,7 +489,7 @@ app.get("/manager", requireAdmin, (_req, res) => {
     }
   });
   sections.push(`<section><h2>Location</h2>${field("Eyebrow", "location.eyebrow", data)}${field("Title", "location.title", data)}${field("Body", "location.body", data, "textarea")}${field("Address", "location.address", data)}${field("Latitude", "location.lat", data, "number")}${field("Longitude", "location.lng", data, "number")}${field("Zoom", "location.zoom", data, "number")}</section>`);
-  sections.push(`<section><h2>Footer</h2>${field("Headline", "footer.headline", data)}${imageField("Footer main logo SVG", "footer.logoImage", data)}${field("Body", "footer.body", data, "textarea")}${field("Address", "footer.address", data)}${field("Phone", "footer.phone", data)}${field("Email", "footer.email", data, "email")}${field("CTA Label", "footer.ctaLabel", data)}${field("CTA URL", "footer.ctaUrl", data)}${field("Copyright", "footer.copyright", data)}</section>`);
+  sections.push(`<section><h2>Footer</h2>${field("Headline", "footer.headline", data)}${imageField("Footer main logo SVG", "footer.logoImage", data)}${field("Body", "footer.body", data, "textarea")}${field("Address", "footer.address", data)}${field("Phone", "footer.phone", data)}${field("Email", "footer.email", data, "email")}${field("Copyright", "footer.copyright", data)}</section>`);
   (data.footer.officialLogos || []).forEach((_, index) => {
     sections.push(`<section><h2>Footer Official Logo ${index + 1}</h2>${field("Label", `footer.officialLogos.${index}.label`, data)}${field("URL", `footer.officialLogos.${index}.url`, data, "url")}${imageField("Logo SVG/image", `footer.officialLogos.${index}.image`, data)}</section>`);
   });
