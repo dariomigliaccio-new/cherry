@@ -85,8 +85,9 @@ function getByPath(target, dottedPath) {
   }, target);
 }
 
-function renderImage(image, alt) {
-  return image ? `<img class="card-image" src="${esc(image)}" alt="${esc(alt)}">` : "";
+function renderCardMedia(image, alt, fallback = "") {
+  if (image) return `<img class="card-image" src="${esc(image)}" alt="${esc(alt)}">`;
+  return `<div class="card-image-placeholder"><span>${esc(fallback || alt)}</span></div>`;
 }
 
 function renderBrandMark(data, extraClass = "") {
@@ -240,7 +241,7 @@ app.get("/", (_req, res) => {
     .join("");
   const cards = data.home.cards
     .map(
-      (card) => `<article>${renderImage(card.image, card.title)}<span>${esc(card.number)}</span><h3>${esc(card.title)}</h3><p>${esc(card.body)}</p></article>`
+      (card) => `<article>${renderCardMedia(card.image, card.title, card.number)}<div class="card-body"><span>${esc(card.number)}</span><h3>${esc(card.title)}</h3><p>${esc(card.body)}</p></div></article>`
     )
     .join("");
 
@@ -264,7 +265,7 @@ Object.entries(readContent().pages).forEach(([route]) => {
     const data = readContent();
     const page = data.pages[route];
     const cardMarkup = page.cards
-      .map((card) => `<article>${renderImage(card.image, card.title)}<h3>${esc(card.title)}</h3><p>${esc(card.body)}</p></article>`)
+      .map((card) => `<article>${renderCardMedia(card.image, card.title)}<div class="card-body"><h3>${esc(card.title)}</h3><p>${esc(card.body)}</p></div></article>`)
       .join("");
     const floorPlanMarkup =
       route === "/floor-plans"
