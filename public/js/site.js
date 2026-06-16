@@ -37,3 +37,32 @@ dots.forEach((dot, index) => {
 if (slides.length > 1) {
   setInterval(() => showSlide(activeSlide + 1), 6000);
 }
+
+function initPropertyMap() {
+  const mapElement = document.getElementById("property-map");
+  if (!mapElement || !window.L) return;
+
+  const propertyCenter = [35.2271, -80.8431];
+  const map = L.map(mapElement, {
+    scrollWheelZoom: false,
+    zoomControl: true
+  }).setView(propertyCenter, 7);
+
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+  }).addTo(map);
+
+  const marker = L.divIcon({
+    className: "property-marker",
+    html: "<span></span>",
+    iconSize: [28, 38],
+    iconAnchor: [14, 38]
+  });
+
+  L.marker(propertyCenter, { icon: marker })
+    .addTo(map)
+    .bindPopup("<strong>Cherry Street Commons</strong><br>1244 Cherry Street");
+}
+
+window.addEventListener("load", initPropertyMap);

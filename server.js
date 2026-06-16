@@ -98,7 +98,9 @@ function renderLayout({ title, content, activePath = "/", home = false }) {
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
       <link rel="stylesheet" href="/css/styles.css">
+      <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
       <script src="/js/site.js" defer></script>
     </head>
     <body>
@@ -140,11 +142,7 @@ function mapSection() {
       <h2>Find Cherry Street Commons</h2>
       <p>Use the interactive map to locate the property and plan your route.</p>
     </div>
-    <iframe
-      title="Map to Cherry Street Commons"
-      loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade"
-      src="https://www.google.com/maps?q=1244%20Cherry%20Street&output=embed"></iframe>
+    <div class="property-map" id="property-map" role="img" aria-label="Interactive map showing the Cherry Street Commons area"></div>
   </section>`;
 }
 
@@ -201,14 +199,37 @@ Object.entries(pages).forEach(([route, page]) => {
     const cardMarkup = page.cards
       .map(([heading, text]) => `<article><h3>${heading}</h3><p>${text}</p></article>`)
       .join("");
+    const floorPlanMarkup =
+      route === "/floor-plans"
+        ? `<section class="floor-plan-gallery" aria-label="Apartment floor plan models">
+            <article>
+              <div class="plan-placeholder">1 BR</div>
+              <h2>One Bedroom Plan</h2>
+              <p>Floor plan image and apartment details can be added here.</p>
+            </article>
+            <article>
+              <div class="plan-placeholder">2 BR</div>
+              <h2>Two Bedroom Plan</h2>
+              <p>Floor plan image and apartment details can be added here.</p>
+            </article>
+            <article>
+              <div class="plan-placeholder">ADA</div>
+              <h2>Accessible Plan</h2>
+              <p>Accessible layout image and availability notes can be added here.</p>
+            </article>
+          </section>`
+        : "";
 
-    const content = `<section class="subpage-hero">
-        <p class="eyebrow">${page.eyebrow}</p>
-        <h1>${page.title}</h1>
-        <p>${page.body}</p>
-        <a class="primary-button" href="/contact">Apply for the Property</a>
+    const content = `<section class="page-banner" style="background-image:url('/assets/hero-cherry.png')">
+        <div class="page-banner-content">
+          <p class="eyebrow">${page.eyebrow}</p>
+          <h1>${page.title}</h1>
+          <p>${page.body}</p>
+          <a class="primary-button" href="/contact">Apply for the Property</a>
+        </div>
       </section>
       <section class="subpage-cards">${cardMarkup}</section>
+      ${floorPlanMarkup}
       ${route === "/contact" ? mapSection() : ""}`;
 
     res.send(renderLayout({ title: `${page.title} | Cherry Street Commons`, content, activePath: route }));

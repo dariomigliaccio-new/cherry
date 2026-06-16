@@ -307,13 +307,11 @@ h3 {
 }
 
 .intro h2,
-.subpage-hero h1,
 .map-copy h2 {
   font-size: clamp(2rem, 4vw, 3.6rem);
 }
 
 .intro p:not(.eyebrow),
-.subpage-hero p:not(.eyebrow),
 .map-copy p:not(.eyebrow) {
   color: var(--muted);
   font-size: 1.08rem;
@@ -327,7 +325,7 @@ h3 {
   gap: 18px;
   max-width: 1180px;
   margin: 0 auto;
-  padding: 20px clamp(18px, 5vw, 40px) 68px;
+  padding: 20px clamp(18px, 5vw, 40px) 74px;
 }
 
 .home-cards article,
@@ -358,56 +356,163 @@ h3 {
 }
 
 .map-section {
-  display: grid;
-  grid-template-columns: minmax(280px, 0.75fr) minmax(320px, 1.25fr);
-  min-height: 520px;
-  background: var(--green-dark);
+  max-width: var(--frame-width);
+  margin: 36px auto 0;
+  padding: 0 0 74px;
 }
 
 .map-copy {
-  align-self: center;
-  padding: clamp(34px, 6vw, 78px);
-  color: #fff;
+  max-width: 760px;
+  margin: 0 auto 28px;
+  padding: 0 20px;
+  text-align: center;
 }
 
 .map-copy p:not(.eyebrow) {
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--muted);
 }
 
-.map-section iframe {
+.property-map {
   width: 100%;
-  height: 100%;
-  min-height: 520px;
-  border: 0;
+  height: 320px;
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: #eef1ef;
 }
 
-.subpage-hero {
-  max-width: 1040px;
+.leaflet-container {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.property-marker span {
+  position: relative;
+  display: block;
+  width: 24px;
+  height: 24px;
+  border: 3px solid #fff;
+  border-radius: 50% 50% 50% 0;
+  background: #16848b;
+  box-shadow: 0 8px 18px rgba(23, 33, 29, 0.24);
+  transform: rotate(-45deg);
+}
+
+.property-marker span::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.page-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: calc(100% - var(--frame-gutter));
+  max-width: var(--frame-width);
+  min-height: 420px;
   margin: 0 auto;
-  padding: clamp(64px, 9vw, 118px) clamp(18px, 5vw, 40px) 36px;
+  padding: clamp(40px, 7vw, 92px);
+  overflow: hidden;
+  background-position: center;
+  background-size: cover;
 }
 
-.subpage-hero p:not(.eyebrow) {
+.page-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(12, 24, 20, 0.82), rgba(12, 24, 20, 0.48) 48%, rgba(12, 24, 20, 0.08));
+}
+
+.page-banner-content {
+  position: relative;
+  z-index: 1;
   max-width: 790px;
-  margin: 22px 0 28px;
+  color: #fff;
+}
+
+.page-banner-content .eyebrow {
+  color: #f4c873;
+}
+
+.page-banner-content h1 {
+  font-size: clamp(2.4rem, 5vw, 4.8rem);
+}
+
+.page-banner-content p:not(.eyebrow) {
+  max-width: 660px;
+  margin: 20px 0 28px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1.08rem;
+  line-height: 1.75;
 }
 
 .subpage-cards {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.floor-plan-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 clamp(18px, 5vw, 40px) 28px;
+}
+
+.floor-plan-gallery article {
+  min-height: 360px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 10px 28px rgba(23, 33, 29, 0.06);
+}
+
+.plan-placeholder {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  border: 1px dashed #aeb8b1;
+  border-radius: 6px;
+  color: var(--green);
+  background:
+    linear-gradient(90deg, rgba(40, 97, 76, 0.07) 1px, transparent 1px),
+    linear-gradient(rgba(40, 97, 76, 0.07) 1px, transparent 1px),
+    #f8faf7;
+  background-size: 22px 22px;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.floor-plan-gallery h2 {
+  margin-top: 18px;
+  font-size: 1.2rem;
+}
+
+.floor-plan-gallery p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .site-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  padding: 26px clamp(18px, 5vw, 72px);
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) auto;
+  align-items: end;
+  gap: 24px;
+  margin-top: 48px;
+  padding: 42px max(24px, calc((100vw - var(--frame-width)) / 2)) 34px;
   color: #fff;
-  background: var(--ink);
+  background:
+    linear-gradient(135deg, rgba(40, 97, 76, 0.96), rgba(23, 33, 29, 0.98)),
+    var(--ink);
 }
 
 .site-footer p {
-  margin: 0;
+  margin: 0 0 8px;
+  font-size: 1.35rem;
   font-weight: 800;
 }
 
@@ -416,18 +521,26 @@ h3 {
   font-weight: 700;
 }
 
+.site-footer::after {
+  content: "Affordable Homes | 1244 Cherry";
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
 @media (max-width: 980px) {
   .desktop-nav {
     display: none;
   }
 
   .home-cards,
-  .subpage-cards {
+  .subpage-cards,
+  .floor-plan-gallery {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .map-section {
-    grid-template-columns: 1fr;
+  .property-map {
+    height: 360px;
   }
 }
 
@@ -473,7 +586,8 @@ h3 {
   }
 
   .home-cards,
-  .subpage-cards {
+  .subpage-cards,
+  .floor-plan-gallery {
     grid-template-columns: 1fr;
     padding-bottom: 46px;
   }
@@ -483,11 +597,26 @@ h3 {
   }
 
   .map-copy {
-    padding: 38px 20px;
+    padding: 0 20px;
   }
 
-  .map-section iframe {
-    min-height: 430px;
+  .map-section {
+    margin-top: 18px;
+    padding-bottom: 48px;
+  }
+
+  .property-map {
+    height: 420px;
+  }
+
+  .page-banner {
+    min-height: 520px;
+    padding: 34px 18px;
+    align-items: flex-end;
+  }
+
+  .page-banner::before {
+    background: linear-gradient(0deg, rgba(12, 24, 20, 0.86), rgba(12, 24, 20, 0.26));
   }
 
   .site-footer {
