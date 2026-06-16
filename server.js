@@ -7,6 +7,7 @@ const multer = require("multer");
 const app = express();
 const port = process.env.PORT || 3000;
 const dataPath = process.env.CONTENT_FILE || path.join(__dirname, "data", "site-content.json");
+const defaultDataPath = path.join(__dirname, "data", "site-content.json");
 const uploadsDir = path.join(__dirname, "public", "uploads");
 const adminPassword = process.env.ADMIN_PASSWORD || "site-content";
 
@@ -35,11 +36,29 @@ app.use(
 app.use(express.static(path.join(__dirname, "public")));
 
 function readContent() {
-  return JSON.parse(fs.readFileSync(dataPath, "utf8"));
+  const defaults = JSON.parse(fs.readFileSync(defaultDataPath, "utf8"));
+  const content = JSON.parse(fs.readFileSync(dataPath, "utf8"));
+  return mergeMissing(defaults, content);
 }
 
 function writeContent(content) {
   fs.writeFileSync(dataPath, `${JSON.stringify(content, null, 2)}\n`);
+}
+
+function mergeMissing(defaultValue, currentValue) {
+  if (currentValue === undefined || currentValue === null) return defaultValue;
+  if (Array.isArray(defaultValue)) {
+    if (!Array.isArray(currentValue)) return defaultValue;
+    return defaultValue.map((item, index) => mergeMissing(item, currentValue[index]));
+  }
+  if (typeof defaultValue === "object" && defaultValue) {
+    const merged = { ...currentValue };
+    Object.entries(defaultValue).forEach(([key, value]) => {
+      merged[key] = mergeMissing(value, currentValue[key]);
+    });
+    return merged;
+  }
+  return currentValue;
 }
 
 function esc(value = "") {
@@ -68,6 +87,20 @@ function getByPath(target, dottedPath) {
 
 function renderImage(image, alt) {
   return image ? `<img class="card-image" src="${esc(image)}" alt="${esc(alt)}">` : "";
+}
+
+function renderBrandMark(data, extraClass = "") {
+  if (data.site.logoImage) {
+    return `<span class="brand-mark image-mark ${esc(extraClass)}"><img src="${esc(data.site.logoImage)}" alt="${esc(data.site.name)}"></span>`;
+  }
+  return `<span class="brand-mark ${esc(extraClass)}">${esc(data.site.brandInitials)}</span>`;
+}
+
+function renderMenuIcon(data) {
+  if (data.site.menuIcon) {
+    return `<img class="menu-icon-image" src="${esc(data.site.menuIcon)}" alt="">`;
+  }
+  return "<span></span><span></span><span></span>";
 }
 
 function renderLayout({ title, content, activePath = "/", home = false }) {
@@ -104,10 +137,10 @@ function renderLayout({ title, content, activePath = "/", home = false }) {
         <div class="header-inner">
           <div class="brand-row">
             <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false" data-menu-button>
-              <span></span><span></span><span></span>
+              ${renderMenuIcon(data)}
             </button>
             <a class="brand" href="/">
-              <span class="brand-mark">${esc(data.site.brandInitials)}</span>
+              ${renderBrandMark(data)}
               <span>
                 <strong>${esc(data.site.name)}</strong>
                 <small>${esc(data.site.tagline)}</small>
@@ -119,7 +152,7 @@ function renderLayout({ title, content, activePath = "/", home = false }) {
       </header>
       <aside class="side-menu" aria-hidden="true" data-side-menu>
         <div class="side-menu-top">
-          <span class="brand-mark">${esc(data.site.brandInitials)}</span>
+          ${renderBrandMark(data)}
           <button class="close-button" type="button" aria-label="Close menu" data-close-menu>&times;</button>
         </div>
         <nav aria-label="Mobile navigation">${nav}</nav>
@@ -136,10 +169,24 @@ function renderFooter(data) {
   const social = data.footer.social
     .map((item) => `<a class="social-link" href="${esc(item.url)}" target="_blank" rel="noreferrer">${esc(item.label)}</a>`)
     .join("");
+  const officialLogos = (data.footer.officialLogos || [])
+    .filter((item) => item.image || item.label)
+    .map((item) => {
+      const logo = item.image
+        ? `<img src="${esc(item.image)}" alt="${esc(item.label)}">`
+        : `<span>${esc(item.label)}</span>`;
+      return item.url
+        ? `<a href="${esc(item.url)}" target="_blank" rel="noreferrer">${logo}</a>`
+        : `<div>${logo}</div>`;
+    })
+    .join("");
+  const footerLogo = data.footer.logoImage
+    ? `<img class="footer-logo-image" src="${esc(data.footer.logoImage)}" alt="${esc(data.footer.headline)}">`
+    : renderBrandMark(data);
 
   return `<footer class="site-footer">
     <div class="footer-brand">
-      <span class="brand-mark">${esc(data.site.brandInitials)}</span>
+      ${footerLogo}
       <h2>${esc(data.footer.headline)}</h2>
       <p>${esc(data.footer.body)}</p>
       <a class="footer-cta" href="${esc(data.footer.ctaUrl)}">${esc(data.footer.ctaLabel)}</a>
@@ -158,6 +205,7 @@ function renderFooter(data) {
       <h3>Social</h3>
       <div class="social-links">${social}</div>
     </div>
+    <div class="footer-logos">${officialLogos}</div>
     <div class="footer-bottom">${esc(data.footer.copyright)}</div>
   </footer>`;
 }
@@ -265,7 +313,7 @@ function field(label, name, data, type = "text") {
 
 function imageField(label, name, data) {
   const value = getByPath(data, name) || "";
-  return `<label><span>${esc(label)}</span><input type="file" name="${esc(name)}" accept="image/*"><small>${esc(value || "No image selected")}</small></label>`;
+  return `<label><span>${esc(label)}</span><input type="file" name="${esc(name)}" accept="image/*,.svg"><small>${esc(value || "No image selected")}</small></label>`;
 }
 
 function adminShell(content) {
@@ -294,7 +342,7 @@ app.post("/manager/logout", (req, res) => {
 app.get("/manager", requireAdmin, (_req, res) => {
   const data = readContent();
   const sections = [];
-  sections.push(`<section><h2>Site</h2>${field("Name", "site.name", data)}${field("Tagline", "site.tagline", data)}${field("Apply label", "site.applyLabel", data)}${field("Apply URL", "site.applyUrl", data)}</section>`);
+  sections.push(`<section><h2>Site</h2>${field("Name", "site.name", data)}${field("Tagline", "site.tagline", data)}${field("Brand initials", "site.brandInitials", data)}${imageField("Affordable Homes / header logo SVG", "site.logoImage", data)}${imageField("Hamburger menu SVG", "site.menuIcon", data)}${field("Apply label", "site.applyLabel", data)}${field("Apply URL", "site.applyUrl", data)}</section>`);
   sections.push(`<section><h2>Home Intro</h2>${field("Eyebrow", "home.intro.eyebrow", data)}${field("Title", "home.intro.title", data)}${field("Body", "home.intro.body", data, "textarea")}</section>`);
   data.home.slides.forEach((_, index) => {
     sections.push(`<section><h2>Home Banner ${index + 1}</h2>${field("Eyebrow", `home.slides.${index}.eyebrow`, data)}${field("Title", `home.slides.${index}.title`, data)}${field("Body", `home.slides.${index}.body`, data, "textarea")}${field("Button Label", `home.slides.${index}.buttonLabel`, data)}${field("Button URL", `home.slides.${index}.buttonUrl`, data)}${imageField("Banner image", `home.slides.${index}.image`, data)}</section>`);
@@ -314,7 +362,10 @@ app.get("/manager", requireAdmin, (_req, res) => {
     }
   });
   sections.push(`<section><h2>Location</h2>${field("Eyebrow", "location.eyebrow", data)}${field("Title", "location.title", data)}${field("Body", "location.body", data, "textarea")}${field("Address", "location.address", data)}${field("Latitude", "location.lat", data, "number")}${field("Longitude", "location.lng", data, "number")}${field("Zoom", "location.zoom", data, "number")}</section>`);
-  sections.push(`<section><h2>Footer</h2>${field("Headline", "footer.headline", data)}${field("Body", "footer.body", data, "textarea")}${field("Address", "footer.address", data)}${field("Phone", "footer.phone", data)}${field("Email", "footer.email", data, "email")}${field("CTA Label", "footer.ctaLabel", data)}${field("CTA URL", "footer.ctaUrl", data)}${field("Copyright", "footer.copyright", data)}</section>`);
+  sections.push(`<section><h2>Footer</h2>${field("Headline", "footer.headline", data)}${imageField("Footer main logo SVG", "footer.logoImage", data)}${field("Body", "footer.body", data, "textarea")}${field("Address", "footer.address", data)}${field("Phone", "footer.phone", data)}${field("Email", "footer.email", data, "email")}${field("CTA Label", "footer.ctaLabel", data)}${field("CTA URL", "footer.ctaUrl", data)}${field("Copyright", "footer.copyright", data)}</section>`);
+  (data.footer.officialLogos || []).forEach((_, index) => {
+    sections.push(`<section><h2>Footer Official Logo ${index + 1}</h2>${field("Label", `footer.officialLogos.${index}.label`, data)}${field("URL", `footer.officialLogos.${index}.url`, data, "url")}${imageField("Logo SVG/image", `footer.officialLogos.${index}.image`, data)}</section>`);
+  });
   data.footer.social.forEach((_, index) => {
     sections.push(`<section><h2>Social ${index + 1}</h2>${field("Label", `footer.social.${index}.label`, data)}${field("URL", `footer.social.${index}.url`, data, "url")}</section>`);
   });

@@ -4,6 +4,8 @@
     "tagline": "Affordable Homes",
     "description": "Affordable homes at Cherry Street Commons.",
     "brandInitials": "CS",
+    "logoImage": "",
+    "menuIcon": "",
     "applyUrl": "/contact",
     "applyLabel": "Apply for the Property"
   },
@@ -134,6 +136,12 @@
     "ctaLabel": "Apply for the Property",
     "ctaUrl": "/contact",
     "copyright": "2026 Cherry Street Commons. All rights reserved.",
+    "logoImage": "",
+    "officialLogos": [
+      { "label": "Equal Housing Opportunity", "image": "", "url": "" },
+      { "label": "Accessibility", "image": "", "url": "" },
+      { "label": "Property Management", "image": "", "url": "" }
+    ],
     "social": [
       { "label": "Facebook", "url": "https://facebook.com" },
       { "label": "Instagram", "url": "https://instagram.com" },
