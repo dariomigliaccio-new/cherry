@@ -12,7 +12,7 @@
   "nav": [
     { "label": "Home", "href": "/" },
     { "label": "About", "href": "/about" },
-    { "label": "PROPERTY DETAILS", "href": "/sustainability" },
+    { "label": "Property Details", "href": "/sustainability" },
     { "label": "Amenities", "href": "/community" },
     { "label": "Floor Plans", "href": "/floor-plans" },
     { "label": "Contact", "href": "/contact" }
@@ -83,11 +83,13 @@
       ]
     },
     "/sustainability": {
-      "title": "PROPERTY DETAILS",
+      "title": "Property Details",
       "eyebrow": "Property information",
       "body": "Explore the property details and in-home features planned for Cherry Street Commons.",
       "bannerImage": "/assets/hero-cherry.png",
       "details": {
+        "title": "Property Details",
+        "subtitle": "Designed with practical features for comfortable affordable living.",
         "unitsLabel": "Number of Units",
         "unitsValue": "33",
         "featuresTitle": "Unit Features",
@@ -107,7 +109,16 @@
       "amenities": {
         "title": "Amenities",
         "subtitle": "Resident-focused features for daily life.",
-        "itemsText": "After-school program\nBicycle Storage\nElectric Vehicle Charging Stations\nGated Parking\nKey Fob Security\nLaundry Room\nPlayground"
+        "itemsText": "After-school program\nBicycle Storage\nElectric Vehicle Charging Stations\nGated Parking\nKey Fob Security\nLaundry Room\nPlayground",
+        "items": [
+          { "title": "After-school program", "icon": "" },
+          { "title": "Bicycle Storage", "icon": "" },
+          { "title": "Electric Vehicle Charging Stations", "icon": "" },
+          { "title": "Gated Parking", "icon": "" },
+          { "title": "Key Fob Security", "icon": "" },
+          { "title": "Laundry Room", "icon": "" },
+          { "title": "Playground", "icon": "" }
+        ]
       },
       "cards": [
         { "title": "Gathering areas", "body": "Shared spaces encourage neighborly connection without overwhelming private residential life.", "image": "" },

@@ -63,11 +63,11 @@ function mergeMissing(defaultValue, currentValue) {
 
 function normalizeContent(data) {
   data.nav.forEach((item) => {
-    if (item.href === "/sustainability" && item.label === "Sustainability") item.label = "PROPERTY DETAILS";
+    if (item.href === "/sustainability" && ["Sustainability", "PROPERTY DETAILS"].includes(item.label)) item.label = "Property Details";
     if (item.href === "/community" && item.label === "Community") item.label = "Amenities";
   });
-  if (data.pages["/sustainability"]?.title === "Sustainability") {
-    data.pages["/sustainability"].title = "PROPERTY DETAILS";
+  if (["Sustainability", "PROPERTY DETAILS"].includes(data.pages["/sustainability"]?.title)) {
+    data.pages["/sustainability"].title = "Property Details";
     data.pages["/sustainability"].eyebrow = "Property information";
     data.pages["/sustainability"].body = "Explore the property details and in-home features planned for Cherry Street Commons.";
   }
@@ -75,6 +75,10 @@ function normalizeContent(data) {
     data.pages["/community"].title = "Amenities";
     data.pages["/community"].eyebrow = "Community amenities";
     data.pages["/community"].body = "Amenities that support convenience, connection, security, and everyday resident life.";
+  }
+  const amenities = data.pages["/community"]?.amenities;
+  if (amenities && (!Array.isArray(amenities.items) || !amenities.items.length)) {
+    amenities.items = splitLines(amenities.itemsText).map((title) => ({ title, icon: "" }));
   }
   return data;
 }
@@ -261,6 +265,11 @@ function renderPropertyDetails(page) {
   const details = page.details || {};
   const features = splitLines(details.featuresText).map((feature) => `<li>${esc(feature)}</li>`).join("");
   return `<section class="property-details-section">
+    <div class="section-heading details-heading">
+      <p class="eyebrow">${esc(page.eyebrow)}</p>
+      <h2>${esc(details.title || page.title)}</h2>
+      <p>${esc(details.subtitle || page.body)}</p>
+    </div>
     <article class="units-card">
       <span>${esc(details.unitsLabel || "Number of Units")}</span>
       <strong>${esc(details.unitsValue || "")}</strong>
@@ -274,7 +283,12 @@ function renderPropertyDetails(page) {
 
 function renderAmenities(page) {
   const amenities = page.amenities || {};
-  const items = splitLines(amenities.itemsText).map((item) => `<li>${esc(item)}</li>`).join("");
+  const sourceItems = Array.isArray(amenities.items) && amenities.items.length
+    ? amenities.items
+    : splitLines(amenities.itemsText).map((title) => ({ title, icon: "" }));
+  const items = sourceItems
+    .map((item) => `<li>${item.icon ? `<img src="${esc(item.icon)}" alt="">` : `<span class="amenity-icon-fallback"></span>`}<strong>${esc(item.title)}</strong></li>`)
+    .join("");
   return `<section class="amenities-section">
     <div class="section-heading">
       <p class="eyebrow">${esc(page.eyebrow)}</p>
@@ -429,10 +443,13 @@ app.get("/manager", requireAdmin, (_req, res) => {
       sections.push(`<section><h2>About Content</h2>${field("Title", "pages./about.aboutSection.title", data)}${field("Subtitle", "pages./about.aboutSection.subtitle", data)}${field("Text", "pages./about.aboutSection.body", data, "textarea")}</section>`);
     }
     if (route === "/sustainability") {
-      sections.push(`<section><h2>Property Details</h2>${field("Units Label", "pages./sustainability.details.unitsLabel", data)}${field("Units Value", "pages./sustainability.details.unitsValue", data)}${field("Features Title", "pages./sustainability.details.featuresTitle", data)}${field("Unit Features", "pages./sustainability.details.featuresText", data, "textarea")}</section>`);
+      sections.push(`<section><h2>Property Details</h2>${field("Main Title", "pages./sustainability.details.title", data)}${field("Subtitle", "pages./sustainability.details.subtitle", data, "textarea")}${field("Units Label", "pages./sustainability.details.unitsLabel", data)}${field("Units Value", "pages./sustainability.details.unitsValue", data)}${field("Features Title", "pages./sustainability.details.featuresTitle", data)}${field("Unit Features", "pages./sustainability.details.featuresText", data, "textarea")}</section>`);
     }
     if (route === "/community") {
       sections.push(`<section><h2>Amenities</h2>${field("Title", "pages./community.amenities.title", data)}${field("Subtitle", "pages./community.amenities.subtitle", data)}${field("Amenities List", "pages./community.amenities.itemsText", data, "textarea")}</section>`);
+      (page.amenities.items || []).forEach((_, index) => {
+        sections.push(`<section><h2>Amenity ${index + 1}</h2>${field("Title", `pages./community.amenities.items.${index}.title`, data)}${imageField("Icon SVG", `pages./community.amenities.items.${index}.icon`, data)}</section>`);
+      });
     }
     if (!["/about", "/sustainability", "/community"].includes(route)) {
       page.cards.forEach((_, index) => {
