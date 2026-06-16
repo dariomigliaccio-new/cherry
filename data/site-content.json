@@ -19,6 +19,12 @@
     { "label": "Floor Plans", "href": "/floor-plans" },
     { "label": "Apply now", "href": "/contact" }
   ],
+  "announcement": {
+    "enabled": true,
+    "text": "",
+    "linkUrl": "",
+    "speed": "32"
+  },
   "home": {
     "slides": [
       {

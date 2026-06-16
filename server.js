@@ -159,6 +159,18 @@ function renderMenuIcon(data) {
   return "<span></span><span></span><span></span>";
 }
 
+function renderAnnouncement(data) {
+  const announcement = data.announcement || {};
+  const text = String(announcement.text || "").trim();
+  if (!announcement.enabled || !text) return "";
+  const item = `<span>★ &nbsp;${esc(text)}&nbsp;</span>`;
+  const items = Array.from({ length: 8 }, () => item).join("");
+  const content = announcement.linkUrl
+    ? `<a href="${esc(announcement.linkUrl)}">${items}</a>`
+    : items;
+  return `<div class="announcement-bar" style="--ticker-duration:${esc(announcement.speed || "32")}s"><div class="announcement-track">${content}</div></div>`;
+}
+
 function applyHref(data) {
   return data.site.applyUrl?.trim() || "#";
 }
@@ -214,6 +226,7 @@ function renderLayout({ title, content, activePath = "/", home = false }) {
           <nav class="desktop-nav" aria-label="Primary navigation">${nav}</nav>
         </div>
       </header>
+      ${renderAnnouncement(data)}
       <aside class="side-menu" aria-hidden="true" data-side-menu>
         <div class="side-menu-top">
           <strong class="side-menu-brand">${esc(data.site.name)}</strong>
@@ -554,6 +567,7 @@ app.get("/manager", requireAdmin, (_req, res) => {
   const data = readContent();
   const sections = [];
   sections.push(`<section><h2>Site</h2>${field("Name", "site.name", data)}${field("Tagline", "site.tagline", data)}${field("Brand initials", "site.brandInitials", data)}${imageField("Affordable Homes / header logo SVG", "site.logoImage", data)}${imageField("Hamburger menu SVG", "site.menuIcon", data)}${field("Apply button label", "site.applyLabel", data)}${field("Apply button URL", "site.applyUrl", data)}</section>`);
+  sections.push(`<section><h2>Scrolling Announcement</h2>${checkboxField("Show scrolling announcement", "announcement.enabled", data)}${field("Announcement text", "announcement.text", data, "textarea")}${field("Announcement link URL", "announcement.linkUrl", data)}${field("Speed in seconds", "announcement.speed", data, "number")}</section>`);
   sections.push(`<section><h2>Home Intro</h2>${field("Eyebrow", "home.intro.eyebrow", data)}${field("Title", "home.intro.title", data)}${field("Body", "home.intro.body", data, "textarea")}</section>`);
   data.home.slides.forEach((_, index) => {
     sections.push(`<section><h2>Home Banner ${index + 1}</h2>${checkboxField("Remove this banner", "removeHomeSlides", { removeHomeSlides: false }).replace('value="true"', `value="${index}"`)}${field("Eyebrow", `home.slides.${index}.eyebrow`, data)}${field("Title", `home.slides.${index}.title`, data)}${field("Body", `home.slides.${index}.body`, data, "textarea")}${field("Button Label", `home.slides.${index}.buttonLabel`, data)}${field("Button URL", `home.slides.${index}.buttonUrl`, data)}${imageField("Banner image", `home.slides.${index}.image`, data)}</section>`);
@@ -625,6 +639,7 @@ app.post("/manager", requireAdmin, upload.any(), (req, res) => {
   delete req.body.removeHomeSlides;
   delete req.body.removeHomeCards;
   delete req.body.removeNeiborhuudCards;
+  data.announcement.enabled = false;
   Object.entries(req.body).forEach(([name, value]) => {
     setByPath(data, name, value);
   });
