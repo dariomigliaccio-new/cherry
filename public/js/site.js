@@ -42,11 +42,12 @@ function initPropertyMap() {
   const mapElement = document.getElementById("property-map");
   if (!mapElement || !window.L) return;
 
-  const propertyCenter = [37.5049699, -122.2601696];
+  const location = window.siteLocation || {};
+  const propertyCenter = [Number(location.lat || 37.5049699), Number(location.lng || -122.2601696)];
   const map = L.map(mapElement, {
     scrollWheelZoom: false,
     zoomControl: true
-  }).setView(propertyCenter, 14);
+  }).setView(propertyCenter, Number(location.zoom || 14));
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
@@ -62,7 +63,7 @@ function initPropertyMap() {
 
   L.marker(propertyCenter, { icon: marker })
     .addTo(map)
-    .bindPopup("<strong>Cherry Street Commons</strong><br>1244 Cherry Street<br>San Carlos, CA");
+    .bindPopup(`<strong>Cherry Street Commons</strong><br>${location.address || "1244 Cherry Street, San Carlos, CA"}`);
 }
 
 window.addEventListener("load", initPropertyMap);

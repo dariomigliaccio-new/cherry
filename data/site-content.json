@@ -1,0 +1,143 @@
+{
+  "site": {
+    "name": "Cherry Street Commons",
+    "tagline": "Affordable Homes",
+    "description": "Affordable homes at Cherry Street Commons.",
+    "brandInitials": "CS",
+    "applyUrl": "/contact",
+    "applyLabel": "Apply for the Property"
+  },
+  "nav": [
+    { "label": "Home", "href": "/" },
+    { "label": "About", "href": "/about" },
+    { "label": "Sustainability", "href": "/sustainability" },
+    { "label": "Community", "href": "/community" },
+    { "label": "Floor Plans", "href": "/floor-plans" },
+    { "label": "Contact", "href": "/contact" }
+  ],
+  "home": {
+    "slides": [
+      {
+        "eyebrow": "Affordable Homes",
+        "title": "Cherry Street Commons",
+        "body": "Modern, welcoming homes designed for comfort, access, and community.",
+        "buttonLabel": "Apply for the Property",
+        "buttonUrl": "/contact",
+        "image": "/assets/hero-cherry.png"
+      },
+      {
+        "eyebrow": "Now welcoming applicants",
+        "title": "A practical place to call home",
+        "body": "Thoughtful layouts, shared green space, and a location built around daily needs.",
+        "buttonLabel": "View Floor Plans",
+        "buttonUrl": "/floor-plans",
+        "image": "/assets/hero-cherry.png"
+      },
+      {
+        "eyebrow": "Connected living",
+        "title": "Comfort with community nearby",
+        "body": "Explore affordable housing created for stability, belonging, and long-term value.",
+        "buttonLabel": "Learn More",
+        "buttonUrl": "/about",
+        "image": "/assets/hero-cherry.png"
+      }
+    ],
+    "intro": {
+      "eyebrow": "Welcome home",
+      "title": "Affordable homes planned around real life.",
+      "body": "Cherry Street Commons brings together comfortable residences, useful community spaces, and a simple path for applicants who want a clear next step."
+    },
+    "cards": [
+      { "number": "01", "title": "Affordable Living", "body": "Homes designed to support household budgets without sacrificing comfort.", "image": "" },
+      { "number": "02", "title": "Community Spaces", "body": "Outdoor and shared areas give residents room to connect and recharge.", "image": "" },
+      { "number": "03", "title": "Efficient Design", "body": "Durable finishes and efficient systems support responsible long-term living.", "image": "" },
+      { "number": "04", "title": "Easy Application", "body": "A direct application path helps residents understand eligibility and next steps.", "image": "" }
+    ]
+  },
+  "location": {
+    "eyebrow": "Location",
+    "title": "Find Cherry Street Commons",
+    "body": "Use the interactive map to locate the property and plan your route.",
+    "address": "1244 Cherry Street, San Carlos, CA",
+    "lat": 37.5049699,
+    "lng": -122.2601696,
+    "zoom": 14
+  },
+  "pages": {
+    "/about": {
+      "title": "About Cherry Street Commons",
+      "eyebrow": "Affordable homes with everyday access",
+      "body": "Cherry Street Commons is planned around practical, welcoming homes for residents who want stability, comfort, and connection. The property brings together thoughtful layouts, accessible paths, and shared spaces that support daily life.",
+      "bannerImage": "/assets/hero-cherry.png",
+      "cards": [
+        { "title": "Resident first", "body": "Homes and common areas are arranged for clear navigation, comfort, and everyday convenience.", "image": "" },
+        { "title": "Built for access", "body": "The site emphasizes walkability, transit-friendly living, and approachable application guidance.", "image": "" },
+        { "title": "Long-term value", "body": "Durable materials and efficient systems help keep the community reliable over time.", "image": "" }
+      ]
+    },
+    "/sustainability": {
+      "title": "Sustainability",
+      "eyebrow": "Efficient living, responsible choices",
+      "body": "The community is shaped by resource-conscious decisions, from energy-aware building practices to landscape choices that make the property easier to maintain and more pleasant to live in.",
+      "bannerImage": "/assets/hero-cherry.png",
+      "cards": [
+        { "title": "Energy smart", "body": "Efficient fixtures and systems are intended to reduce waste and support resident affordability.", "image": "" },
+        { "title": "Healthy grounds", "body": "Landscaping is planned to provide shade, soften the site, and create a calmer street presence.", "image": "" },
+        { "title": "Lower impact", "body": "Shared amenities and compact layouts help make daily living more efficient.", "image": "" }
+      ]
+    },
+    "/community": {
+      "title": "Community",
+      "eyebrow": "A place to feel connected",
+      "body": "Cherry Street Commons is designed to support a balanced neighborhood experience, with places to gather, clear outdoor circulation, and a residential scale that feels approachable.",
+      "bannerImage": "/assets/hero-cherry.png",
+      "cards": [
+        { "title": "Gathering areas", "body": "Shared spaces encourage neighborly connection without overwhelming private residential life.", "image": "" },
+        { "title": "Neighborhood scale", "body": "The property is designed to feel grounded in the surrounding community.", "image": "" },
+        { "title": "Everyday support", "body": "Clear contact paths help applicants and residents get information when they need it.", "image": "" }
+      ]
+    },
+    "/floor-plans": {
+      "title": "Floor Plans",
+      "eyebrow": "Simple layouts for real daily needs",
+      "body": "Floor plan details can be presented by bedroom count, availability, and household needs. Applicants can contact the property team for current availability and eligibility requirements.",
+      "bannerImage": "/assets/hero-cherry.png",
+      "cards": [
+        { "title": "One bedroom", "body": "Efficient private homes for individuals or smaller households.", "image": "" },
+        { "title": "Two bedroom", "body": "Balanced layouts with more room for daily routines.", "image": "" },
+        { "title": "Accessible options", "body": "Select homes may support accessibility needs. Contact the property team for details.", "image": "" }
+      ],
+      "floorPlans": [
+        { "title": "One Bedroom Plan", "label": "1 BR", "body": "Floor plan image and apartment details can be added here.", "image": "" },
+        { "title": "Two Bedroom Plan", "label": "2 BR", "body": "Floor plan image and apartment details can be added here.", "image": "" },
+        { "title": "Accessible Plan", "label": "ADA", "body": "Accessible layout image and availability notes can be added here.", "image": "" }
+      ]
+    },
+    "/contact": {
+      "title": "Contact",
+      "eyebrow": "Apply or ask a question",
+      "body": "Use the application button or contact the property team to learn about availability, income guidelines, required documents, and next steps for Cherry Street Commons.",
+      "bannerImage": "/assets/hero-cherry.png",
+      "cards": [
+        { "title": "Apply online", "body": "Start the application process and receive next-step instructions.", "image": "" },
+        { "title": "Ask about eligibility", "body": "Confirm household, income, and document requirements before applying.", "image": "" },
+        { "title": "Visit the property", "body": "Use the map to locate Cherry Street Commons and plan your visit.", "image": "" }
+      ]
+    }
+  },
+  "footer": {
+    "headline": "Cherry Street Commons",
+    "body": "Affordable homes designed for access, comfort, and community in San Carlos.",
+    "address": "1244 Cherry Street, San Carlos, CA",
+    "phone": "(555) 555-5555",
+    "email": "leasing@1244cherry.com",
+    "ctaLabel": "Apply for the Property",
+    "ctaUrl": "/contact",
+    "copyright": "2026 Cherry Street Commons. All rights reserved.",
+    "social": [
+      { "label": "Facebook", "url": "https://facebook.com" },
+      { "label": "Instagram", "url": "https://instagram.com" },
+      { "label": "LinkedIn", "url": "https://linkedin.com" }
+    ]
+  }
+}

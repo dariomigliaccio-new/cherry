@@ -1,105 +1,101 @@
 const express = require("express");
+const fs = require("fs");
 const path = require("path");
+const session = require("express-session");
+const multer = require("multer");
 
 const app = express();
 const port = process.env.PORT || 3000;
+const dataPath = process.env.CONTENT_FILE || path.join(__dirname, "data", "site-content.json");
+const uploadsDir = path.join(__dirname, "public", "uploads");
+const adminPassword = process.env.ADMIN_PASSWORD || "site-content";
 
-const navItems = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Sustainability", href: "/sustainability" },
-  { label: "Community", href: "/community" },
-  { label: "Floor Plans", href: "/floor-plans" },
-  { label: "Contact", href: "/contact" }
-];
+fs.mkdirSync(path.dirname(dataPath), { recursive: true });
+fs.mkdirSync(uploadsDir, { recursive: true });
 
-const pages = {
-  "/about": {
-    title: "About Cherry Street Commons",
-    eyebrow: "Affordable homes with everyday access",
-    body:
-      "Cherry Street Commons is planned around practical, welcoming homes for residents who want stability, comfort, and connection. The property brings together thoughtful layouts, accessible paths, and shared spaces that support daily life.",
-    cards: [
-      ["Resident first", "Homes and common areas are arranged for clear navigation, comfort, and everyday convenience."],
-      ["Built for access", "The site emphasizes walkability, transit-friendly living, and approachable application guidance."],
-      ["Long-term value", "Durable materials and efficient systems help keep the community reliable over time."]
-    ]
-  },
-  "/sustainability": {
-    title: "Sustainability",
-    eyebrow: "Efficient living, responsible choices",
-    body:
-      "The community is shaped by resource-conscious decisions, from energy-aware building practices to landscape choices that make the property easier to maintain and more pleasant to live in.",
-    cards: [
-      ["Energy smart", "Efficient fixtures and systems are intended to reduce waste and support resident affordability."],
-      ["Healthy grounds", "Landscaping is planned to provide shade, soften the site, and create a calmer street presence."],
-      ["Lower impact", "Shared amenities and compact layouts help make daily living more efficient."]
-    ]
-  },
-  "/community": {
-    title: "Community",
-    eyebrow: "A place to feel connected",
-    body:
-      "Cherry Street Commons is designed to support a balanced neighborhood experience, with places to gather, clear outdoor circulation, and a residential scale that feels approachable.",
-    cards: [
-      ["Gathering areas", "Shared spaces encourage neighborly connection without overwhelming private residential life."],
-      ["Neighborhood scale", "The property is designed to feel grounded in the surrounding community."],
-      ["Everyday support", "Clear contact paths help applicants and residents get information when they need it."]
-    ]
-  },
-  "/floor-plans": {
-    title: "Floor Plans",
-    eyebrow: "Simple layouts for real daily needs",
-    body:
-      "Floor plan details can be presented by bedroom count, availability, and household needs. Applicants can contact the property team for current availability and eligibility requirements.",
-    cards: [
-      ["One bedroom", "Efficient private homes for individuals or smaller households."],
-      ["Two bedroom", "Balanced layouts with more room for daily routines."],
-      ["Accessible options", "Select homes may support accessibility needs. Contact the property team for details."]
-    ]
-  },
-  "/contact": {
-    title: "Contact",
-    eyebrow: "Apply or ask a question",
-    body:
-      "Use the application button or contact the property team to learn about availability, income guidelines, required documents, and next steps for Cherry Street Commons.",
-    cards: [
-      ["Apply online", "Start the application process and receive next-step instructions."],
-      ["Ask about eligibility", "Confirm household, income, and document requirements before applying."],
-      ["Visit the property", "Use the map to locate Cherry Street Commons and plan your visit."]
-    ]
-  }
-};
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (_req, _file, cb) => cb(null, uploadsDir),
+    filename: (_req, file, cb) => {
+      const ext = path.extname(file.originalname).toLowerCase();
+      const base = path.basename(file.originalname, ext).replace(/[^a-z0-9]+/gi, "-").toLowerCase();
+      cb(null, `${Date.now()}-${base}${ext}`);
+    }
+  })
+});
 
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "cherry-street-commons-admin",
+    resave: false,
+    saveUninitialized: false
+  })
+);
 app.use(express.static(path.join(__dirname, "public")));
 
+function readContent() {
+  return JSON.parse(fs.readFileSync(dataPath, "utf8"));
+}
+
+function writeContent(content) {
+  fs.writeFileSync(dataPath, `${JSON.stringify(content, null, 2)}\n`);
+}
+
+function esc(value = "") {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function setByPath(target, dottedPath, value) {
+  const parts = dottedPath.split(".");
+  let current = target;
+  parts.slice(0, -1).forEach((part) => {
+    current = current[Number.isNaN(Number(part)) ? part : Number(part)];
+  });
+  current[parts.at(-1)] = value;
+}
+
+function getByPath(target, dottedPath) {
+  return dottedPath.split(".").reduce((current, part) => {
+    if (current == null) return "";
+    return current[Number.isNaN(Number(part)) ? part : Number(part)];
+  }, target);
+}
+
+function renderImage(image, alt) {
+  return image ? `<img class="card-image" src="${esc(image)}" alt="${esc(alt)}">` : "";
+}
+
 function renderLayout({ title, content, activePath = "/", home = false }) {
-  const nav = navItems
+  const data = readContent();
+  const nav = data.nav
     .map((item) => {
       const active = item.href === activePath ? " active" : "";
-      return `<a class="nav-link${active}" href="${item.href}">${item.label}</a>`;
+      return `<a class="nav-link${active}" href="${esc(item.href)}">${esc(item.label)}</a>`;
     })
     .join("");
 
-  const footer = home
-    ? ""
-    : `<footer class="site-footer">
-        <p>Cherry Street Commons</p>
-        <a href="/contact">Contact the property team</a>
-      </footer>`;
+  const footer = home ? "" : renderFooter(data);
 
   return `<!doctype html>
   <html lang="en">
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>${title}</title>
-      <meta name="description" content="Affordable homes at Cherry Street Commons.">
+      <title>${esc(title)}</title>
+      <meta name="description" content="${esc(data.site.description)}">
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
       <link rel="stylesheet" href="/css/styles.css">
+      <script>
+        window.siteLocation = ${JSON.stringify(data.location)};
+      </script>
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
       <script src="/js/site.js" defer></script>
     </head>
@@ -111,10 +107,10 @@ function renderLayout({ title, content, activePath = "/", home = false }) {
               <span></span><span></span><span></span>
             </button>
             <a class="brand" href="/">
-              <span class="brand-mark">CS</span>
+              <span class="brand-mark">${esc(data.site.brandInitials)}</span>
               <span>
-                <strong>Cherry Street</strong>
-                <small>Affordable Homes</small>
+                <strong>${esc(data.site.name)}</strong>
+                <small>${esc(data.site.tagline)}</small>
               </span>
             </a>
           </div>
@@ -123,7 +119,7 @@ function renderLayout({ title, content, activePath = "/", home = false }) {
       </header>
       <aside class="side-menu" aria-hidden="true" data-side-menu>
         <div class="side-menu-top">
-          <span class="brand-mark">CS</span>
+          <span class="brand-mark">${esc(data.site.brandInitials)}</span>
           <button class="close-button" type="button" aria-label="Close menu" data-close-menu>&times;</button>
         </div>
         <nav aria-label="Mobile navigation">${nav}</nav>
@@ -135,105 +131,212 @@ function renderLayout({ title, content, activePath = "/", home = false }) {
   </html>`;
 }
 
-function mapSection() {
+function renderFooter(data) {
+  const links = data.nav.map((item) => `<a href="${esc(item.href)}">${esc(item.label)}</a>`).join("");
+  const social = data.footer.social
+    .map((item) => `<a class="social-link" href="${esc(item.url)}" target="_blank" rel="noreferrer">${esc(item.label)}</a>`)
+    .join("");
+
+  return `<footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark">${esc(data.site.brandInitials)}</span>
+      <h2>${esc(data.footer.headline)}</h2>
+      <p>${esc(data.footer.body)}</p>
+      <a class="footer-cta" href="${esc(data.footer.ctaUrl)}">${esc(data.footer.ctaLabel)}</a>
+    </div>
+    <div class="footer-column">
+      <h3>Explore</h3>
+      <nav>${links}</nav>
+    </div>
+    <div class="footer-column">
+      <h3>Contact</h3>
+      <p>${esc(data.footer.address)}</p>
+      <a href="tel:${esc(data.footer.phone)}">${esc(data.footer.phone)}</a>
+      <a href="mailto:${esc(data.footer.email)}">${esc(data.footer.email)}</a>
+    </div>
+    <div class="footer-column">
+      <h3>Social</h3>
+      <div class="social-links">${social}</div>
+    </div>
+    <div class="footer-bottom">${esc(data.footer.copyright)}</div>
+  </footer>`;
+}
+
+function mapSection(data) {
   return `<section class="map-section" aria-label="Property location">
     <div class="map-copy">
-      <p class="eyebrow">Location</p>
-      <h2>Find Cherry Street Commons</h2>
-      <p>Use the interactive map to locate the property and plan your route.</p>
+      <p class="eyebrow">${esc(data.location.eyebrow)}</p>
+      <h2>${esc(data.location.title)}</h2>
+      <p>${esc(data.location.body)}</p>
     </div>
-    <div class="property-map" id="property-map" role="img" aria-label="Interactive map showing the Cherry Street Commons area"></div>
+    <div class="property-map" id="property-map" role="img" aria-label="Interactive map showing ${esc(data.location.address)}"></div>
   </section>`;
 }
 
 app.get("/", (_req, res) => {
+  const data = readContent();
+  const slides = data.home.slides
+    .map(
+      (slide, index) => `<div class="slide${index === 0 ? " active" : ""}" style="background-image:url('${esc(slide.image)}')">
+      <div class="hero-content">
+        <p class="eyebrow">${esc(slide.eyebrow)}</p>
+        <h1>${esc(slide.title)}</h1>
+        <p>${esc(slide.body)}</p>
+        <a class="primary-button" href="${esc(slide.buttonUrl)}">${esc(slide.buttonLabel)}</a>
+      </div>
+    </div>`
+    )
+    .join("");
+  const dots = data.home.slides
+    .map((_, index) => `<button class="dot${index === 0 ? " active" : ""}" type="button" aria-label="Show slide ${index + 1}"></button>`)
+    .join("");
+  const cards = data.home.cards
+    .map(
+      (card) => `<article>${renderImage(card.image, card.title)}<span>${esc(card.number)}</span><h3>${esc(card.title)}</h3><p>${esc(card.body)}</p></article>`
+    )
+    .join("");
+
   const content = `<section class="hero-slider" aria-label="Featured property">
-    <div class="slide active" style="background-image:url('/assets/hero-cherry.png')">
-      <div class="hero-content">
-        <p class="eyebrow">Affordable Homes</p>
-        <h1>Cherry Street Commons</h1>
-        <p>Modern, welcoming homes designed for comfort, access, and community.</p>
-        <a class="primary-button" href="/contact">Apply for the Property</a>
-      </div>
-    </div>
-    <div class="slide" style="background-image:url('/assets/hero-cherry.png')">
-      <div class="hero-content">
-        <p class="eyebrow">Now welcoming applicants</p>
-        <h1>A practical place to call home</h1>
-        <p>Thoughtful layouts, shared green space, and a location built around daily needs.</p>
-        <a class="primary-button" href="/floor-plans">View Floor Plans</a>
-      </div>
-    </div>
-    <div class="slide" style="background-image:url('/assets/hero-cherry.png')">
-      <div class="hero-content">
-        <p class="eyebrow">Connected living</p>
-        <h1>Comfort with community nearby</h1>
-        <p>Explore affordable housing created for stability, belonging, and long-term value.</p>
-        <a class="primary-button" href="/about">Learn More</a>
-      </div>
-    </div>
-    <div class="slider-dots" aria-label="Banner controls">
-      <button class="dot active" type="button" aria-label="Show slide 1"></button>
-      <button class="dot" type="button" aria-label="Show slide 2"></button>
-      <button class="dot" type="button" aria-label="Show slide 3"></button>
-    </div>
+    ${slides}
+    <div class="slider-dots" aria-label="Banner controls">${dots}</div>
   </section>
   <section class="intro">
-    <p class="eyebrow">Welcome home</p>
-    <h2>Affordable homes planned around real life.</h2>
-    <p>Cherry Street Commons brings together comfortable residences, useful community spaces, and a simple path for applicants who want a clear next step.</p>
+    <p class="eyebrow">${esc(data.home.intro.eyebrow)}</p>
+    <h2>${esc(data.home.intro.title)}</h2>
+    <p>${esc(data.home.intro.body)}</p>
   </section>
-  <section class="home-cards" aria-label="Property highlights">
-    <article><span>01</span><h3>Affordable Living</h3><p>Homes designed to support household budgets without sacrificing comfort.</p></article>
-    <article><span>02</span><h3>Community Spaces</h3><p>Outdoor and shared areas give residents room to connect and recharge.</p></article>
-    <article><span>03</span><h3>Efficient Design</h3><p>Durable finishes and efficient systems support responsible long-term living.</p></article>
-    <article><span>04</span><h3>Easy Application</h3><p>A direct application path helps residents understand eligibility and next steps.</p></article>
-  </section>
-  ${mapSection()}`;
+  <section class="home-cards" aria-label="Property highlights">${cards}</section>
+  ${mapSection(data)}`;
 
-  res.send(renderLayout({ title: "Cherry Street Commons | Affordable Homes", content, activePath: "/", home: true }));
+  res.send(renderLayout({ title: `${data.site.name} | ${data.site.tagline}`, content, activePath: "/", home: true }));
 });
 
-Object.entries(pages).forEach(([route, page]) => {
+Object.entries(readContent().pages).forEach(([route]) => {
   app.get(route, (_req, res) => {
+    const data = readContent();
+    const page = data.pages[route];
     const cardMarkup = page.cards
-      .map(([heading, text]) => `<article><h3>${heading}</h3><p>${text}</p></article>`)
+      .map((card) => `<article>${renderImage(card.image, card.title)}<h3>${esc(card.title)}</h3><p>${esc(card.body)}</p></article>`)
       .join("");
     const floorPlanMarkup =
       route === "/floor-plans"
         ? `<section class="floor-plan-gallery" aria-label="Apartment floor plan models">
-            <article>
-              <div class="plan-placeholder">1 BR</div>
-              <h2>One Bedroom Plan</h2>
-              <p>Floor plan image and apartment details can be added here.</p>
-            </article>
-            <article>
-              <div class="plan-placeholder">2 BR</div>
-              <h2>Two Bedroom Plan</h2>
-              <p>Floor plan image and apartment details can be added here.</p>
-            </article>
-            <article>
-              <div class="plan-placeholder">ADA</div>
-              <h2>Accessible Plan</h2>
-              <p>Accessible layout image and availability notes can be added here.</p>
-            </article>
+            ${page.floorPlans
+              .map(
+                (plan) => `<article>
+              ${plan.image ? `<img class="plan-image" src="${esc(plan.image)}" alt="${esc(plan.title)}">` : `<div class="plan-placeholder">${esc(plan.label)}</div>`}
+              <h2>${esc(plan.title)}</h2>
+              <p>${esc(plan.body)}</p>
+            </article>`
+              )
+              .join("")}
           </section>`
         : "";
 
-    const content = `<section class="page-banner" style="background-image:url('/assets/hero-cherry.png')">
+    const content = `<section class="page-banner" style="background-image:url('${esc(page.bannerImage)}')">
         <div class="page-banner-content">
-          <p class="eyebrow">${page.eyebrow}</p>
-          <h1>${page.title}</h1>
-          <p>${page.body}</p>
-          <a class="primary-button" href="/contact">Apply for the Property</a>
+          <p class="eyebrow">${esc(page.eyebrow)}</p>
+          <h1>${esc(page.title)}</h1>
+          <p>${esc(page.body)}</p>
+          <a class="primary-button" href="${esc(data.site.applyUrl)}">${esc(data.site.applyLabel)}</a>
         </div>
       </section>
       <section class="subpage-cards">${cardMarkup}</section>
       ${floorPlanMarkup}
-      ${route === "/contact" ? mapSection() : ""}`;
+      ${route === "/contact" ? mapSection(data) : ""}`;
 
-    res.send(renderLayout({ title: `${page.title} | Cherry Street Commons`, content, activePath: route }));
+    res.send(renderLayout({ title: `${page.title} | ${data.site.name}`, content, activePath: route }));
   });
+});
+
+function requireAdmin(req, res, next) {
+  if (req.session.admin) return next();
+  res.redirect("/manager/login");
+}
+
+function field(label, name, data, type = "text") {
+  const value = getByPath(data, name) || "";
+  const input =
+    type === "textarea"
+      ? `<textarea name="${esc(name)}" rows="3">${esc(value)}</textarea>`
+      : `<input type="${esc(type)}" name="${esc(name)}" value="${esc(value)}">`;
+  return `<label><span>${esc(label)}</span>${input}</label>`;
+}
+
+function imageField(label, name, data) {
+  const value = getByPath(data, name) || "";
+  return `<label><span>${esc(label)}</span><input type="file" name="${esc(name)}" accept="image/*"><small>${esc(value || "No image selected")}</small></label>`;
+}
+
+function adminShell(content) {
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Site Manager</title><link rel="stylesheet" href="/css/admin.css"></head><body>${content}</body></html>`;
+}
+
+app.get("/manager/login", (req, res) => {
+  res.send(
+    adminShell(`<main class="login-panel"><h1>Site Manager</h1><form method="post" action="/manager/login"><label>Password<input type="password" name="password" autofocus></label><button>Login</button>${req.query.error ? "<p>Invalid password.</p>" : ""}</form></main>`)
+  );
+});
+
+app.post("/manager/login", (req, res) => {
+  if (req.body.password === adminPassword) {
+    req.session.admin = true;
+    res.redirect("/manager");
+    return;
+  }
+  res.redirect("/manager/login?error=1");
+});
+
+app.post("/manager/logout", (req, res) => {
+  req.session.destroy(() => res.redirect("/manager/login"));
+});
+
+app.get("/manager", requireAdmin, (_req, res) => {
+  const data = readContent();
+  const sections = [];
+  sections.push(`<section><h2>Site</h2>${field("Name", "site.name", data)}${field("Tagline", "site.tagline", data)}${field("Apply label", "site.applyLabel", data)}${field("Apply URL", "site.applyUrl", data)}</section>`);
+  sections.push(`<section><h2>Home Intro</h2>${field("Eyebrow", "home.intro.eyebrow", data)}${field("Title", "home.intro.title", data)}${field("Body", "home.intro.body", data, "textarea")}</section>`);
+  data.home.slides.forEach((_, index) => {
+    sections.push(`<section><h2>Home Banner ${index + 1}</h2>${field("Eyebrow", `home.slides.${index}.eyebrow`, data)}${field("Title", `home.slides.${index}.title`, data)}${field("Body", `home.slides.${index}.body`, data, "textarea")}${field("Button Label", `home.slides.${index}.buttonLabel`, data)}${field("Button URL", `home.slides.${index}.buttonUrl`, data)}${imageField("Banner image", `home.slides.${index}.image`, data)}</section>`);
+  });
+  data.home.cards.forEach((_, index) => {
+    sections.push(`<section><h2>Home Card ${index + 1}</h2>${field("Number", `home.cards.${index}.number`, data)}${field("Title", `home.cards.${index}.title`, data)}${field("Body", `home.cards.${index}.body`, data, "textarea")}${imageField("Card image", `home.cards.${index}.image`, data)}</section>`);
+  });
+  Object.entries(data.pages).forEach(([route, page]) => {
+    sections.push(`<section><h2>${esc(page.title)} Page</h2>${field("Eyebrow", `pages.${route}.eyebrow`, data)}${field("Title", `pages.${route}.title`, data)}${field("Body", `pages.${route}.body`, data, "textarea")}${imageField("Banner image", `pages.${route}.bannerImage`, data)}</section>`);
+    page.cards.forEach((_, index) => {
+      sections.push(`<section><h2>${esc(page.title)} Card ${index + 1}</h2>${field("Title", `pages.${route}.cards.${index}.title`, data)}${field("Body", `pages.${route}.cards.${index}.body`, data, "textarea")}${imageField("Card image", `pages.${route}.cards.${index}.image`, data)}</section>`);
+    });
+    if (route === "/floor-plans") {
+      page.floorPlans.forEach((_, index) => {
+        sections.push(`<section><h2>Floor Plan ${index + 1}</h2>${field("Label", `pages./floor-plans.floorPlans.${index}.label`, data)}${field("Title", `pages./floor-plans.floorPlans.${index}.title`, data)}${field("Body", `pages./floor-plans.floorPlans.${index}.body`, data, "textarea")}${imageField("Plan image", `pages./floor-plans.floorPlans.${index}.image`, data)}</section>`);
+      });
+    }
+  });
+  sections.push(`<section><h2>Location</h2>${field("Eyebrow", "location.eyebrow", data)}${field("Title", "location.title", data)}${field("Body", "location.body", data, "textarea")}${field("Address", "location.address", data)}${field("Latitude", "location.lat", data, "number")}${field("Longitude", "location.lng", data, "number")}${field("Zoom", "location.zoom", data, "number")}</section>`);
+  sections.push(`<section><h2>Footer</h2>${field("Headline", "footer.headline", data)}${field("Body", "footer.body", data, "textarea")}${field("Address", "footer.address", data)}${field("Phone", "footer.phone", data)}${field("Email", "footer.email", data, "email")}${field("CTA Label", "footer.ctaLabel", data)}${field("CTA URL", "footer.ctaUrl", data)}${field("Copyright", "footer.copyright", data)}</section>`);
+  data.footer.social.forEach((_, index) => {
+    sections.push(`<section><h2>Social ${index + 1}</h2>${field("Label", `footer.social.${index}.label`, data)}${field("URL", `footer.social.${index}.url`, data, "url")}</section>`);
+  });
+
+  res.send(
+    adminShell(`<header class="admin-header"><h1>Site Manager</h1><div><a href="/" target="_blank">View site</a><form method="post" action="/manager/logout"><button>Logout</button></form></div></header><form class="admin-form" method="post" action="/manager" enctype="multipart/form-data">${sections.join("")}<button class="save-button">Save Changes</button></form>`)
+  );
+});
+
+app.post("/manager", requireAdmin, upload.any(), (req, res) => {
+  const data = readContent();
+  Object.entries(req.body).forEach(([name, value]) => {
+    setByPath(data, name, value);
+  });
+  req.files.forEach((file) => {
+    setByPath(data, file.fieldname, `/uploads/${file.filename}`);
+  });
+  data.location.lat = Number(data.location.lat);
+  data.location.lng = Number(data.location.lng);
+  data.location.zoom = Number(data.location.zoom);
+  writeContent(data);
+  res.redirect("/manager?saved=1");
 });
 
 app.listen(port, () => {
