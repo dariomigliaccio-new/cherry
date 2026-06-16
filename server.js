@@ -77,7 +77,7 @@ function normalizeContent(data) {
     { label: "Property Details", href: "/sustainability" },
     { label: "Amenities", href: "/community" },
     { label: "Eligibility", href: "/eligibility" },
-    { label: "Neiborhuud", href: "/neiborhub" },
+    { label: "Neighborhood", href: "/neiborhub" },
     { label: "Floor Plans", href: "/floor-plans" },
     { label: "Apply now", href: "/contact" }
   ];
@@ -594,11 +594,11 @@ app.get("/manager", requireAdmin, (_req, res) => {
       });
     }
     if (route === "/neiborhub") {
-      sections.push(`<section><h2>Neiborhuud Content</h2>${field("Title", "pages./neiborhub.neighborhood.title", data)}${field("Subtitle", "pages./neiborhub.neighborhood.subtitle", data)}${field("Text", "pages./neiborhub.neighborhood.body", data, "textarea")}</section>`);
+      sections.push(`<section><h2>Neighborhood Content</h2>${field("Title", "pages./neiborhub.neighborhood.title", data)}${field("Subtitle", "pages./neiborhub.neighborhood.subtitle", data)}${field("Text", "pages./neiborhub.neighborhood.body", data, "textarea")}</section>`);
       page.cards.forEach((_, index) => {
-        sections.push(`<section><h2>Neiborhuud Card ${index + 1}</h2>${checkboxField("Remove this card", "removeNeiborhuudCards", { removeNeiborhuudCards: false }).replace('value="true"', `value="${index}"`)}${field("Title", `pages./neiborhub.cards.${index}.title`, data)}${field("Body", `pages./neiborhub.cards.${index}.body`, data, "textarea")}${imageField("Card image", `pages./neiborhub.cards.${index}.image`, data)}</section>`);
+        sections.push(`<section><h2>Neighborhood Card ${index + 1}</h2>${checkboxField("Remove this card", "removeNeiborhuudCards", { removeNeiborhuudCards: false }).replace('value="true"', `value="${index}"`)}${field("Title", `pages./neiborhub.cards.${index}.title`, data)}${field("Body", `pages./neiborhub.cards.${index}.body`, data, "textarea")}${imageField("Card image", `pages./neiborhub.cards.${index}.image`, data)}</section>`);
       });
-      sections.push(`<section><h2>Neiborhuud Cards</h2><button class="secondary-button" type="submit" name="adminAction" value="addNeiborhuudCard">Add Neiborhuud card</button></section>`);
+      sections.push(`<section><h2>Neighborhood Cards</h2><button class="secondary-button" type="submit" name="adminAction" value="addNeiborhuudCard">Add Neighborhood card</button></section>`);
     }
     if (!["/about", "/sustainability", "/community", "/eligibility", "/neiborhub"].includes(route)) {
       page.cards.forEach((_, index) => {

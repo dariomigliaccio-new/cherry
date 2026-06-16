@@ -15,7 +15,7 @@
     { "label": "Property Details", "href": "/sustainability" },
     { "label": "Amenities", "href": "/community" },
     { "label": "Eligibility", "href": "/eligibility" },
-    { "label": "Neiborhuud", "href": "/neiborhub" },
+    { "label": "Neighborhood", "href": "/neiborhub" },
     { "label": "Floor Plans", "href": "/floor-plans" },
     { "label": "Apply now", "href": "/contact" }
   ],
@@ -190,12 +190,12 @@
       ]
     },
     "/neiborhub": {
-      "title": "Neiborhuud",
+      "title": "Neighborhood",
       "eyebrow": "Around the property",
       "body": "Use this page to highlight what is near the building, including transportation, schools, parks, shopping, services, and neighborhood destinations.",
       "bannerImage": "/assets/hero-cherry.png",
       "neighborhood": {
-        "title": "Explore the Neiborhuud",
+        "title": "Explore the Neighborhood",
         "subtitle": "Everything residents need nearby.",
         "body": "Use this section to describe transportation, shopping, schools, parks, services, and destinations around Cherry Street Commons."
       },
