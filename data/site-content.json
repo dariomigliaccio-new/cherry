@@ -152,6 +152,37 @@
       "eyebrow": "Qualification information",
       "body": "Use this page to explain what applicants need in order to qualify for an apartment at Cherry Street Commons.",
       "bannerImage": "/assets/hero-cherry.png",
+      "eligibility": {
+        "introTitle": "Income Eligibility",
+        "introSubtitle": "Learn about our affordable housing requirements.",
+        "incomeTitle": "Maximum Income Qualifications",
+        "incomeSubtitle": "Based on current HUD AMI limits.",
+        "incomeTable": "AMI|1 Person|2 Person|3 Person\n30%|Add amount|Add amount|N/A\n50%|Add amount|Add amount|N/A\n80%|Add amount|Add amount|Add amount",
+        "rentTitle": "Rental Amounts",
+        "rentSubtitle": "Affordable housing rates.",
+        "rentTable": "No. Of Units|Square Footage|Unit Type|AMI Level|Monthly Rent\nAdd units|Add sq ft|Studio|30%|Add rent\nAdd units|Add sq ft|1 Bedroom|80%|Add rent",
+        "occupancyTitle": "Occupancy at Move-In",
+        "occupancySubtitle": "Household size guidelines.",
+        "occupancyTable": "Bed Size|Minimum|Maximum\nStudio Unit|1 Person|2 Persons\n1-Bedroom Unit|1 Person|3 Persons",
+        "limitsTitle": "Income Limits & Rent Information",
+        "limitsBody": "Income limits and rents are subject to change based on current published program limits prior to move-in.",
+        "availabilityTable": "Unit Type|AMI Level|Total Units|Currently Available\nStudio|30% AMI|Add total|Add available\n1 Bedroom|80% AMI|Add total|Add available",
+        "applyTitle": "How to Apply",
+        "applyBody": "To apply for housing at Cherry Street Commons, please contact the leasing office. Staff can discuss eligibility and answer questions about the affordable housing program.",
+        "requirements": [
+          { "title": "Documentation Required", "body": "Proof of income, identification, and employment verification." },
+          { "title": "Background Check", "body": "All applicants must pass the standard background screening." },
+          { "title": "Credit Review", "body": "Credit history may be reviewed as part of the application process." },
+          { "title": "Income Verification", "body": "Annual income must fall within the applicable AMI requirements." }
+        ],
+        "readyTitle": "Ready to Apply?",
+        "readySubtitle": "Complete your application or contact the leasing office for assistance.",
+        "readyCards": [
+          { "title": "Apply Online", "body": "Fill out the online form and submit your application.", "buttonLabel": "Pre-Application Form", "buttonUrl": "" },
+          { "title": "Book a Visit", "body": "Schedule a visit or ask questions about the property.", "buttonLabel": "Schedule Tour", "buttonUrl": "" },
+          { "title": "Questions?", "body": "Contact the leasing office for assistance.", "buttonLabel": "(555) 555-5555", "buttonUrl": "" }
+        ]
+      },
       "cards": [
         { "title": "Income guidelines", "body": "Add income limits, household size requirements, and any program-specific qualification notes here.", "image": "" },
         { "title": "Required documents", "body": "List the documents applicants should prepare before applying.", "image": "" },
@@ -163,6 +194,11 @@
       "eyebrow": "Around the property",
       "body": "Use this page to highlight what is near the building, including transportation, schools, parks, shopping, services, and neighborhood destinations.",
       "bannerImage": "/assets/hero-cherry.png",
+      "neighborhood": {
+        "title": "Explore the Neiborhuud",
+        "subtitle": "Everything residents need nearby.",
+        "body": "Use this section to describe transportation, shopping, schools, parks, services, and destinations around Cherry Street Commons."
+      },
       "cards": [
         { "title": "Transit and access", "body": "Describe nearby public transportation, major roads, and walkable access points.", "image": "" },
         { "title": "Daily needs", "body": "Add nearby grocery stores, pharmacies, medical offices, and everyday services.", "image": "" },

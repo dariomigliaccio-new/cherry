@@ -306,6 +306,17 @@ function splitLines(value = "") {
     .filter(Boolean);
 }
 
+function renderContentTable(value = "") {
+  const rows = splitLines(value).map((row) => row.split("|").map((cell) => cell.trim()));
+  if (!rows.length) return "";
+  const [head, ...body] = rows;
+  const headers = head.map((cell) => `<th>${esc(cell)}</th>`).join("");
+  const bodyRows = body
+    .map((row) => `<tr>${head.map((_, index) => `<td>${esc(row[index] || "")}</td>`).join("")}</tr>`)
+    .join("");
+  return `<div class="responsive-table"><table><thead><tr>${headers}</tr></thead><tbody>${bodyRows}</tbody></table></div>`;
+}
+
 function renderAboutSection(page) {
   const section = page.aboutSection || {};
   return `<section class="about-detail-section">
@@ -351,6 +362,77 @@ function renderAmenities(page) {
       <p>${esc(amenities.subtitle || page.body)}</p>
     </div>
     <ul>${items}</ul>
+  </section>`;
+}
+
+function renderEligibility(page) {
+  const info = page.eligibility || {};
+  const requirements = (info.requirements || [])
+    .map((item) => `<article><h3>${esc(item.title)}</h3><p>${esc(item.body)}</p></article>`)
+    .join("");
+  const readyCards = (info.readyCards || [])
+    .map(
+      (item) => `<article>
+        <h3>${esc(item.title)}</h3>
+        <p>${esc(item.body)}</p>
+        ${String(item.buttonLabel || "").trim() ? `<a class="text-button" href="${esc(item.buttonUrl || "#")}">${esc(item.buttonLabel)}</a>` : ""}
+      </article>`
+    )
+    .join("");
+  return `<section class="eligibility-section">
+    <div class="section-heading">
+      <p class="eyebrow">${esc(page.eyebrow)}</p>
+      <h2>${esc(info.introTitle || page.title)}</h2>
+      <p>${esc(info.introSubtitle || page.body)}</p>
+    </div>
+    <div class="eligibility-grid">
+      <article class="eligibility-panel">
+        <h3>${esc(info.incomeTitle)}</h3>
+        <p>${esc(info.incomeSubtitle)}</p>
+        ${renderContentTable(info.incomeTable)}
+      </article>
+      <article class="eligibility-panel">
+        <h3>${esc(info.rentTitle)}</h3>
+        <p>${esc(info.rentSubtitle)}</p>
+        ${renderContentTable(info.rentTable)}
+      </article>
+      <article class="eligibility-panel">
+        <h3>${esc(info.occupancyTitle)}</h3>
+        <p>${esc(info.occupancySubtitle)}</p>
+        ${renderContentTable(info.occupancyTable)}
+      </article>
+    </div>
+    <article class="eligibility-note">
+      <h2>${esc(info.limitsTitle)}</h2>
+      <p>${esc(info.limitsBody)}</p>
+      ${renderContentTable(info.availabilityTable)}
+    </article>
+    <article class="eligibility-note">
+      <h2>${esc(info.applyTitle)}</h2>
+      <p>${esc(info.applyBody)}</p>
+    </article>
+    <div class="requirement-grid">${requirements}</div>
+    <div class="section-heading ready-heading">
+      <h2>${esc(info.readyTitle)}</h2>
+      <p>${esc(info.readySubtitle)}</p>
+    </div>
+    <div class="ready-card-grid">${readyCards}</div>
+  </section>`;
+}
+
+function renderNeighborhood(page) {
+  const section = page.neighborhood || {};
+  const cards = (page.cards || [])
+    .map((card) => `<article>${renderCardMedia(card.image, card.title)}<div class="card-body"><h3>${esc(card.title)}</h3><p>${esc(card.body)}</p></div></article>`)
+    .join("");
+  return `<section class="neighborhood-section">
+    <div class="section-heading">
+      <p class="eyebrow">${esc(page.eyebrow)}</p>
+      <h2>${esc(section.title || page.title)}</h2>
+      <h3>${esc(section.subtitle || "")}</h3>
+      <p>${esc(section.body || page.body)}</p>
+    </div>
+    <div class="subpage-cards">${cards}</div>
   </section>`;
 }
 
@@ -427,9 +509,13 @@ Object.entries(readContent().pages).forEach(([route]) => {
           ? renderPropertyDetails(page)
           : route === "/community"
             ? renderAmenities(page)
-            : route === "/floor-plans"
-              ? ""
-              : `<section class="subpage-cards">${cardMarkup}</section>`;
+            : route === "/eligibility"
+              ? renderEligibility(page)
+              : route === "/neiborhub"
+                ? renderNeighborhood(page)
+                : route === "/floor-plans"
+                  ? ""
+                  : `<section class="subpage-cards">${cardMarkup}</section>`;
 
     const content = `<section class="page-banner" style="background-image:url('${esc(page.bannerImage)}')">
         <div class="page-banner-content">
@@ -520,7 +606,24 @@ app.get("/manager", requireAdmin, (_req, res) => {
         sections.push(`<section><h2>Amenity ${index + 1}</h2>${field("Title", `pages./community.amenities.items.${index}.title`, data)}${imageField("Icon SVG", `pages./community.amenities.items.${index}.icon`, data)}</section>`);
       });
     }
-    if (!["/about", "/sustainability", "/community"].includes(route)) {
+    if (route === "/eligibility") {
+      sections.push(`<section><h2>Eligibility Main</h2>${field("Intro Title", "pages./eligibility.eligibility.introTitle", data)}${field("Intro Subtitle", "pages./eligibility.eligibility.introSubtitle", data, "textarea")}${field("Maximum Income Title", "pages./eligibility.eligibility.incomeTitle", data)}${field("Maximum Income Subtitle", "pages./eligibility.eligibility.incomeSubtitle", data)}${field("Maximum Income Table", "pages./eligibility.eligibility.incomeTable", data, "textarea")}${field("Rental Amounts Title", "pages./eligibility.eligibility.rentTitle", data)}${field("Rental Amounts Subtitle", "pages./eligibility.eligibility.rentSubtitle", data)}${field("Rental Amounts Table", "pages./eligibility.eligibility.rentTable", data, "textarea")}${field("Occupancy Title", "pages./eligibility.eligibility.occupancyTitle", data)}${field("Occupancy Subtitle", "pages./eligibility.eligibility.occupancySubtitle", data)}${field("Occupancy Table", "pages./eligibility.eligibility.occupancyTable", data, "textarea")}</section>`);
+      sections.push(`<section><h2>Eligibility Details</h2>${field("Limits Title", "pages./eligibility.eligibility.limitsTitle", data)}${field("Limits Body", "pages./eligibility.eligibility.limitsBody", data, "textarea")}${field("Availability Table", "pages./eligibility.eligibility.availabilityTable", data, "textarea")}${field("Apply Title", "pages./eligibility.eligibility.applyTitle", data)}${field("Apply Body", "pages./eligibility.eligibility.applyBody", data, "textarea")}${field("Ready Title", "pages./eligibility.eligibility.readyTitle", data)}${field("Ready Subtitle", "pages./eligibility.eligibility.readySubtitle", data, "textarea")}</section>`);
+      (page.eligibility.requirements || []).forEach((_, index) => {
+        sections.push(`<section><h2>Eligibility Requirement ${index + 1}</h2>${field("Title", `pages./eligibility.eligibility.requirements.${index}.title`, data)}${field("Body", `pages./eligibility.eligibility.requirements.${index}.body`, data, "textarea")}</section>`);
+      });
+      (page.eligibility.readyCards || []).forEach((_, index) => {
+        sections.push(`<section><h2>Eligibility Action ${index + 1}</h2>${field("Title", `pages./eligibility.eligibility.readyCards.${index}.title`, data)}${field("Body", `pages./eligibility.eligibility.readyCards.${index}.body`, data, "textarea")}${field("Button Label", `pages./eligibility.eligibility.readyCards.${index}.buttonLabel`, data)}${field("Button URL", `pages./eligibility.eligibility.readyCards.${index}.buttonUrl`, data)}</section>`);
+      });
+    }
+    if (route === "/neiborhub") {
+      sections.push(`<section><h2>Neiborhuud Content</h2>${field("Title", "pages./neiborhub.neighborhood.title", data)}${field("Subtitle", "pages./neiborhub.neighborhood.subtitle", data)}${field("Text", "pages./neiborhub.neighborhood.body", data, "textarea")}</section>`);
+      page.cards.forEach((_, index) => {
+        sections.push(`<section><h2>Neiborhuud Card ${index + 1}</h2>${checkboxField("Remove this card", "removeNeiborhuudCards", { removeNeiborhuudCards: false }).replace('value="true"', `value="${index}"`)}${field("Title", `pages./neiborhub.cards.${index}.title`, data)}${field("Body", `pages./neiborhub.cards.${index}.body`, data, "textarea")}${imageField("Card image", `pages./neiborhub.cards.${index}.image`, data)}</section>`);
+      });
+      sections.push(`<section><h2>Neiborhuud Cards</h2><button class="secondary-button" type="submit" name="adminAction" value="addNeiborhuudCard">Add Neiborhuud card</button></section>`);
+    }
+    if (!["/about", "/sustainability", "/community", "/eligibility", "/neiborhub"].includes(route)) {
       page.cards.forEach((_, index) => {
         sections.push(`<section><h2>${esc(page.title)} Card ${index + 1}</h2>${field("Title", `pages.${route}.cards.${index}.title`, data)}${field("Body", `pages.${route}.cards.${index}.body`, data, "textarea")}${imageField("Card image", `pages.${route}.cards.${index}.image`, data)}</section>`);
       });
@@ -550,9 +653,11 @@ app.post("/manager", requireAdmin, upload.any(), (req, res) => {
   const action = req.body.adminAction;
   const removeHomeSlides = req.body.removeHomeSlides;
   const removeHomeCards = req.body.removeHomeCards;
+  const removeNeiborhuudCards = req.body.removeNeiborhuudCards;
   delete req.body.adminAction;
   delete req.body.removeHomeSlides;
   delete req.body.removeHomeCards;
+  delete req.body.removeNeiborhuudCards;
   Object.entries(req.body).forEach(([name, value]) => {
     setByPath(data, name, value);
   });
@@ -567,6 +672,10 @@ app.post("/manager", requireAdmin, upload.any(), (req, res) => {
     const indexes = new Set((Array.isArray(removeHomeCards) ? removeHomeCards : [removeHomeCards]).map((value) => Number(value)));
     data.home.cards = data.home.cards.filter((_, index) => !indexes.has(index));
   }
+  if (removeNeiborhuudCards !== undefined) {
+    const indexes = new Set((Array.isArray(removeNeiborhuudCards) ? removeNeiborhuudCards : [removeNeiborhuudCards]).map((value) => Number(value)));
+    data.pages["/neiborhub"].cards = data.pages["/neiborhub"].cards.filter((_, index) => !indexes.has(index));
+  }
   if (action === "addHomeSlide") {
     data.home.slides.push({
       eyebrow: "",
@@ -580,6 +689,13 @@ app.post("/manager", requireAdmin, upload.any(), (req, res) => {
   if (action === "addHomeCard") {
     data.home.cards.push({
       number: String(data.home.cards.length + 1).padStart(2, "0"),
+      title: "",
+      body: "",
+      image: ""
+    });
+  }
+  if (action === "addNeiborhuudCard") {
+    data.pages["/neiborhub"].cards.push({
       title: "",
       body: "",
       image: ""
