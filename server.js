@@ -22,6 +22,9 @@ fs.mkdirSync(path.dirname(dataPath), { recursive: true });
 fs.mkdirSync(uploadsDir, { recursive: true });
 
 const upload = multer({
+  limits: {
+    fileSize: 50 * 1024 * 1024
+  },
   storage: multer.diskStorage({
     destination: (_req, _file, cb) => cb(null, uploadsDir),
     filename: (_req, file, cb) => {
