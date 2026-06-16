@@ -1,16 +1,17 @@
 :root {
-  --ink: #17211d;
-  --muted: #5f6b65;
-  --paper: #fbfaf5;
+  --ink: #1b2529;
+  --muted: #647077;
+  --paper: #edf1f5;
   --surface: #ffffff;
-  --green: #28614c;
-  --green-dark: #173d31;
-  --clay: #b85d3f;
-  --orange: #f27a1a;
-  --orange-dark: #d95f00;
-  --gold: #d8a642;
-  --line: #d9ded7;
-  --shadow: 0 18px 45px rgba(23, 33, 29, 0.14);
+  --green: #2788bd;
+  --green-dark: #071f44;
+  --clay: #a56022;
+  --orange: #d48940;
+  --orange-dark: #a56022;
+  --gold: #4eb2c8;
+  --aqua: #87d1d8;
+  --line: #cbd4df;
+  --shadow: 0 18px 45px rgba(7, 31, 68, 0.16);
   --frame-width: 1458px;
   --frame-gutter: 48px;
 }
@@ -37,8 +38,8 @@ a {
   z-index: 20;
   min-height: 82px;
   padding: 0;
-  background: rgba(251, 250, 245, 0.94);
-  border-bottom: 1px solid rgba(217, 222, 215, 0.82);
+  background: rgba(237, 241, 245, 0.94);
+  border-bottom: 1px solid rgba(203, 212, 223, 0.9);
   backdrop-filter: blur(16px);
 }
 
@@ -122,7 +123,7 @@ a {
 .nav-link:hover,
 .nav-link.active {
   color: var(--green);
-  background: rgba(40, 97, 76, 0.09);
+  background: rgba(39, 136, 189, 0.1);
 }
 
 .nav-link.nav-apply {
@@ -181,7 +182,7 @@ a {
   inset: 0;
   z-index: 30;
   display: none;
-  background: rgba(23, 33, 29, 0.42);
+  background: rgba(7, 31, 68, 0.42);
 }
 
 .menu-backdrop.open {
@@ -194,7 +195,7 @@ a {
   width: 100%;
   overflow: hidden;
   color: #fff;
-  background: #061a3a;
+  background: #071f44;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
@@ -256,7 +257,7 @@ a {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(12, 24, 20, 0.78), rgba(12, 24, 20, 0.4) 42%, rgba(12, 24, 20, 0.05));
+  background: linear-gradient(90deg, rgba(7, 31, 68, 0.78), rgba(7, 31, 68, 0.42) 42%, rgba(7, 31, 68, 0.06));
 }
 
 .slide.active {
@@ -280,7 +281,7 @@ a {
 }
 
 .hero-content .eyebrow {
-  color: #f4c873;
+  color: var(--aqua);
 }
 
 h1,
@@ -404,7 +405,7 @@ h3 {
   border: 1px solid var(--line);
   border-radius: 6px;
   background: var(--surface);
-  box-shadow: 0 12px 28px rgba(23, 33, 29, 0.18);
+  box-shadow: 0 12px 28px rgba(7, 31, 68, 0.18);
 }
 
 .card-image {
@@ -420,7 +421,7 @@ h3 {
   height: 190px;
   color: rgba(255, 255, 255, 0.86);
   background:
-    linear-gradient(135deg, rgba(40, 97, 76, 0.9), rgba(23, 33, 29, 0.92)),
+    linear-gradient(135deg, rgba(39, 136, 189, 0.92), rgba(7, 31, 68, 0.94)),
     var(--green);
   font-size: 2.4rem;
   font-weight: 800;
@@ -500,7 +501,7 @@ h3 {
   border: 1px solid var(--line);
   border-radius: 6px;
   background: var(--surface);
-  box-shadow: 0 12px 28px rgba(23, 33, 29, 0.12);
+  box-shadow: 0 12px 28px rgba(7, 31, 68, 0.12);
 }
 
 .eligibility-panel,
@@ -606,7 +607,7 @@ h3 {
   border: 3px solid #fff;
   border-radius: 50% 50% 50% 0;
   background: #16848b;
-  box-shadow: 0 8px 18px rgba(23, 33, 29, 0.24);
+  box-shadow: 0 8px 18px rgba(7, 31, 68, 0.24);
   transform: rotate(-45deg);
 }
 
@@ -636,7 +637,7 @@ h3 {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(12, 24, 20, 0.82), rgba(12, 24, 20, 0.48) 48%, rgba(12, 24, 20, 0.08));
+  background: linear-gradient(90deg, rgba(7, 31, 68, 0.82), rgba(7, 31, 68, 0.48) 48%, rgba(7, 31, 68, 0.08));
 }
 
 .page-banner-content {
@@ -647,7 +648,7 @@ h3 {
 }
 
 .page-banner-content .eyebrow {
-  color: #f4c873;
+  color: var(--aqua);
 }
 
 .page-banner-content h1 {
@@ -723,7 +724,7 @@ h3 {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--surface);
-  box-shadow: 0 10px 26px rgba(23, 33, 29, 0.08);
+  box-shadow: 0 10px 26px rgba(7, 31, 68, 0.08);
 }
 
 .units-card {
@@ -810,7 +811,7 @@ h3 {
 .amenity-icon-fallback {
   border-radius: 8px;
   background:
-    linear-gradient(135deg, rgba(40, 97, 76, 0.95), rgba(23, 33, 29, 0.92));
+    linear-gradient(135deg, rgba(39, 136, 189, 0.95), rgba(7, 31, 68, 0.92));
 }
 
 .amenities-section li strong {
@@ -835,7 +836,7 @@ h3 {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--surface);
-  box-shadow: 0 10px 28px rgba(23, 33, 29, 0.06);
+  box-shadow: 0 10px 28px rgba(7, 31, 68, 0.06);
 }
 
 .plan-placeholder {
@@ -846,8 +847,8 @@ h3 {
   border-radius: 6px;
   color: var(--green);
   background:
-    linear-gradient(90deg, rgba(40, 97, 76, 0.07) 1px, transparent 1px),
-    linear-gradient(rgba(40, 97, 76, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(39, 136, 189, 0.07) 1px, transparent 1px),
+    linear-gradient(rgba(39, 136, 189, 0.07) 1px, transparent 1px),
     #f8faf7;
   background-size: 22px 22px;
   font-size: 2rem;
@@ -1090,7 +1091,7 @@ h3 {
   }
 
   .slide::before {
-    background: linear-gradient(0deg, rgba(12, 24, 20, 0.86), rgba(12, 24, 20, 0.22));
+    background: linear-gradient(0deg, rgba(7, 31, 68, 0.86), rgba(7, 31, 68, 0.22));
   }
 
   .hero-content h1 {
@@ -1146,7 +1147,7 @@ h3 {
   }
 
   .page-banner::before {
-    background: linear-gradient(0deg, rgba(12, 24, 20, 0.86), rgba(12, 24, 20, 0.26));
+    background: linear-gradient(0deg, rgba(7, 31, 68, 0.86), rgba(7, 31, 68, 0.26));
   }
 
   .site-footer {
