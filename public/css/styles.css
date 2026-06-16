@@ -9,6 +9,8 @@
   --gold: #d8a642;
   --line: #d9ded7;
   --shadow: 0 18px 45px rgba(23, 33, 29, 0.14);
+  --frame-width: 1458px;
+  --frame-gutter: 48px;
 }
 
 * {
@@ -32,7 +34,7 @@ a {
   top: 0;
   z-index: 20;
   min-height: 82px;
-  padding: 0 clamp(18px, 3vw, 32px);
+  padding: 0;
   background: rgba(251, 250, 245, 0.94);
   border-bottom: 1px solid rgba(217, 222, 215, 0.82);
   backdrop-filter: blur(16px);
@@ -42,7 +44,8 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: min(100%, 1667px);
+  width: calc(100% - var(--frame-gutter));
+  max-width: var(--frame-width);
   min-height: 82px;
   margin: 0 auto;
 }
@@ -178,9 +181,9 @@ a {
 
 .hero-slider {
   position: relative;
-  width: min(100%, 1667px);
-  height: min(661px, calc((100vw * 661) / 1667));
-  min-height: 440px;
+  width: calc(100% - var(--frame-gutter));
+  max-width: var(--frame-width);
+  aspect-ratio: 1667 / 661;
   margin: 0 auto;
   overflow: hidden;
   background: var(--green-dark);
@@ -429,13 +432,16 @@ h3 {
 }
 
 @media (max-width: 640px) {
+  :root {
+    --frame-gutter: 32px;
+  }
+
   .site-header {
     min-height: 72px;
-    padding: 12px 16px;
   }
 
   .header-inner {
-    min-height: 48px;
+    min-height: 72px;
   }
 
   .brand strong {
@@ -449,6 +455,7 @@ h3 {
   .hero-slider {
     height: 620px;
     min-height: 620px;
+    aspect-ratio: auto;
   }
 
   .slide {
