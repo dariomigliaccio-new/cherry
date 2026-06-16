@@ -101,7 +101,7 @@ function renderLayout({ title, content, activePath = "/", home = false }) {
       <link rel="stylesheet" href="/css/styles.css">
       <script src="/js/site.js" defer></script>
     </head>
-    <body>
+    <body class="${home ? "home-page" : "sub-page"}">
       <header class="site-header">
         <div class="brand-row">
           <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false" data-menu-button>
