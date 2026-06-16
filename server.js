@@ -151,10 +151,6 @@ function optionalTag(tag, className, value) {
   return `<${tag}${classAttr}>${esc(value)}</${tag}>`;
 }
 
-function renderBrandMark(data, extraClass = "") {
-  return `<span class="brand-mark image-mark ${esc(extraClass)}"><img src="${esc(officialLogo)}" alt="${esc(data.site.name)}"></span>`;
-}
-
 function renderMenuIcon(data) {
   if (data.site.menuIcon) {
     return `<img class="menu-icon-image" src="${esc(data.site.menuIcon)}" alt="">`;
@@ -211,11 +207,7 @@ function renderLayout({ title, content, activePath = "/", home = false }) {
               ${renderMenuIcon(data)}
             </button>
             <a class="brand" href="/">
-              ${renderBrandMark(data)}
-              <span>
-                <strong>${esc(data.site.name)}</strong>
-                <small>${esc(data.site.tagline)}</small>
-              </span>
+              <strong>${esc(data.site.name)}</strong>
             </a>
           </div>
           <nav class="desktop-nav" aria-label="Primary navigation">${nav}</nav>
@@ -223,7 +215,7 @@ function renderLayout({ title, content, activePath = "/", home = false }) {
       </header>
       <aside class="side-menu" aria-hidden="true" data-side-menu>
         <div class="side-menu-top">
-          ${renderBrandMark(data)}
+          <strong class="side-menu-brand">${esc(data.site.name)}</strong>
           <button class="close-button" type="button" aria-label="Close menu" data-close-menu>&times;</button>
         </div>
         <nav aria-label="Mobile navigation">${nav}</nav>
@@ -258,13 +250,8 @@ function renderFooter(data) {
         : `<div class="official-logo official-logo-${index + 1}">${logo}</div>`;
     })
     .join("");
-  const footerLogo = data.footer.logoImage
-    ? `<img class="footer-logo-image" src="${esc(data.footer.logoImage)}" alt="${esc(data.footer.headline)}">`
-    : `<img class="footer-logo-image" src="${esc(officialLogo)}" alt="${esc(data.site.name)}">`;
-
   return `<footer class="site-footer">
     <div class="footer-brand">
-      ${footerLogo}
       <h2>${esc(data.footer.headline)}</h2>
       <p>${esc(data.footer.body)}</p>
       <a class="footer-cta apply-pulse" href="${esc(applyLink)}">${esc(data.site.applyLabel)}</a>

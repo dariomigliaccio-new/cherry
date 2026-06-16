@@ -87,46 +87,22 @@ a {
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
   min-width: 0;
 }
 
-.brand-mark {
-  display: grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  flex: 0 0 56px;
-  border-radius: 0;
-  color: #fff;
-  background: var(--green);
-  font-weight: 800;
-}
-
-.brand-mark.image-mark {
-  background: transparent;
-}
-
-.brand-mark img {
-  display: block;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-.brand strong,
-.brand small {
-  display: block;
-}
-
 .brand strong {
-  font-size: 1.05rem;
+  display: block;
+  color: var(--green-dark);
+  font-size: clamp(1.35rem, 2.1vw, 2rem);
+  font-weight: 800;
+  line-height: 1;
 }
 
-.brand small {
-  color: var(--muted);
-  font-size: 0.78rem;
-  font-weight: 600;
+.side-menu-brand {
+  color: var(--green-dark);
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.1;
 }
 
 .desktop-nav {
@@ -876,23 +852,6 @@ h3 {
   background: #050706;
 }
 
-.footer-brand .brand-mark {
-  width: 76px;
-  height: 76px;
-  margin-bottom: 24px;
-  background: #fff;
-  color: #050706;
-}
-
-.footer-logo-image {
-  display: block;
-  width: 86px;
-  height: 86px;
-  margin: 0 0 24px;
-  object-fit: contain;
-  object-position: center;
-}
-
 .footer-brand {
   display: flex;
   flex-direction: column;
@@ -1095,10 +1054,6 @@ h3 {
 
   .brand strong {
     font-size: 0.95rem;
-  }
-
-  .brand small {
-    font-size: 0.7rem;
   }
 
   .hero-slider {
