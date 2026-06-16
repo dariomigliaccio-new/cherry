@@ -194,7 +194,7 @@ a {
   width: 100%;
   overflow: hidden;
   color: #fff;
-  background: var(--green-dark);
+  background: #061a3a;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 

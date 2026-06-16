@@ -163,7 +163,8 @@ function renderAnnouncement(data) {
   const announcement = data.announcement || {};
   const text = String(announcement.text || "").trim();
   if (!announcement.enabled || !text) return "";
-  const item = `<span>★ &nbsp;${esc(text)}&nbsp;</span>`;
+  const displayText = esc(text).replace(/\*/g, "★");
+  const item = `<span>${displayText}</span>`;
   const items = Array.from({ length: 8 }, () => item).join("");
   const content = announcement.linkUrl
     ? `<a href="${esc(announcement.linkUrl)}">${items}</a>`
