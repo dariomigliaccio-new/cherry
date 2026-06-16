@@ -346,13 +346,18 @@ Object.entries(readContent().pages).forEach(([route]) => {
       .join("");
     const floorPlanMarkup =
       route === "/floor-plans"
-        ? `<section class="floor-plan-gallery" aria-label="Apartment floor plan models">
+        ? `<section class="floor-plan-list" aria-label="Apartment floor plan models">
             ${page.floorPlans
               .map(
                 (plan) => `<article>
-              ${plan.image ? `<img class="plan-image" src="${esc(plan.image)}" alt="${esc(plan.title)}">` : `<div class="plan-placeholder">${esc(plan.label)}</div>`}
-              <h2>${esc(plan.title)}</h2>
-              <p>${esc(plan.body)}</p>
+              <div class="plan-media">
+                ${plan.image ? `<img class="plan-image" src="${esc(plan.image)}" alt="${esc(plan.title)}">` : `<div class="plan-placeholder">${esc(plan.label)}</div>`}
+              </div>
+              <div class="plan-copy">
+                <span>${esc(plan.label)}</span>
+                <h2>${esc(plan.title)}</h2>
+                <p>${esc(plan.body)}</p>
+              </div>
             </article>`
               )
               .join("")}
@@ -366,7 +371,9 @@ Object.entries(readContent().pages).forEach(([route]) => {
           ? renderPropertyDetails(page)
           : route === "/community"
             ? renderAmenities(page)
-            : `<section class="subpage-cards">${cardMarkup}</section>`;
+            : route === "/floor-plans"
+              ? ""
+              : `<section class="subpage-cards">${cardMarkup}</section>`;
 
     const content = `<section class="page-banner" style="background-image:url('${esc(page.bannerImage)}')">
         <div class="page-banner-content">
@@ -458,7 +465,7 @@ app.get("/manager", requireAdmin, (_req, res) => {
     }
     if (route === "/floor-plans") {
       page.floorPlans.forEach((_, index) => {
-        sections.push(`<section><h2>Floor Plan ${index + 1}</h2>${field("Label", `pages./floor-plans.floorPlans.${index}.label`, data)}${field("Title", `pages./floor-plans.floorPlans.${index}.title`, data)}${field("Body", `pages./floor-plans.floorPlans.${index}.body`, data, "textarea")}${imageField("Plan image", `pages./floor-plans.floorPlans.${index}.image`, data)}</section>`);
+        sections.push(`<section><h2>Floor Plan ${index + 1}</h2>${field("Label", `pages./floor-plans.floorPlans.${index}.label`, data)}${field("Title", `pages./floor-plans.floorPlans.${index}.title`, data)}${field("Description", `pages./floor-plans.floorPlans.${index}.body`, data, "textarea")}${imageField("Floor plan image", `pages./floor-plans.floorPlans.${index}.image`, data)}</section>`);
       });
     }
   });
