@@ -57,7 +57,8 @@ function mergeMissing(defaultValue, currentValue) {
   if (currentValue === undefined || currentValue === null) return defaultValue;
   if (Array.isArray(defaultValue)) {
     if (!Array.isArray(currentValue)) return defaultValue;
-    return defaultValue.map((item, index) => mergeMissing(item, currentValue[index]));
+    if (!currentValue.length) return currentValue;
+    return currentValue.map((item, index) => mergeMissing(defaultValue[Math.min(index, defaultValue.length - 1)], item));
   }
   if (typeof defaultValue === "object" && defaultValue) {
     const merged = { ...currentValue };
@@ -483,8 +484,9 @@ app.get("/manager", requireAdmin, (_req, res) => {
     sections.push(`<section><h2>Home Banner ${index + 1}</h2>${checkboxField("Delete / hide this banner", `home.slides.${index}.hidden`, data)}${field("Eyebrow", `home.slides.${index}.eyebrow`, data)}${field("Title", `home.slides.${index}.title`, data)}${field("Body", `home.slides.${index}.body`, data, "textarea")}${field("Button Label", `home.slides.${index}.buttonLabel`, data)}${field("Button URL", `home.slides.${index}.buttonUrl`, data, "url")}${imageField("Banner image", `home.slides.${index}.image`, data)}</section>`);
   });
   data.home.cards.forEach((_, index) => {
-    sections.push(`<section><h2>Home Card ${index + 1}</h2>${field("Number", `home.cards.${index}.number`, data)}${field("Title", `home.cards.${index}.title`, data)}${field("Body", `home.cards.${index}.body`, data, "textarea")}${imageField("Card image", `home.cards.${index}.image`, data)}</section>`);
+    sections.push(`<section><h2>Home Card ${index + 1}</h2>${checkboxField("Remove this card", "removeHomeCards", { removeHomeCards: false }).replace('value="true"', `value="${index}"`)}${field("Number", `home.cards.${index}.number`, data)}${field("Title", `home.cards.${index}.title`, data)}${field("Body", `home.cards.${index}.body`, data, "textarea")}${imageField("Card image", `home.cards.${index}.image`, data)}</section>`);
   });
+  sections.push(`<section><h2>Home Cards</h2><button class="secondary-button" type="submit" name="adminAction" value="addHomeCard">Add home card</button></section>`);
   Object.entries(data.pages).forEach(([route, page]) => {
     sections.push(`<section><h2>${esc(page.title)} Page</h2>${field("Eyebrow", `pages.${route}.eyebrow`, data)}${field("Title", `pages.${route}.title`, data)}${field("Body", `pages.${route}.body`, data, "textarea")}${imageField("Banner image", `pages.${route}.bannerImage`, data)}</section>`);
     if (route === "/about") {
@@ -526,6 +528,10 @@ app.get("/manager", requireAdmin, (_req, res) => {
 
 app.post("/manager", requireAdmin, upload.any(), (req, res) => {
   const data = readContent();
+  const action = req.body.adminAction;
+  const removeHomeCards = req.body.removeHomeCards;
+  delete req.body.adminAction;
+  delete req.body.removeHomeCards;
   data.home.slides.forEach((slide) => {
     slide.hidden = false;
   });
@@ -535,6 +541,18 @@ app.post("/manager", requireAdmin, upload.any(), (req, res) => {
   req.files.forEach((file) => {
     setByPath(data, file.fieldname, `/uploads/${file.filename}`);
   });
+  if (removeHomeCards !== undefined) {
+    const indexes = new Set((Array.isArray(removeHomeCards) ? removeHomeCards : [removeHomeCards]).map((value) => Number(value)));
+    data.home.cards = data.home.cards.filter((_, index) => !indexes.has(index));
+  }
+  if (action === "addHomeCard") {
+    data.home.cards.push({
+      number: String(data.home.cards.length + 1).padStart(2, "0"),
+      title: "",
+      body: "",
+      image: ""
+    });
+  }
   data.location.lat = Number(data.location.lat);
   data.location.lng = Number(data.location.lng);
   data.location.zoom = Number(data.location.zoom);

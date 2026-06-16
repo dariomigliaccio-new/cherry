@@ -139,6 +139,11 @@ small {
   box-shadow: 0 14px 28px rgba(184, 93, 63, 0.26);
 }
 
+.secondary-button {
+  width: 100%;
+  background: var(--green);
+}
+
 .login-panel {
   width: min(420px, calc(100% - 36px));
   margin: 12vh auto 0;
