@@ -41,15 +41,6 @@ a {
   backdrop-filter: blur(16px);
 }
 
-.home-page .site-header {
-  position: absolute;
-  left: 0;
-  right: 0;
-  background: linear-gradient(180deg, rgba(12, 24, 20, 0.66), rgba(12, 24, 20, 0));
-  border-bottom: 0;
-  backdrop-filter: none;
-}
-
 .brand-row {
   display: flex;
   align-items: center;
@@ -68,20 +59,11 @@ a {
   cursor: pointer;
 }
 
-.home-page .menu-button {
-  border-color: rgba(255, 255, 255, 0.35);
-  background: rgba(255, 255, 255, 0.14);
-}
-
 .menu-button span {
   display: block;
   width: 21px;
   height: 2px;
   background: var(--green-dark);
-}
-
-.home-page .menu-button span {
-  background: #fff;
 }
 
 .brand {
@@ -118,12 +100,6 @@ a {
   font-weight: 600;
 }
 
-.home-page .brand strong,
-.home-page .brand small,
-.home-page .desktop-nav .nav-link {
-  color: #fff;
-}
-
 .desktop-nav {
   display: flex;
   align-items: center;
@@ -142,12 +118,6 @@ a {
 .nav-link.active {
   color: var(--green);
   background: rgba(40, 97, 76, 0.09);
-}
-
-.home-page .desktop-nav .nav-link:hover,
-.home-page .desktop-nav .nav-link.active {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.18);
 }
 
 .side-menu {
