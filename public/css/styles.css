@@ -833,7 +833,7 @@ h3 {
   width: fit-content;
   min-width: 128px;
   min-height: 50px;
-  margin: 46px 0 0;
+  margin: 0;
   padding: 0 26px;
   border: 0;
   border-radius: 6px;
@@ -844,6 +844,10 @@ h3 {
   text-align: center;
   white-space: nowrap;
   box-shadow: 0 12px 24px rgba(242, 122, 26, 0.3);
+}
+
+.footer-brand .footer-cta {
+  margin-top: 74px;
 }
 
 .footer-cta:hover {
