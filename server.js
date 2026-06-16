@@ -38,7 +38,7 @@ app.use(express.static(path.join(__dirname, "public")));
 function readContent() {
   const defaults = JSON.parse(fs.readFileSync(defaultDataPath, "utf8"));
   const content = JSON.parse(fs.readFileSync(dataPath, "utf8"));
-  return mergeMissing(defaults, content);
+  return normalizeContent(mergeMissing(defaults, content));
 }
 
 function writeContent(content) {
@@ -59,6 +59,24 @@ function mergeMissing(defaultValue, currentValue) {
     return merged;
   }
   return currentValue;
+}
+
+function normalizeContent(data) {
+  data.nav.forEach((item) => {
+    if (item.href === "/sustainability" && item.label === "Sustainability") item.label = "PROPERTY DETAILS";
+    if (item.href === "/community" && item.label === "Community") item.label = "Amenities";
+  });
+  if (data.pages["/sustainability"]?.title === "Sustainability") {
+    data.pages["/sustainability"].title = "PROPERTY DETAILS";
+    data.pages["/sustainability"].eyebrow = "Property information";
+    data.pages["/sustainability"].body = "Explore the property details and in-home features planned for Cherry Street Commons.";
+  }
+  if (data.pages["/community"]?.title === "Community") {
+    data.pages["/community"].title = "Amenities";
+    data.pages["/community"].eyebrow = "Community amenities";
+    data.pages["/community"].body = "Amenities that support convenience, connection, security, and everyday resident life.";
+  }
+  return data;
 }
 
 function esc(value = "") {
@@ -222,6 +240,51 @@ function mapSection(data) {
   </section>`;
 }
 
+function splitLines(value = "") {
+  return String(value)
+    .split(/\r?\n/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function renderAboutSection(page) {
+  const section = page.aboutSection || {};
+  return `<section class="about-detail-section">
+    <p class="eyebrow">${esc(page.eyebrow)}</p>
+    <h2>${esc(section.title || page.title)}</h2>
+    <h3>${esc(section.subtitle || "")}</h3>
+    <p>${esc(section.body || page.body)}</p>
+  </section>`;
+}
+
+function renderPropertyDetails(page) {
+  const details = page.details || {};
+  const features = splitLines(details.featuresText).map((feature) => `<li>${esc(feature)}</li>`).join("");
+  return `<section class="property-details-section">
+    <article class="units-card">
+      <span>${esc(details.unitsLabel || "Number of Units")}</span>
+      <strong>${esc(details.unitsValue || "")}</strong>
+    </article>
+    <article class="features-card">
+      <h2>${esc(details.featuresTitle || "Unit Features")}</h2>
+      <ul>${features}</ul>
+    </article>
+  </section>`;
+}
+
+function renderAmenities(page) {
+  const amenities = page.amenities || {};
+  const items = splitLines(amenities.itemsText).map((item) => `<li>${esc(item)}</li>`).join("");
+  return `<section class="amenities-section">
+    <div class="section-heading">
+      <p class="eyebrow">${esc(page.eyebrow)}</p>
+      <h2>${esc(amenities.title || page.title)}</h2>
+      <p>${esc(amenities.subtitle || page.body)}</p>
+    </div>
+    <ul>${items}</ul>
+  </section>`;
+}
+
 app.get("/", (_req, res) => {
   const data = readContent();
   const slides = data.home.slides
@@ -282,6 +345,15 @@ Object.entries(readContent().pages).forEach(([route]) => {
           </section>`
         : "";
 
+    const bodyContent =
+      route === "/about"
+        ? renderAboutSection(page)
+        : route === "/sustainability"
+          ? renderPropertyDetails(page)
+          : route === "/community"
+            ? renderAmenities(page)
+            : `<section class="subpage-cards">${cardMarkup}</section>`;
+
     const content = `<section class="page-banner" style="background-image:url('${esc(page.bannerImage)}')">
         <div class="page-banner-content">
           <p class="eyebrow">${esc(page.eyebrow)}</p>
@@ -290,7 +362,7 @@ Object.entries(readContent().pages).forEach(([route]) => {
           <a class="primary-button" href="${esc(data.site.applyUrl)}">${esc(data.site.applyLabel)}</a>
         </div>
       </section>
-      <section class="subpage-cards">${cardMarkup}</section>
+      ${bodyContent}
       ${floorPlanMarkup}
       ${route === "/contact" ? mapSection(data) : ""}`;
 
@@ -353,9 +425,20 @@ app.get("/manager", requireAdmin, (_req, res) => {
   });
   Object.entries(data.pages).forEach(([route, page]) => {
     sections.push(`<section><h2>${esc(page.title)} Page</h2>${field("Eyebrow", `pages.${route}.eyebrow`, data)}${field("Title", `pages.${route}.title`, data)}${field("Body", `pages.${route}.body`, data, "textarea")}${imageField("Banner image", `pages.${route}.bannerImage`, data)}</section>`);
-    page.cards.forEach((_, index) => {
-      sections.push(`<section><h2>${esc(page.title)} Card ${index + 1}</h2>${field("Title", `pages.${route}.cards.${index}.title`, data)}${field("Body", `pages.${route}.cards.${index}.body`, data, "textarea")}${imageField("Card image", `pages.${route}.cards.${index}.image`, data)}</section>`);
-    });
+    if (route === "/about") {
+      sections.push(`<section><h2>About Content</h2>${field("Title", "pages./about.aboutSection.title", data)}${field("Subtitle", "pages./about.aboutSection.subtitle", data)}${field("Text", "pages./about.aboutSection.body", data, "textarea")}</section>`);
+    }
+    if (route === "/sustainability") {
+      sections.push(`<section><h2>Property Details</h2>${field("Units Label", "pages./sustainability.details.unitsLabel", data)}${field("Units Value", "pages./sustainability.details.unitsValue", data)}${field("Features Title", "pages./sustainability.details.featuresTitle", data)}${field("Unit Features", "pages./sustainability.details.featuresText", data, "textarea")}</section>`);
+    }
+    if (route === "/community") {
+      sections.push(`<section><h2>Amenities</h2>${field("Title", "pages./community.amenities.title", data)}${field("Subtitle", "pages./community.amenities.subtitle", data)}${field("Amenities List", "pages./community.amenities.itemsText", data, "textarea")}</section>`);
+    }
+    if (!["/about", "/sustainability", "/community"].includes(route)) {
+      page.cards.forEach((_, index) => {
+        sections.push(`<section><h2>${esc(page.title)} Card ${index + 1}</h2>${field("Title", `pages.${route}.cards.${index}.title`, data)}${field("Body", `pages.${route}.cards.${index}.body`, data, "textarea")}${imageField("Card image", `pages.${route}.cards.${index}.image`, data)}</section>`);
+      });
+    }
     if (route === "/floor-plans") {
       page.floorPlans.forEach((_, index) => {
         sections.push(`<section><h2>Floor Plan ${index + 1}</h2>${field("Label", `pages./floor-plans.floorPlans.${index}.label`, data)}${field("Title", `pages./floor-plans.floorPlans.${index}.title`, data)}${field("Body", `pages./floor-plans.floorPlans.${index}.body`, data, "textarea")}${imageField("Plan image", `pages./floor-plans.floorPlans.${index}.image`, data)}</section>`);

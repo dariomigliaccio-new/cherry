@@ -12,8 +12,8 @@
   "nav": [
     { "label": "Home", "href": "/" },
     { "label": "About", "href": "/about" },
-    { "label": "Sustainability", "href": "/sustainability" },
-    { "label": "Community", "href": "/community" },
+    { "label": "PROPERTY DETAILS", "href": "/sustainability" },
+    { "label": "Amenities", "href": "/community" },
     { "label": "Floor Plans", "href": "/floor-plans" },
     { "label": "Contact", "href": "/contact" }
   ],
@@ -71,6 +71,11 @@
       "eyebrow": "Affordable homes with everyday access",
       "body": "Cherry Street Commons is planned around practical, welcoming homes for residents who want stability, comfort, and connection. The property brings together thoughtful layouts, accessible paths, and shared spaces that support daily life.",
       "bannerImage": "/assets/hero-cherry.png",
+      "aboutSection": {
+        "title": "Affordable homes designed around daily life.",
+        "subtitle": "Comfort, access, and community in San Carlos.",
+        "body": "Use this space to describe Cherry Street Commons, the property mission, resident experience, and what makes the community distinct."
+      },
       "cards": [
         { "title": "Resident first", "body": "Homes and common areas are arranged for clear navigation, comfort, and everyday convenience.", "image": "" },
         { "title": "Built for access", "body": "The site emphasizes walkability, transit-friendly living, and approachable application guidance.", "image": "" },
@@ -78,10 +83,16 @@
       ]
     },
     "/sustainability": {
-      "title": "Sustainability",
-      "eyebrow": "Efficient living, responsible choices",
-      "body": "The community is shaped by resource-conscious decisions, from energy-aware building practices to landscape choices that make the property easier to maintain and more pleasant to live in.",
+      "title": "PROPERTY DETAILS",
+      "eyebrow": "Property information",
+      "body": "Explore the property details and in-home features planned for Cherry Street Commons.",
       "bannerImage": "/assets/hero-cherry.png",
+      "details": {
+        "unitsLabel": "Number of Units",
+        "unitsValue": "33",
+        "featuresTitle": "Unit Features",
+        "featuresText": "Air Conditioning\nAppliances\nBlinds\nBroadband Internet Access\nCable Ready\nCarpet and Vinyl Flooring\nElectric cooktop stove and range\nEnergy Star rated appliances\nHigh efficiency light fixtures and appliances\nRefrigerator and Range\nSewer\nSmoke Free Community\nTrash and recycle chutes\nWater\nWindow Coverings"
+      },
       "cards": [
         { "title": "Energy smart", "body": "Efficient fixtures and systems are intended to reduce waste and support resident affordability.", "image": "" },
         { "title": "Healthy grounds", "body": "Landscaping is planned to provide shade, soften the site, and create a calmer street presence.", "image": "" },
@@ -89,10 +100,15 @@
       ]
     },
     "/community": {
-      "title": "Community",
-      "eyebrow": "A place to feel connected",
-      "body": "Cherry Street Commons is designed to support a balanced neighborhood experience, with places to gather, clear outdoor circulation, and a residential scale that feels approachable.",
+      "title": "Amenities",
+      "eyebrow": "Community amenities",
+      "body": "Amenities that support convenience, connection, security, and everyday resident life.",
       "bannerImage": "/assets/hero-cherry.png",
+      "amenities": {
+        "title": "Amenities",
+        "subtitle": "Resident-focused features for daily life.",
+        "itemsText": "After-school program\nBicycle Storage\nElectric Vehicle Charging Stations\nGated Parking\nKey Fob Security\nLaundry Room\nPlayground"
+      },
       "cards": [
         { "title": "Gathering areas", "body": "Shared spaces encourage neighborly connection without overwhelming private residential life.", "image": "" },
         { "title": "Neighborhood scale", "body": "The property is designed to feel grounded in the surrounding community.", "image": "" },
