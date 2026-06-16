@@ -15,7 +15,7 @@
     { "label": "Property Details", "href": "/sustainability" },
     { "label": "Amenities", "href": "/community" },
     { "label": "Eligibility", "href": "/eligibility" },
-    { "label": "Neiborhub", "href": "/neiborhub" },
+    { "label": "Neiborhuud", "href": "/neiborhub" },
     { "label": "Floor Plans", "href": "/floor-plans" },
     { "label": "Apply now", "href": "/contact" }
   ],
@@ -159,7 +159,7 @@
       ]
     },
     "/neiborhub": {
-      "title": "Neiborhub",
+      "title": "Neiborhuud",
       "eyebrow": "Around the property",
       "body": "Use this page to highlight what is near the building, including transportation, schools, parks, shopping, services, and neighborhood destinations.",
       "bannerImage": "/assets/hero-cherry.png",

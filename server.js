@@ -77,7 +77,7 @@ function normalizeContent(data) {
     { label: "Property Details", href: "/sustainability" },
     { label: "Amenities", href: "/community" },
     { label: "Eligibility", href: "/eligibility" },
-    { label: "Neiborhub", href: "/neiborhub" },
+    { label: "Neiborhuud", href: "/neiborhub" },
     { label: "Floor Plans", href: "/floor-plans" },
     { label: "Apply now", href: "/contact" }
   ];
