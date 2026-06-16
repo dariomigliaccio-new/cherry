@@ -358,7 +358,7 @@ h3 {
 .map-section {
   width: 100%;
   margin: 36px auto 0;
-  padding: 0 0 74px;
+  padding: 0;
 }
 
 .map-copy {
@@ -411,7 +411,7 @@ h3 {
   align-items: center;
   width: calc(100% - var(--frame-gutter));
   max-width: var(--frame-width);
-  min-height: 420px;
+  aspect-ratio: 1667 / 661;
   margin: 0 auto;
   padding: clamp(40px, 7vw, 92px);
   overflow: hidden;
@@ -451,6 +451,7 @@ h3 {
 
 .subpage-cards {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding-top: 62px;
 }
 
 .floor-plan-gallery {
@@ -502,7 +503,7 @@ h3 {
   grid-template-columns: minmax(240px, 1fr) auto;
   align-items: end;
   gap: 24px;
-  margin-top: 48px;
+  margin-top: 0;
   padding: 42px max(24px, calc((100vw - var(--frame-width)) / 2)) 34px;
   color: #fff;
   background:
@@ -602,7 +603,6 @@ h3 {
 
   .map-section {
     margin-top: 18px;
-    padding-bottom: 48px;
   }
 
   .property-map {
@@ -610,7 +610,9 @@ h3 {
   }
 
   .page-banner {
-    min-height: 520px;
+    height: 620px;
+    min-height: 620px;
+    aspect-ratio: auto;
     padding: 34px 18px;
     align-items: flex-end;
   }
