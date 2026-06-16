@@ -213,13 +213,13 @@ function renderFooter(data) {
     .join("");
   const officialLogos = (data.footer.officialLogos || [])
     .filter((item) => item.image || item.label)
-    .map((item) => {
+    .map((item, index) => {
       const logo = item.image
         ? `<img src="${esc(item.image)}" alt="${esc(item.label)}">`
         : `<span>${esc(item.label)}</span>`;
       return item.url
-        ? `<a href="${esc(item.url)}" target="_blank" rel="noreferrer">${logo}</a>`
-        : `<div>${logo}</div>`;
+        ? `<a class="official-logo official-logo-${index + 1}" href="${esc(item.url)}" target="_blank" rel="noreferrer">${logo}</a>`
+        : `<div class="official-logo official-logo-${index + 1}">${logo}</div>`;
     })
     .join("");
   const footerLogo = data.footer.logoImage
