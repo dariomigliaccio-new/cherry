@@ -42,11 +42,11 @@ function initPropertyMap() {
   const mapElement = document.getElementById("property-map");
   if (!mapElement || !window.L) return;
 
-  const propertyCenter = [35.2271, -80.8431];
+  const propertyCenter = [37.5049699, -122.2601696];
   const map = L.map(mapElement, {
     scrollWheelZoom: false,
     zoomControl: true
-  }).setView(propertyCenter, 7);
+  }).setView(propertyCenter, 14);
 
   L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
     maxZoom: 19,
@@ -62,7 +62,7 @@ function initPropertyMap() {
 
   L.marker(propertyCenter, { icon: marker })
     .addTo(map)
-    .bindPopup("<strong>Cherry Street Commons</strong><br>1244 Cherry Street");
+    .bindPopup("<strong>Cherry Street Commons</strong><br>1244 Cherry Street<br>San Carlos, CA");
 }
 
 window.addEventListener("load", initPropertyMap);
