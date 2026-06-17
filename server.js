@@ -43,6 +43,18 @@ app.use(
     saveUninitialized: false
   })
 );
+
+app.use((req, res, next) => {
+  const allowedAssets = new Set([
+    "/css/styles.css",
+    "/assets/cherry-street-rendering-1600x700.jpg"
+  ]);
+  if (req.method === "GET" && allowedAssets.has(req.path)) {
+    return next();
+  }
+  return res.status(503).send(renderConstructionPage(readContent()));
+});
+
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/images", express.static(path.join(__dirname, "images")));
 
@@ -284,6 +296,32 @@ function renderFooter(data) {
     <div class="footer-logos">${officialLogos}</div>
     <div class="footer-bottom">${esc(data.footer.copyright)}</div>
   </footer>`;
+}
+
+function renderConstructionPage(data) {
+  return `<!doctype html>
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>${esc(data.site.name)} | Under Construction</title>
+      <meta name="description" content="${esc(data.site.description)}">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="/css/styles.css">
+    </head>
+    <body class="construction-body">
+      <main class="construction-page">
+        <section class="construction-panel" aria-label="Site under construction">
+          <p class="eyebrow">Cherry Street Commons</p>
+          <h1>This page is under construction</h1>
+          <p>We are preparing the website and will be back soon.</p>
+          <img src="/assets/cherry-street-rendering-1600x700.jpg" alt="Rendering of Cherry Street Commons">
+        </section>
+      </main>
+    </body>
+  </html>`;
 }
 
 function mapSection(data) {

@@ -33,6 +33,54 @@ body {
   background: var(--paper);
 }
 
+.construction-body {
+  min-height: 100vh;
+  background: #edf1f5;
+}
+
+.construction-page {
+  display: grid;
+  min-height: 100vh;
+  padding: 32px;
+  place-items: center;
+}
+
+.construction-panel {
+  display: grid;
+  width: min(100%, 1180px);
+  justify-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.construction-panel .eyebrow {
+  margin: 0;
+  color: var(--green);
+}
+
+.construction-panel h1 {
+  max-width: 780px;
+  margin: 0;
+  color: var(--green-dark);
+  font-size: clamp(2.1rem, 5vw, 4.6rem);
+  line-height: 0.98;
+}
+
+.construction-panel p:not(.eyebrow) {
+  max-width: 620px;
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 1.08rem;
+  line-height: 1.6;
+}
+
+.construction-panel img {
+  display: block;
+  width: min(100%, 980px);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
 img,
 svg,
 iframe {
