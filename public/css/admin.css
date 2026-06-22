@@ -163,6 +163,14 @@ textarea {
   resize: vertical;
 }
 
+label textarea[name^="__svg__"] {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: #2d5a3d;
+  background: #f4faf6;
+}
+
 small {
   color: var(--muted);
 }

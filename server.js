@@ -629,6 +629,12 @@ function imageField(label, name, data) {
   return `<label><span>${esc(label)}</span><input type="file" name="${esc(name)}" accept="image/*,.svg"><small>${esc(value || "No image selected")}</small></label>`;
 }
 
+function svgField(label, name, data) {
+  const value = getByPath(data, name) || "";
+  const note = value.startsWith("data:") ? "SVG code saved" : esc(value || "None");
+  return `<label><span>${esc(label)}</span><textarea name="__svg__${esc(name)}" rows="5" placeholder="&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; ...&gt;...&lt;/svg&gt;"></textarea><small>Current: ${note}</small></label>`;
+}
+
 function checkboxField(label, name, data) {
   const checked = getByPath(data, name) ? " checked" : "";
   return `<label class="checkbox-field"><input type="checkbox" name="${esc(name)}" value="true"${checked}><span>${esc(label)}</span></label>`;
@@ -660,7 +666,7 @@ app.post("/manager/logout", (req, res) => {
 app.get("/manager", requireAdmin, (_req, res) => {
   const data = readContent();
   const sections = [];
-  sections.push(`<section><h2>Site</h2>${field("Name", "site.name", data)}${field("Tagline", "site.tagline", data)}${field("Brand initials", "site.brandInitials", data)}${imageField("Affordable Homes / header logo SVG", "site.logoImage", data)}${imageField("Hamburger menu SVG", "site.menuIcon", data)}${field("Apply button label", "site.applyLabel", data)}${field("Apply button URL", "site.applyUrl", data)}</section>`);
+  sections.push(`<section><h2>Site</h2>${field("Name", "site.name", data)}${field("Tagline", "site.tagline", data)}${field("Brand initials", "site.brandInitials", data)}${svgField("Header logo SVG", "site.logoImage", data)}${svgField("Hamburger menu SVG", "site.menuIcon", data)}${field("Apply button label", "site.applyLabel", data)}${field("Apply button URL", "site.applyUrl", data)}</section>`);
   sections.push(`<section><h2>Scrolling Announcement</h2>${checkboxField("Show scrolling announcement", "announcement.enabled", data)}${field("Announcement text", "announcement.text", data, "textarea")}${field("Announcement link URL", "announcement.linkUrl", data)}${field("Speed in seconds", "announcement.speed", data, "number")}</section>`);
   sections.push(`<section><h2>Home Intro</h2>${field("Eyebrow", "home.intro.eyebrow", data)}${field("Title", "home.intro.title", data)}${field("Body", "home.intro.body", data, "textarea")}</section>`);
   data.home.slides.forEach((_, index) => {
@@ -686,7 +692,7 @@ app.get("/manager", requireAdmin, (_req, res) => {
     if (route === "/community") {
       sections.push(`<section><h2>Amenities</h2>${field("Title", "pages./community.amenities.title", data)}${field("Subtitle", "pages./community.amenities.subtitle", data)}${field("Amenities List", "pages./community.amenities.itemsText", data, "textarea")}</section>`);
       (page.amenities.items || []).forEach((_, index) => {
-        sections.push(`<section><h2>Amenity ${index + 1}</h2>${field("Title", `pages./community.amenities.items.${index}.title`, data)}${imageField("Icon SVG", `pages./community.amenities.items.${index}.icon`, data)}</section>`);
+        sections.push(`<section><h2>Amenity ${index + 1}</h2>${field("Title", `pages./community.amenities.items.${index}.title`, data)}${svgField("Icon SVG", `pages./community.amenities.items.${index}.icon`, data)}</section>`);
       });
     }
     if (route === "/eligibility") {
@@ -718,7 +724,7 @@ app.get("/manager", requireAdmin, (_req, res) => {
     }
   });
   sections.push(`<section><h2>Location</h2>${field("Eyebrow", "location.eyebrow", data)}${field("Title", "location.title", data)}${field("Body", "location.body", data, "textarea")}${field("Address", "location.address", data)}${field("Latitude", "location.lat", data, "number")}${field("Longitude", "location.lng", data, "number")}${field("Zoom", "location.zoom", data, "number")}</section>`);
-  sections.push(`<section><h2>Footer</h2>${field("Headline", "footer.headline", data)}${imageField("Footer main logo SVG", "footer.logoImage", data)}${field("Body", "footer.body", data, "textarea")}${field("Address", "footer.address", data)}${field("Phone", "footer.phone", data)}${field("Email", "footer.email", data, "email")}${field("Copyright", "footer.copyright", data)}</section>`);
+  sections.push(`<section><h2>Footer</h2>${field("Headline", "footer.headline", data)}${svgField("Footer main logo SVG", "footer.logoImage", data)}${field("Body", "footer.body", data, "textarea")}${field("Address", "footer.address", data)}${field("Phone", "footer.phone", data)}${field("Email", "footer.email", data, "email")}${field("Copyright", "footer.copyright", data)}</section>`);
   (data.footer.officialLogos || []).forEach((_, index) => {
     sections.push(`<section><h2>Footer Official Logo ${index + 1}</h2>${field("Label", `footer.officialLogos.${index}.label`, data)}${field("URL", `footer.officialLogos.${index}.url`, data, "url")}${imageField("Logo SVG/image", `footer.officialLogos.${index}.image`, data)}</section>`);
   });
@@ -740,6 +746,15 @@ app.post("/manager", requireAdmin, upload.any(), (req, res) => {
   delete req.body.removeNeiborhuudCards;
   delete req.body.removeNewsItems;
   data.announcement.enabled = false;
+  const svgEntries = Object.keys(req.body).filter((k) => k.startsWith("__svg__"));
+  svgEntries.forEach((key) => {
+    const svgCode = String(req.body[key] || "").trim();
+    delete req.body[key];
+    if (svgCode) {
+      const fieldName = key.slice(7);
+      setByPath(data, fieldName, `data:image/svg+xml;base64,${Buffer.from(svgCode).toString("base64")}`);
+    }
+  });
   Object.entries(req.body).forEach(([name, value]) => {
     setByPath(data, name, value);
   });
