@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+(function () {
   var TABS = [
     { key: 'site',   label: 'Site',         test: function (t) { return /^(Site$|Scrolling)/.test(t); } },
     { key: 'home',   label: 'Home',         test: function (t) { return /^Home/.test(t); } },
@@ -72,4 +72,4 @@ document.addEventListener('DOMContentLoaded', function () {
     activateTab(btn.dataset.tab);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
-});
+}());
