@@ -71,3 +71,19 @@ function initPropertyMap() {
 }
 
 window.addEventListener("load", initPropertyMap);
+
+document.querySelectorAll(".plan-image").forEach((img) => {
+  img.addEventListener("click", () => {
+    const box = document.createElement("div");
+    box.className = "plan-lightbox";
+    box.innerHTML = `<img src="${img.src}" alt="${img.alt}">`;
+    document.body.appendChild(box);
+    requestAnimationFrame(() => box.classList.add("open"));
+    const close = () => {
+      box.classList.remove("open");
+      box.addEventListener("transitionend", () => box.remove(), { once: true });
+    };
+    box.addEventListener("click", close);
+    document.addEventListener("keydown", (e) => e.key === "Escape" && close(), { once: true });
+  });
+});

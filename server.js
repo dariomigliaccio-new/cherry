@@ -626,13 +626,15 @@ function field(label, name, data, type = "text") {
 
 function imageField(label, name, data) {
   const value = getByPath(data, name) || "";
-  return `<label><span>${esc(label)}</span><input type="file" name="${esc(name)}" accept="image/*,.svg"><small>${esc(value || "No image selected")}</small></label>`;
+  const clearBtn = value ? `<label class="checkbox-field clear-check"><input type="checkbox" name="__clear__${esc(name)}" value="1"><span>Remove image</span></label>` : "";
+  return `<label><span>${esc(label)}</span><input type="file" name="${esc(name)}" accept="image/*,.svg"><small>${esc(value || "No image selected")}</small></label>${clearBtn}`;
 }
 
 function svgField(label, name, data) {
   const value = getByPath(data, name) || "";
   const note = value.startsWith("data:") ? "SVG code saved" : esc(value || "None");
-  return `<label><span>${esc(label)}</span><textarea name="__svg__${esc(name)}" rows="5" placeholder="&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; ...&gt;...&lt;/svg&gt;"></textarea><small>Current: ${note}</small></label>`;
+  const clearBtn = value ? `<label class="checkbox-field clear-check"><input type="checkbox" name="__clear__${esc(name)}" value="1"><span>Remove SVG</span></label>` : "";
+  return `<label><span>${esc(label)}</span><textarea name="__svg__${esc(name)}" rows="5" placeholder="&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; ...&gt;...&lt;/svg&gt;"></textarea><small>Current: ${note}</small></label>${clearBtn}`;
 }
 
 function checkboxField(label, name, data) {
@@ -746,6 +748,12 @@ app.post("/manager", requireAdmin, upload.any(), (req, res) => {
   delete req.body.removeNeiborhuudCards;
   delete req.body.removeNewsItems;
   data.announcement.enabled = false;
+  const clearEntries = Object.keys(req.body).filter((k) => k.startsWith("__clear__"));
+  clearEntries.forEach((key) => {
+    const shouldClear = req.body[key];
+    delete req.body[key];
+    if (shouldClear) setByPath(data, key.slice(8), "");
+  });
   const svgEntries = Object.keys(req.body).filter((k) => k.startsWith("__svg__"));
   svgEntries.forEach((key) => {
     const svgCode = String(req.body[key] || "").trim();

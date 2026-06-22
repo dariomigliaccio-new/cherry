@@ -148,6 +148,15 @@ label span {
   color: var(--clay);
 }
 
+.clear-check {
+  border-color: rgba(185, 28, 28, 0.25);
+  background: #fef8f8;
+}
+
+.clear-check span {
+  color: #b91c1c !important;
+}
+
 input,
 textarea {
   width: 100%;
