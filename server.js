@@ -710,7 +710,7 @@ app.get("/manager", requireAdmin, (_req, res) => {
   Object.entries(data.pages).forEach(([route, page]) => {
     sections.push(`<section><h2>${esc(page.title)} Page</h2>${field("Eyebrow", `pages.${route}.eyebrow`, data)}${field("Title", `pages.${route}.title`, data)}${field("Body", `pages.${route}.body`, data, "textarea")}${imageField("Banner image", `pages.${route}.bannerImage`, data)}</section>`);
     if (route === "/about") {
-      sections.push(`<section><h2>About / News Header</h2>${field("News Section Title", "pages./about.aboutSection.title", data)}${field("Eyebrow", "pages./about.eyebrow", data)}</section>`);
+      sections.push(`<section><h2>About / News Header</h2>${field("News Section Title", "pages./about.aboutSection.title", data)}${field("Eyebrow", "pages./about.eyebrow", data)}${field("Available Units (same field as Property Details)", "pages./sustainability.details.availableUnits", data)}</section>`);
       (page.news || []).forEach((_, index) => {
         sections.push(`<section><h2>News Item ${index + 1}</h2>${checkboxField("Remove this item", "removeNewsItems", { removeNewsItems: false }).replace('value="true"', `value="${index}"`)}${field("Date (YYYY-MM-DD)", `pages./about.news.${index}.date`, data)}${field("Category", `pages./about.news.${index}.category`, data)}${field("Title", `pages./about.news.${index}.title`, data)}${field("Body", `pages./about.news.${index}.body`, data, "textarea")}${imageField("Image", `pages./about.news.${index}.image`, data)}</section>`);
       });
