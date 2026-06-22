@@ -203,7 +203,7 @@ function slideHref(slide) {
 function renderLayout({ title, content, activePath = "/", home = false }) {
   const data = readContent();
   const applyLink = applyHref(data);
-  const nav = data.nav
+  const buildNavLinks = (items) => items
     .map((item) => {
       const active = item.href === activePath ? " active" : "";
       const cta = item.href === "/contact" ? " nav-apply" : "";
@@ -212,6 +212,8 @@ function renderLayout({ title, content, activePath = "/", home = false }) {
       return `<a class="nav-link${active}${cta}" href="${esc(href)}">${esc(label)}</a>`;
     })
     .join("");
+  const nav = buildNavLinks(data.nav);
+  const mobileNav = buildNavLinks(data.nav.filter((item) => item.href !== "/contact"));
 
   const footer = home ? "" : renderFooter(data);
 
@@ -253,7 +255,7 @@ function renderLayout({ title, content, activePath = "/", home = false }) {
           <strong class="side-menu-brand">${esc(data.site.name)}</strong>
           <button class="close-button" type="button" aria-label="Close menu" data-close-menu>&times;</button>
         </div>
-        <nav aria-label="Mobile navigation">${nav}</nav>
+        <nav aria-label="Mobile navigation">${mobileNav}</nav>
       </aside>
       <div class="menu-backdrop" data-menu-backdrop></div>
       <main>${content}</main>
