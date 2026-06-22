@@ -972,7 +972,7 @@ h3 {
   margin-top: 0;
   padding: 76px max(28px, calc((100vw - var(--frame-width)) / 2)) 32px;
   color: #fff;
-  background: #050706;
+  background: linear-gradient(to bottom, transparent 0%, #363d44 38%, #2b3138 100%);
 }
 
 .footer-brand {
