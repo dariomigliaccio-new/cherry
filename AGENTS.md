@@ -27,3 +27,22 @@ Recent commits use short, imperative subject lines such as `Increase map height`
 ## Security & Configuration Tips
 
 Do not commit real credentials. Override default admin and session values with environment variables outside the repository. Treat `public/uploads/` as user-managed content and avoid checking in large or sensitive uploaded files unless they are intentional site assets.
+
+## Deployment & Hosting
+
+The production host is a Hostinger Ubuntu VPS at `2.24.96.87` (`srv1666945`). The deployed checkout is `/var/www/cherry-street-commons`, and its `origin` is `https://github.com/dariomigliaccio-new/cherry.git`. Deployment is currently manual; there is no GitHub Actions workflow. Before deploying, compare the local, GitHub, and server commit hashes and preserve server-managed content and uploads.
+
+The Express application runs under PM2 as `cherry-street-commons` with `PORT=3012`. PM2 is restored at boot by `pm2-root.service`; after starting or changing the process, run `pm2 save`. Nginx terminates HTTPS and proxies requests to `127.0.0.1:3012`. Validate changes with `nginx -t` before reloading Nginx. A `502 Bad Gateway` normally means the PM2 process is absent or nothing is listening on port `3012`.
+
+The official domains are `1244cherry.com` and `www.1244cherry.com`. They intentionally return HTTP `503` with the under-construction page. The temporary preview domains are `logmed.cloud` and `www.logmed.cloud`; they expose the complete site and should return HTTP `200`. The content manager is available at `https://logmed.cloud/manager/login`. This host-specific behavior is implemented in the early middleware in `server.js`.
+
+Both domain pairs resolve to the same VPS and use Let's Encrypt certificates managed by Certbot. Active Nginx configurations are `cherry-street-commons` and `logmed` under `/etc/nginx/sites-enabled/`. The former `cardmatch` configuration for `logmed.cloud` was disabled because it conflicted with `logmed` and targeted inactive ports. Dated backups are retained under `/etc/nginx/sites-available/`; keep them available for reversal but never place backup files in `sites-enabled`, because Nginx loads every file in that directory.
+
+After deployment, verify at minimum:
+
+- `https://logmed.cloud/`, `/about`, and `/manager/login` return `200`.
+- Preview CSS and images return `200`.
+- `https://1244cherry.com/` continues to return the intentional `503`.
+- `pm2 status cherry-street-commons` reports `online` and port `3012` is listening.
+
+As of June 22, 2026, local, GitHub, and VPS are in sync. Deploy is automated via GitHub Actions (`.github/workflows/deploy.yml`): every push to `main` triggers `git pull` + `pm2 restart` on the VPS automatically.
