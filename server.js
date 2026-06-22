@@ -394,6 +394,7 @@ function renderNewsSection(page) {
     featured.category ? `<span class="news-category">${esc(featured.category)}</span>` : "",
     featured.date ? `<time>${esc(formatNewsDate(featured.date))}</time>` : ""
   ].filter(Boolean).join("");
+  const moreBtn = (link) => link ? `<a class="news-more-btn" href="${esc(link)}" target="_blank" rel="noopener">More details</a>` : "";
   const gridItems = rest.map((item) => {
     const img = item.image
       ? `<img class="news-card-image" src="${esc(item.image)}" alt="${esc(item.title)}">`
@@ -402,7 +403,7 @@ function renderNewsSection(page) {
       item.category ? `<span class="news-category">${esc(item.category)}</span>` : "",
       item.date ? `<time>${esc(formatNewsDate(item.date))}</time>` : ""
     ].filter(Boolean).join("");
-    return `<article class="news-card">${img}<div class="news-card-body">${meta ? `<div class="news-meta">${meta}</div>` : ""}<h3>${esc(item.title)}</h3><p>${esc(item.body)}</p></div></article>`;
+    return `<article class="news-card">${img}<div class="news-card-body">${meta ? `<div class="news-meta">${meta}</div>` : ""}<h3>${esc(item.title)}</h3><p>${esc(item.body)}</p>${moreBtn(item.link)}</div></article>`;
   }).join("");
   return `<section class="news-section">
     ${header}
@@ -412,6 +413,7 @@ function renderNewsSection(page) {
         ${featuredMeta ? `<div class="news-meta">${featuredMeta}</div>` : ""}
         <h2>${esc(featured.title)}</h2>
         <p>${esc(featured.body)}</p>
+        ${moreBtn(featured.link)}
       </div>
     </article>
     ${rest.length ? `<div class="news-grid">${gridItems}</div>` : ""}
@@ -714,7 +716,7 @@ app.get("/manager", requireAdmin, (_req, res) => {
     if (route === "/about") {
       sections.push(`<section><h2>About / News Header</h2>${field("News Section Title", "pages./about.aboutSection.title", data)}${field("Eyebrow", "pages./about.eyebrow", data)}${field("Available Units (same field as Property Details)", "pages./sustainability.details.availableUnits", data)}</section>`);
       (page.news || []).forEach((_, index) => {
-        sections.push(`<section><h2>News Item ${index + 1}</h2>${checkboxField("Remove this item", "removeNewsItems", { removeNewsItems: false }).replace('value="true"', `value="${index}"`)}${field("Date (YYYY-MM-DD)", `pages./about.news.${index}.date`, data)}${field("Category", `pages./about.news.${index}.category`, data)}${field("Title", `pages./about.news.${index}.title`, data)}${field("Body", `pages./about.news.${index}.body`, data, "textarea")}${imageField("Image", `pages./about.news.${index}.image`, data)}</section>`);
+        sections.push(`<section><h2>News Item ${index + 1}</h2>${checkboxField("Remove this item", "removeNewsItems", { removeNewsItems: false }).replace('value="true"', `value="${index}"`)}${field("Date (YYYY-MM-DD)", `pages./about.news.${index}.date`, data)}${field("Category", `pages./about.news.${index}.category`, data)}${field("Title", `pages./about.news.${index}.title`, data)}${field("Body", `pages./about.news.${index}.body`, data, "textarea")}${field("More details link (URL)", `pages./about.news.${index}.link`, data)}${imageField("Image", `pages./about.news.${index}.image`, data)}</section>`);
       });
       sections.push(`<section><h2>News Items</h2><button class="secondary-button" type="submit" name="adminAction" value="addNewsItem">Add news item</button></section>`);
     }
