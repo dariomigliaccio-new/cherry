@@ -56,11 +56,48 @@ button {
   cursor: pointer;
 }
 
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 14px clamp(18px, 4vw, 54px);
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-tab {
+  padding: 9px 18px;
+  border: 1px solid var(--line) !important;
+  border-radius: 6px;
+  background: var(--surface) !important;
+  color: var(--muted) !important;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: none !important;
+  transition: border-color 120ms, color 120ms, background 120ms;
+}
+
+.admin-tab:hover {
+  border-color: var(--green) !important;
+  color: var(--green) !important;
+}
+
+.admin-tab.active {
+  background: var(--green) !important;
+  border-color: var(--green) !important;
+  color: #fff !important;
+}
+
 .admin-form {
+  display: block;
+  padding: 24px clamp(18px, 4vw, 54px) 96px;
+}
+
+.admin-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
-  padding: 24px clamp(18px, 4vw, 54px) 96px;
 }
 
 section,
@@ -155,7 +192,7 @@ small {
 }
 
 @media (max-width: 900px) {
-  .admin-form {
+  .admin-grid {
     grid-template-columns: 1fr;
   }
 }

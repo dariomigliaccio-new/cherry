@@ -45,10 +45,14 @@ app.use(
 );
 
 app.use((req, res, next) => {
+  const previewHosts = new Set(["logmed.cloud", "www.logmed.cloud"]);
   const allowedAssets = new Set([
     "/css/styles.css",
     "/assets/cherry-street-rendering-1600x700.jpg"
   ]);
+  if (previewHosts.has(req.hostname.toLowerCase())) {
+    return next();
+  }
   if (req.method === "GET" && allowedAssets.has(req.path)) {
     return next();
   }
@@ -364,6 +368,53 @@ function renderAboutSection(page) {
   </section>`;
 }
 
+function formatNewsDate(dateStr) {
+  if (!dateStr) return "";
+  const parts = String(dateStr).split("-");
+  if (parts.length !== 3) return dateStr;
+  const d = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+  return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+}
+
+function renderNewsSection(page) {
+  const items = (page.news || []).slice().sort((a, b) => (a.date > b.date ? -1 : a.date < b.date ? 1 : 0));
+  const sectionTitle = (page.aboutSection || {}).title || page.title;
+  const header = `<div class="news-header"><p class="eyebrow">${esc(page.eyebrow)}</p><h2>${esc(sectionTitle)}</h2></div>`;
+  if (!items.length) {
+    return `<section class="news-section">${header}<div class="news-empty"><p>No updates yet. Check back soon.</p></div></section>`;
+  }
+  const [featured, ...rest] = items;
+  const featuredImg = featured.image
+    ? `<img src="${esc(featured.image)}" alt="${esc(featured.title)}">`
+    : `<div class="news-image-placeholder"></div>`;
+  const featuredMeta = [
+    featured.category ? `<span class="news-category">${esc(featured.category)}</span>` : "",
+    featured.date ? `<time>${esc(formatNewsDate(featured.date))}</time>` : ""
+  ].filter(Boolean).join("");
+  const gridItems = rest.map((item) => {
+    const img = item.image
+      ? `<img class="news-card-image" src="${esc(item.image)}" alt="${esc(item.title)}">`
+      : `<div class="news-card-image news-image-placeholder"></div>`;
+    const meta = [
+      item.category ? `<span class="news-category">${esc(item.category)}</span>` : "",
+      item.date ? `<time>${esc(formatNewsDate(item.date))}</time>` : ""
+    ].filter(Boolean).join("");
+    return `<article class="news-card">${img}<div class="news-card-body">${meta ? `<div class="news-meta">${meta}</div>` : ""}<h3>${esc(item.title)}</h3><p>${esc(item.body)}</p></div></article>`;
+  }).join("");
+  return `<section class="news-section">
+    ${header}
+    <article class="news-featured">
+      <div class="news-featured-image">${featuredImg}</div>
+      <div class="news-featured-body">
+        ${featuredMeta ? `<div class="news-meta">${featuredMeta}</div>` : ""}
+        <h2>${esc(featured.title)}</h2>
+        <p>${esc(featured.body)}</p>
+      </div>
+    </article>
+    ${rest.length ? `<div class="news-grid">${gridItems}</div>` : ""}
+  </section>`;
+}
+
 function renderPropertyDetails(page) {
   const details = page.details || {};
   const features = splitLines(details.featuresText).map((feature) => `<li>${esc(feature)}</li>`).join("");
@@ -531,7 +582,7 @@ Object.entries(readContent().pages).forEach(([route]) => {
 
     const bodyContent =
       route === "/about"
-        ? renderAboutSection(page)
+        ? renderNewsSection(page)
         : route === "/sustainability"
           ? renderPropertyDetails(page)
           : route === "/community"
@@ -584,7 +635,7 @@ function checkboxField(label, name, data) {
 }
 
 function adminShell(content) {
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Site Manager</title><link rel="stylesheet" href="/css/admin.css"></head><body>${content}</body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Site Manager</title><link rel="stylesheet" href="/css/admin.css"></head><body>${content}<script src="/js/admin.js" defer></script></body></html>`;
 }
 
 app.get("/manager/login", (req, res) => {
@@ -623,7 +674,11 @@ app.get("/manager", requireAdmin, (_req, res) => {
   Object.entries(data.pages).forEach(([route, page]) => {
     sections.push(`<section><h2>${esc(page.title)} Page</h2>${field("Eyebrow", `pages.${route}.eyebrow`, data)}${field("Title", `pages.${route}.title`, data)}${field("Body", `pages.${route}.body`, data, "textarea")}${imageField("Banner image", `pages.${route}.bannerImage`, data)}</section>`);
     if (route === "/about") {
-      sections.push(`<section><h2>About Content</h2>${field("Title", "pages./about.aboutSection.title", data)}${field("Subtitle", "pages./about.aboutSection.subtitle", data)}${field("Text", "pages./about.aboutSection.body", data, "textarea")}</section>`);
+      sections.push(`<section><h2>About / News Header</h2>${field("News Section Title", "pages./about.aboutSection.title", data)}${field("Eyebrow", "pages./about.eyebrow", data)}</section>`);
+      (page.news || []).forEach((_, index) => {
+        sections.push(`<section><h2>News Item ${index + 1}</h2>${checkboxField("Remove this item", "removeNewsItems", { removeNewsItems: false }).replace('value="true"', `value="${index}"`)}${field("Date (YYYY-MM-DD)", `pages./about.news.${index}.date`, data)}${field("Category", `pages./about.news.${index}.category`, data)}${field("Title", `pages./about.news.${index}.title`, data)}${field("Body", `pages./about.news.${index}.body`, data, "textarea")}${imageField("Image", `pages./about.news.${index}.image`, data)}</section>`);
+      });
+      sections.push(`<section><h2>News Items</h2><button class="secondary-button" type="submit" name="adminAction" value="addNewsItem">Add news item</button></section>`);
     }
     if (route === "/sustainability") {
       sections.push(`<section><h2>Property Details</h2>${field("Main Title", "pages./sustainability.details.title", data)}${field("Subtitle", "pages./sustainability.details.subtitle", data, "textarea")}${field("Units Label", "pages./sustainability.details.unitsLabel", data)}${field("Units Value", "pages./sustainability.details.unitsValue", data)}${field("Features Title", "pages./sustainability.details.featuresTitle", data)}${field("Unit Features", "pages./sustainability.details.featuresText", data, "textarea")}</section>`);
@@ -678,10 +733,12 @@ app.post("/manager", requireAdmin, upload.any(), (req, res) => {
   const removeHomeSlides = req.body.removeHomeSlides;
   const removeHomeCards = req.body.removeHomeCards;
   const removeNeiborhuudCards = req.body.removeNeiborhuudCards;
+  const removeNewsItems = req.body.removeNewsItems;
   delete req.body.adminAction;
   delete req.body.removeHomeSlides;
   delete req.body.removeHomeCards;
   delete req.body.removeNeiborhuudCards;
+  delete req.body.removeNewsItems;
   data.announcement.enabled = false;
   Object.entries(req.body).forEach(([name, value]) => {
     setByPath(data, name, value);
@@ -725,6 +782,14 @@ app.post("/manager", requireAdmin, upload.any(), (req, res) => {
       body: "",
       image: ""
     });
+  }
+  if (removeNewsItems !== undefined) {
+    const indexes = new Set((Array.isArray(removeNewsItems) ? removeNewsItems : [removeNewsItems]).map(Number));
+    data.pages["/about"].news = (data.pages["/about"].news || []).filter((_, index) => !indexes.has(index));
+  }
+  if (action === "addNewsItem") {
+    if (!data.pages["/about"].news) data.pages["/about"].news = [];
+    data.pages["/about"].news.push({ date: new Date().toISOString().slice(0, 10), category: "", title: "", body: "", image: "" });
   }
   data.location.lat = Number(data.location.lat);
   data.location.lng = Number(data.location.lng);
