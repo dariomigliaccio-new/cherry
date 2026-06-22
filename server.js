@@ -417,21 +417,22 @@ function renderNewsSection(page) {
 
 function renderPropertyDetails(page) {
   const details = page.details || {};
-  const features = splitLines(details.featuresText).map((feature) => `<li>${esc(feature)}</li>`).join("");
+  const checkSvg = `<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8.5l3.5 3.5 7-7"/></svg>`;
+  const features = splitLines(details.featuresText).map((f) => `<li>${checkSvg}<span>${esc(f)}</span></li>`).join("");
   return `<section class="property-details-section">
-    <div class="section-heading details-heading">
+    <div class="details-intro section-heading">
       <p class="eyebrow">${esc(page.eyebrow)}</p>
       <h2>${esc(details.title || page.title)}</h2>
       <p>${esc(details.subtitle || page.body)}</p>
     </div>
-    <article class="units-card">
-      <span>${esc(details.unitsLabel || "Number of Units")}</span>
+    <div class="details-stat">
       <strong>${esc(details.unitsValue || "")}</strong>
-    </article>
-    <article class="features-card">
-      <h2>${esc(details.featuresTitle || "Unit Features")}</h2>
+      <span>${esc(details.unitsLabel || "Affordable Homes")}</span>
+    </div>
+    <div class="details-features">
+      <h3>${esc(details.featuresTitle || "Unit Features")}</h3>
       <ul>${features}</ul>
-    </article>
+    </div>
   </section>`;
 }
 
