@@ -793,35 +793,81 @@ h3 {
   text-align: center;
 }
 
-.details-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.avail-counter {
   margin-bottom: 52px;
-  padding: 58px 40px 54px;
-  border-radius: 16px;
-  background: var(--green-dark);
+  padding: 40px 44px 36px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.avail-numbers {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 28px;
+}
+
+.avail-item {
+  flex: 1;
   text-align: center;
 }
 
-.details-stat strong {
+.avail-item strong {
   display: block;
-  font-size: clamp(5rem, 14vw, 8.5rem);
+  font-size: clamp(2.6rem, 6vw, 4.2rem);
   font-weight: 900;
   line-height: 1;
-  color: #fff;
   letter-spacing: -0.03em;
 }
 
-.details-stat span {
+.avail-item--total strong { color: var(--ink); }
+.avail-item--open strong  { color: var(--green); }
+.avail-item--taken strong { color: var(--muted); }
+
+.avail-item span {
   display: block;
-  margin-top: 14px;
-  color: rgba(255, 255, 255, 0.65);
-  font-size: 0.85rem;
+  margin-top: 8px;
+  font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+}
+
+.avail-divider {
+  width: 1px;
+  height: 64px;
+  background: var(--line);
+  flex-shrink: 0;
+  margin: 0 24px;
+}
+
+.avail-bar {
+  height: 10px;
+  border-radius: 99px;
+  background: var(--paper);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.avail-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--green) 0%, var(--gold) 100%);
+  transition: width 600ms ease;
+}
+
+.avail-note {
+  margin: 0;
+  text-align: center;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+.avail-note strong {
+  color: var(--green);
 }
 
 .details-features {
@@ -1399,8 +1445,12 @@ h3 {
     padding: 28px 22px 34px;
   }
 
-  .details-stat {
-    padding: 42px 28px 38px;
+  .avail-counter {
+    padding: 30px 22px 26px;
+  }
+
+  .avail-divider {
+    margin: 0 16px;
   }
 
   .eligibility-panel,

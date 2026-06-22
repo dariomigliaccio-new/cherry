@@ -137,7 +137,8 @@ function normalizeContent(data) {
 }
 
 function esc(value = "") {
-  return String(value)
+  const v = Array.isArray(value) ? value[0] ?? "" : value;
+  return String(v ?? "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
@@ -417,6 +418,35 @@ function renderNewsSection(page) {
 
 function renderPropertyDetails(page) {
   const details = page.details || {};
+  const total = parseInt(details.unitsValue || "0", 10);
+  const available = parseInt(details.availableUnits ?? details.unitsValue ?? "0", 10);
+  const taken = Math.max(0, total - available);
+  const pct = total > 0 ? Math.round((taken / total) * 100) : 0;
+
+  const availBlock = total > 0 ? `
+    <div class="avail-counter">
+      <div class="avail-numbers">
+        <div class="avail-item avail-item--total">
+          <strong>${esc(String(total))}</strong>
+          <span>${esc(details.unitsLabel || "Total Homes")}</span>
+        </div>
+        <div class="avail-divider" aria-hidden="true"></div>
+        <div class="avail-item avail-item--open">
+          <strong>${esc(String(available))}</strong>
+          <span>Available Now</span>
+        </div>
+        <div class="avail-divider" aria-hidden="true"></div>
+        <div class="avail-item avail-item--taken">
+          <strong>${esc(String(taken))}</strong>
+          <span>Applications Filed</span>
+        </div>
+      </div>
+      <div class="avail-bar" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100">
+        <div class="avail-bar-fill" style="width:${pct}%"></div>
+      </div>
+      <p class="avail-note">${available > 0 ? `<strong>${esc(String(available))}</strong> unit${available === 1 ? "" : "s"} still available — apply today!` : "All units are currently spoken for. Join the waitlist."}</p>
+    </div>` : "";
+
   const checkSvg = `<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8.5l3.5 3.5 7-7"/></svg>`;
   const features = splitLines(details.featuresText).map((f) => `<li>${checkSvg}<span>${esc(f)}</span></li>`).join("");
   return `<section class="property-details-section">
@@ -425,10 +455,7 @@ function renderPropertyDetails(page) {
       <h2>${esc(details.title || page.title)}</h2>
       <p>${esc(details.subtitle || page.body)}</p>
     </div>
-    <div class="details-stat">
-      <strong>${esc(details.unitsValue || "")}</strong>
-      <span>${esc(details.unitsLabel || "Affordable Homes")}</span>
-    </div>
+    ${availBlock}
     <div class="details-features">
       <h3>${esc(details.featuresTitle || "Unit Features")}</h3>
       <ul>${features}</ul>
@@ -690,7 +717,7 @@ app.get("/manager", requireAdmin, (_req, res) => {
       sections.push(`<section><h2>News Items</h2><button class="secondary-button" type="submit" name="adminAction" value="addNewsItem">Add news item</button></section>`);
     }
     if (route === "/sustainability") {
-      sections.push(`<section><h2>Property Details</h2>${field("Main Title", "pages./sustainability.details.title", data)}${field("Subtitle", "pages./sustainability.details.subtitle", data, "textarea")}${field("Units Label", "pages./sustainability.details.unitsLabel", data)}${field("Units Value", "pages./sustainability.details.unitsValue", data)}${field("Features Title", "pages./sustainability.details.featuresTitle", data)}${field("Unit Features", "pages./sustainability.details.featuresText", data, "textarea")}</section>`);
+      sections.push(`<section><h2>Property Details</h2>${field("Main Title", "pages./sustainability.details.title", data)}${field("Subtitle", "pages./sustainability.details.subtitle", data, "textarea")}${field("Units Label", "pages./sustainability.details.unitsLabel", data)}${field("Total Units", "pages./sustainability.details.unitsValue", data)}${field("Available Units (decreases as applicants are approved)", "pages./sustainability.details.availableUnits", data)}${field("Features Title", "pages./sustainability.details.featuresTitle", data)}${field("Unit Features", "pages./sustainability.details.featuresText", data, "textarea")}</section>`);
     }
     if (route === "/community") {
       sections.push(`<section><h2>Amenities</h2>${field("Title", "pages./community.amenities.title", data)}${field("Subtitle", "pages./community.amenities.subtitle", data)}${field("Amenities List", "pages./community.amenities.itemsText", data, "textarea")}</section>`);
