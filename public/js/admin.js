@@ -48,6 +48,7 @@
     panel.className = 'tab-panel admin-grid';
     panel.dataset.tab = tab.key;
     groups[tab.key].forEach(function (s) { panel.appendChild(s); });
+    panel.style.display = 'none';
     form.insertBefore(panel, saveBtn);
   });
 
@@ -60,7 +61,7 @@
       btn.classList.toggle('active', btn.dataset.tab === key);
     });
     form.querySelectorAll('.tab-panel').forEach(function (panel) {
-      panel.hidden = panel.dataset.tab !== key;
+      panel.style.display = panel.dataset.tab === key ? '' : 'none';
     });
   }
 
