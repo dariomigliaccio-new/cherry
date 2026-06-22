@@ -446,6 +446,11 @@ h3 {
   text-align: center;
 }
 
+.intro .eyebrow {
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+}
+
 .intro h2,
 .map-copy h2 {
   font-size: clamp(2rem, 4vw, 3.6rem);
