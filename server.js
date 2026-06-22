@@ -752,7 +752,7 @@ app.post("/manager", requireAdmin, upload.any(), (req, res) => {
   clearEntries.forEach((key) => {
     const shouldClear = req.body[key];
     delete req.body[key];
-    if (shouldClear) setByPath(data, key.slice(8), "");
+    if (shouldClear) setByPath(data, key.slice(9), "");
   });
   const svgEntries = Object.keys(req.body).filter((k) => k.startsWith("__svg__"));
   svgEntries.forEach((key) => {
