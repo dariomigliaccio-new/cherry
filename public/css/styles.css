@@ -447,13 +447,13 @@ h3 {
 }
 
 .intro .eyebrow {
-  font-size: 1rem;
-  letter-spacing: 0.12em;
+  font-size: 1.35rem;
+  letter-spacing: 0.14em;
 }
 
 .intro h2,
 .map-copy h2 {
-  font-size: clamp(2rem, 4vw, 3.6rem);
+  font-size: clamp(1.5rem, 2.8vw, 2.4rem);
 }
 
 .intro p:not(.eyebrow),
