@@ -452,9 +452,13 @@ h3 {
   letter-spacing: 0.14em;
 }
 
-.intro h2,
-.map-copy h2 {
+.intro h2 {
   font-size: clamp(1.5rem, 2.8vw, 2.4rem);
+}
+
+.map-copy h2 {
+  font-size: 1.35rem;
+  letter-spacing: 0.14em;
 }
 
 .intro p:not(.eyebrow),
@@ -1672,7 +1676,6 @@ h3 {
   }
 
   .intro h2,
-  .map-copy h2,
   .eligibility-section .section-heading h2,
   .neighborhood-section .section-heading h2,
   .about-detail-section h2,
