@@ -1267,6 +1267,11 @@ h3 {
   height: 40px;
 }
 
+.footer-logos .official-logo-2 {
+  width: 110px;
+  height: 64px;
+}
+
 .footer-logos img {
   display: block;
   width: 100%;
