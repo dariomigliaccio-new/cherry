@@ -147,9 +147,11 @@ function esc(value = "") {
 function setByPath(target, dottedPath, value) {
   const parts = dottedPath.split(".");
   let current = target;
-  parts.slice(0, -1).forEach((part) => {
-    current = current[Number.isNaN(Number(part)) ? part : Number(part)];
-  });
+  for (const part of parts.slice(0, -1)) {
+    const key = Number.isNaN(Number(part)) ? part : Number(part);
+    if (current[key] == null) return;
+    current = current[key];
+  }
   current[parts.at(-1)] = value;
 }
 
