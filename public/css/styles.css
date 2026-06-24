@@ -1544,6 +1544,10 @@ h3 {
     height: 260px;
   }
 
+  .news-featured-image::before {
+    display: none;
+  }
+
   .news-featured-body {
     padding: 34px 32px 38px;
   }
