@@ -1677,18 +1677,15 @@ h3 {
   }
 
   .site-footer {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 0;
-    row-gap: 0;
     padding: 44px 24px 28px;
   }
 
   .footer-brand {
-    grid-column: 1 / -1;
     align-items: center;
     text-align: center;
-    padding-bottom: 32px;
-    margin-bottom: 32px;
+    padding-bottom: 28px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
@@ -1701,9 +1698,55 @@ h3 {
     max-width: 100%;
   }
 
-  .footer-column {
-    padding-bottom: 28px;
+  .footer-column h3 {
+    display: none;
+  }
+
+  .site-footer > .footer-column:nth-child(2) {
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .site-footer > .footer-column:nth-child(2) nav {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .site-footer > .footer-column:nth-child(2) nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .site-footer > .footer-column:nth-child(2) nav a {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0 16px 0 0;
+    margin-right: 16px;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .site-footer > .footer-column:nth-child(2) nav a:last-child {
+    border-right: none;
+    margin-right: 0;
+    padding-right: 0;
+  }
+
+  .site-footer > .footer-column:nth-child(3) {
+    padding-top: 22px;
     text-align: center;
+  }
+
+  .site-footer > .footer-column:nth-child(3) p,
+  .site-footer > .footer-column:nth-child(3) a {
+    font-size: 0.88rem;
+    margin-bottom: 6px;
   }
 }
 
@@ -1746,10 +1789,19 @@ h3 {
   }
 
   .footer-logos {
-    gap: 16px;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .footer-logos a,
+  .footer-logos div {
+    width: 56px;
+    height: 40px;
+    min-height: 32px;
   }
 
   .footer-logos .official-logo-1 {
-    width: 100%;
+    width: min(200px, 100%);
+    height: 40px;
   }
 }
