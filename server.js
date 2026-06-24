@@ -394,37 +394,26 @@ function renderNewsSection(page) {
   if (!items.length) {
     return `<section class="news-section"><div class="news-empty"><p>No updates yet. Check back soon.</p></div></section>`;
   }
-  const [featured, ...rest] = items;
-  const featuredImg = featured.image
-    ? `<img src="${esc(featured.image)}" alt="${esc(featured.title)}">`
-    : `<div class="news-image-placeholder"></div>`;
-  const featuredMeta = [
-    featured.category ? `<span class="news-category">${esc(featured.category)}</span>` : "",
-    featured.date ? `<time>${esc(formatNewsDate(featured.date))}</time>` : ""
-  ].filter(Boolean).join("");
   const moreBtn = (link) => link ? `<a class="news-more-btn" href="${esc(link)}" target="_blank" rel="noopener">More details</a>` : "";
-  const gridItems = rest.map((item) => {
+  const allItems = items.map((item) => {
     const img = item.image
-      ? `<img class="news-card-image" src="${esc(item.image)}" alt="${esc(item.title)}">`
-      : `<div class="news-card-image news-image-placeholder"></div>`;
+      ? `<img src="${esc(item.image)}" alt="${esc(item.title)}">`
+      : `<div class="news-image-placeholder"></div>`;
     const meta = [
       item.category ? `<span class="news-category">${esc(item.category)}</span>` : "",
       item.date ? `<time>${esc(formatNewsDate(item.date))}</time>` : ""
     ].filter(Boolean).join("");
-    return `<article class="news-card">${img}<div class="news-card-body">${meta ? `<div class="news-meta">${meta}</div>` : ""}<h3>${esc(item.title)}</h3><p>${esc(item.body)}</p>${moreBtn(item.link)}</div></article>`;
-  }).join("");
-  return `<section class="news-section">
-    <article class="news-featured">
-      <div class="news-featured-image">${featuredImg}</div>
+    return `<article class="news-featured">
+      <div class="news-featured-image">${img}</div>
       <div class="news-featured-body">
-        ${featuredMeta ? `<div class="news-meta">${featuredMeta}</div>` : ""}
-        <h2>${esc(featured.title)}</h2>
-        <p>${esc(featured.body)}</p>
-        ${moreBtn(featured.link)}
+        ${meta ? `<div class="news-meta">${meta}</div>` : ""}
+        <h2>${esc(item.title)}</h2>
+        <p>${esc(item.body)}</p>
+        ${moreBtn(item.link)}
       </div>
-    </article>
-    ${rest.length ? `<div class="news-grid">${gridItems}</div>` : ""}
-  </section>`;
+    </article>`;
+  }).join("");
+  return `<section class="news-section">${allItems}</section>`;
 }
 
 function renderPropertyDetails(page) {
