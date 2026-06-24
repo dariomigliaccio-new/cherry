@@ -550,7 +550,7 @@ function renderEligibility(page, data) {
         </table></div>
       </article>
       <article class="eligibility-panel">
-        <h3>Maximum Rent Amounts (2026 HUD Income &amp; Rent Limits)</h3>
+        <h3>Maximum Rent Amounts</h3>
         <div class="responsive-table"><table>
           <thead><tr><th>AMI</th><th>1 BR</th><th>2 BR</th><th>3 BR</th></tr></thead>
           <tbody>
