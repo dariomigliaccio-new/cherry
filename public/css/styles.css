@@ -528,7 +528,8 @@ h3 {
   line-height: 1.25;
 }
 
-.home-cards h3 {
+.home-cards h3,
+.home-cards p {
   text-align: center;
 }
 
@@ -578,7 +579,8 @@ h3 {
   line-height: 1.75;
 }
 
-.neighborhood-section .subpage-cards h3 {
+.neighborhood-section .subpage-cards h3,
+.neighborhood-section .subpage-cards p {
   text-align: center;
 }
 
