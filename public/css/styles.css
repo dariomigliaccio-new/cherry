@@ -1677,18 +1677,23 @@ h3 {
   }
 
   .site-footer {
-    grid-template-columns: 1fr;
-    gap: 30px;
-    padding: 54px 22px 28px;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    row-gap: 0;
+    padding: 44px 24px 28px;
   }
 
   .footer-brand {
+    grid-column: 1 / -1;
     align-items: center;
     text-align: center;
+    padding-bottom: 32px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .footer-brand .footer-cta {
-    margin-top: 36px;
+    margin-top: 24px;
   }
 
   .site-footer h2,
@@ -1697,6 +1702,7 @@ h3 {
   }
 
   .footer-column {
+    padding-bottom: 28px;
     text-align: center;
   }
 }
