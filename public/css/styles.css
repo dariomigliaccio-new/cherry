@@ -452,9 +452,12 @@ h3 {
   letter-spacing: 0.14em;
 }
 
-.intro h2,
-.map-copy h2 {
+.intro h2 {
   font-size: clamp(1.5rem, 2.8vw, 2.4rem);
+}
+
+.map-copy h2 {
+  font-size: clamp(1.2rem, 2.2vw, 1.8rem);
 }
 
 .map-copy .eyebrow {
@@ -523,6 +526,10 @@ h3 {
   margin-top: 0;
   font-size: clamp(1.25rem, 2vw, 1.55rem);
   line-height: 1.25;
+}
+
+.home-cards h3 {
+  text-align: center;
 }
 
 .home-cards p,
@@ -1677,7 +1684,6 @@ h3 {
   }
 
   .intro h2,
-  .map-copy h2,
   .eligibility-section .section-heading h2,
   .neighborhood-section .section-heading h2,
   .about-detail-section h2,
