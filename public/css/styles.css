@@ -1244,7 +1244,7 @@ h3 {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 15px;
+  gap: 6px;
   margin-top: 16px;
   padding-top: 30px;
   border-top: 1px solid rgba(255, 255, 255, 0.12);
@@ -1255,16 +1255,16 @@ h3 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 68px;
-  height: 48px;
-  min-height: 36px;
+  width: 52px;
+  height: 40px;
+  min-height: 32px;
   margin: 0;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .footer-logos .official-logo-1 {
-  width: min(280px, 100%);
-  height: 48px;
+  width: min(220px, 100%);
+  height: 40px;
 }
 
 .footer-logos img {
