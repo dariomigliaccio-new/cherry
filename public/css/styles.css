@@ -1703,13 +1703,16 @@ h3 {
   }
 
   .site-footer > .footer-column:nth-child(2) {
+    min-width: 0;
     padding: 20px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .site-footer > .footer-column:nth-child(2) nav {
     display: flex;
+    width: 100%;
     overflow-x: auto;
+    overflow-y: visible;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -1720,15 +1723,17 @@ h3 {
   }
 
   .site-footer > .footer-column:nth-child(2) nav a {
-    flex-shrink: 0;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
     scroll-snap-align: start;
     white-space: nowrap;
     margin: 0;
-    padding: 0 16px 0 0;
-    margin-right: 16px;
-    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 6px 14px 6px 0;
+    margin-right: 14px;
+    border-right: 1px solid rgba(255, 255, 255, 0.18);
     color: rgba(255, 255, 255, 0.82);
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     font-weight: 600;
   }
 
@@ -1745,8 +1750,18 @@ h3 {
 
   .site-footer > .footer-column:nth-child(3) p,
   .site-footer > .footer-column:nth-child(3) a {
+    display: block;
     font-size: 0.88rem;
-    margin-bottom: 6px;
+    margin: 0 0 6px;
+  }
+
+  .about-hero {
+    padding-top: clamp(20px, 5vw, 36px);
+    padding-bottom: 12px;
+  }
+
+  .about-hero-content h1 {
+    font-size: clamp(2rem, 8vw, 3rem);
   }
 }
 
