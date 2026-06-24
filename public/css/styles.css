@@ -578,6 +578,15 @@ h3 {
   line-height: 1.75;
 }
 
+.neighborhood-section .subpage-cards h3 {
+  text-align: center;
+}
+
+.neighborhood-section .card-image {
+  aspect-ratio: 1 / 1;
+  height: auto;
+}
+
 .eligibility-grid {
   display: grid;
   gap: 22px;
