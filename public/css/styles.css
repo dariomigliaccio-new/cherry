@@ -753,10 +753,12 @@ h3 {
   max-width: var(--frame-width);
   margin: 0 auto;
   padding: clamp(52px, 7vw, 100px) clamp(24px, 5vw, 80px) clamp(40px, 5vw, 72px);
+  text-align: center;
 }
 
 .about-hero-content {
   max-width: 760px;
+  margin: 0 auto;
 }
 
 .about-hero-content h1 {
