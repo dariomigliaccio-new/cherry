@@ -661,7 +661,7 @@ function field(label, name, data, type = "text") {
   const value = getByPath(data, name) || "";
   const input =
     type === "textarea"
-      ? `<textarea name="${esc(name)}" rows="3">${esc(value)}</textarea>`
+      ? `<textarea name="${esc(name)}" rows="6">${esc(value)}</textarea>`
       : `<input type="${esc(type)}" name="${esc(name)}" value="${esc(value)}">`;
   return `<label><span>${esc(label)}</span>${input}</label>`;
 }
