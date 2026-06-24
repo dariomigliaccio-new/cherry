@@ -1630,6 +1630,13 @@ h3 {
     min-width: 0;
   }
 
+  .eligibility-panel .responsive-table th,
+  .eligibility-panel .responsive-table td {
+    padding: 10px 10px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
   .floor-plan-list article {
     padding: 16px;
   }
