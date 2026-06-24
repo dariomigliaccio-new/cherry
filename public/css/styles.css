@@ -607,6 +607,8 @@ h3 {
 .eligibility-panel,
 .eligibility-note {
   padding: 28px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .eligibility-panel h3,
@@ -1622,6 +1624,10 @@ h3 {
   .eligibility-note,
   .requirement-grid article {
     padding: 22px;
+  }
+
+  .eligibility-panel .responsive-table table {
+    min-width: 0;
   }
 
   .floor-plan-list article {
