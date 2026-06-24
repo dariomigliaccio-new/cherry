@@ -1108,13 +1108,56 @@ h3 {
 
 .site-footer {
   display: grid;
-  grid-template-columns: minmax(320px, 1.35fr) repeat(2, minmax(170px, 0.75fr));
+  grid-template-columns: minmax(320px, 1.35fr) minmax(200px, 0.75fr);
   align-items: start;
-  gap: clamp(32px, 5vw, 72px);
+  column-gap: clamp(32px, 5vw, 72px);
+  row-gap: 0;
   margin-top: 0;
-  padding: 76px max(28px, calc((100vw - var(--frame-width)) / 2)) 32px;
+  padding: 64px max(28px, calc((100vw - var(--frame-width)) / 2)) 32px;
   color: #fff;
   background: #2b3138;
+}
+
+.site-footer > .footer-column:nth-child(2) {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  padding: 20px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 16px;
+}
+
+.site-footer > .footer-column:nth-child(2) h3 {
+  display: none;
+}
+
+.site-footer > .footer-column:nth-child(2) nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+}
+
+.site-footer > .footer-column:nth-child(2) nav a {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  white-space: nowrap;
+  margin: 0 20px 0 0;
+  padding: 4px 20px 4px 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.92rem;
+}
+
+.site-footer > .footer-column:nth-child(2) nav a:last-child {
+  border-right: none;
+  margin-right: 0;
+  padding-right: 0;
+}
+
+.site-footer > .footer-column:nth-child(3) {
+  grid-column: 2;
+  grid-row: 1;
 }
 
 .footer-brand {
@@ -1189,7 +1232,7 @@ h3 {
 }
 
 .footer-brand .footer-cta {
-  margin-top: 74px;
+  margin-top: 40px;
 }
 
 .footer-cta:hover {
@@ -1481,11 +1524,28 @@ h3 {
   }
 
   .site-footer {
-    grid-template-columns: minmax(0, 1.1fr) minmax(160px, 0.8fr);
+    grid-template-columns: 1fr;
   }
 
   .footer-brand {
-    grid-column: 1 / -1;
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .site-footer > .footer-column:nth-child(2) {
+    grid-column: auto;
+    grid-row: auto;
+    margin-bottom: 0;
+  }
+
+  .site-footer > .footer-column:nth-child(3) {
+    grid-column: auto;
+    grid-row: auto;
+    padding-top: 0;
+  }
+
+  .footer-brand .footer-cta {
+    margin-top: 28px;
   }
 }
 
