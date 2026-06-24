@@ -736,8 +736,9 @@ app.get("/manager", requireAdmin, (_req, res) => {
     if (route === "/community") {
       sections.push(`<section><h2>Amenities</h2>${field("Title", "pages./community.amenities.title", data)}${field("Subtitle", "pages./community.amenities.subtitle", data)}${field("Amenities List", "pages./community.amenities.itemsText", data, "textarea")}</section>`);
       (page.amenities.items || []).forEach((_, index) => {
-        sections.push(`<section><h2>Amenity ${index + 1}</h2>${field("Title", `pages./community.amenities.items.${index}.title`, data)}${svgField("Icon SVG", `pages./community.amenities.items.${index}.icon`, data)}</section>`);
+        sections.push(`<section><h2>Amenity ${index + 1}</h2>${checkboxField("Remove this amenity", "removeAmenityItems", { removeAmenityItems: false }).replace('value="true"', `value="${index}"`)}${field("Title", `pages./community.amenities.items.${index}.title`, data)}${svgField("Icon SVG", `pages./community.amenities.items.${index}.icon`, data)}</section>`);
       });
+      sections.push(`<section><h2>Amenities</h2><button class="secondary-button" type="submit" name="adminAction" value="addAmenityItem">Add amenity</button></section>`);
     }
     if (route === "/eligibility") {
       sections.push(`<section><h2>Eligibility Main</h2>${field("Intro Title", "pages./eligibility.eligibility.introTitle", data)}${field("Intro Subtitle", "pages./eligibility.eligibility.introSubtitle", data, "textarea")}${field("Maximum Income Title", "pages./eligibility.eligibility.incomeTitle", data)}${field("Maximum Income Subtitle", "pages./eligibility.eligibility.incomeSubtitle", data)}${field("Maximum Income Table", "pages./eligibility.eligibility.incomeTable", data, "textarea")}${field("Rental Amounts Title", "pages./eligibility.eligibility.rentTitle", data)}${field("Rental Amounts Subtitle", "pages./eligibility.eligibility.rentSubtitle", data)}${field("Rental Amounts Table", "pages./eligibility.eligibility.rentTable", data, "textarea")}${field("Occupancy Title", "pages./eligibility.eligibility.occupancyTitle", data)}${field("Occupancy Subtitle", "pages./eligibility.eligibility.occupancySubtitle", data)}${field("Occupancy Table", "pages./eligibility.eligibility.occupancyTable", data, "textarea")}</section>`);
@@ -784,11 +785,13 @@ app.post("/manager", requireAdmin, upload.any(), (req, res) => {
   const removeHomeCards = req.body.removeHomeCards;
   const removeNeiborhuudCards = req.body.removeNeiborhuudCards;
   const removeNewsItems = req.body.removeNewsItems;
+  const removeAmenityItems = req.body.removeAmenityItems;
   delete req.body.adminAction;
   delete req.body.removeHomeSlides;
   delete req.body.removeHomeCards;
   delete req.body.removeNeiborhuudCards;
   delete req.body.removeNewsItems;
+  delete req.body.removeAmenityItems;
   data.announcement.enabled = false;
   const clearEntries = Object.keys(req.body).filter((k) => k.startsWith("__clear__"));
   clearEntries.forEach((key) => {
@@ -847,6 +850,14 @@ app.post("/manager", requireAdmin, upload.any(), (req, res) => {
       body: "",
       image: ""
     });
+  }
+  if (removeAmenityItems !== undefined) {
+    const indexes = new Set((Array.isArray(removeAmenityItems) ? removeAmenityItems : [removeAmenityItems]).map(Number));
+    data.pages["/community"].amenities.items = (data.pages["/community"].amenities.items || []).filter((_, index) => !indexes.has(index));
+  }
+  if (action === "addAmenityItem") {
+    if (!data.pages["/community"].amenities.items) data.pages["/community"].amenities.items = [];
+    data.pages["/community"].amenities.items.push({ title: "", icon: "" });
   }
   if (removeNewsItems !== undefined) {
     const indexes = new Set((Array.isArray(removeNewsItems) ? removeNewsItems : [removeNewsItems]).map(Number));
