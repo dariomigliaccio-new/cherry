@@ -637,7 +637,7 @@ Object.entries(readContent().pages).forEach(([route]) => {
 
     const heroBanner = route === "/about"
       ? renderAboutHero(page)
-      : `<section class="page-banner" style="background-image:url('${esc(page.bannerImage)}')">
+      : `<section class="page-banner" style="--banner-desktop:url('${esc(page.bannerImage)}')${page.bannerImageMobile ? `;--banner-mobile:url('${esc(page.bannerImageMobile)}')` : ""}">
           <div class="page-banner-content">
             ${optionalTag("p", "eyebrow", page.eyebrow)}
             ${optionalTag("h1", "", page.title)}
@@ -723,7 +723,7 @@ app.get("/manager", requireAdmin, (_req, res) => {
   });
   sections.push(`<section><h2>Home Cards</h2><button class="secondary-button" type="submit" name="adminAction" value="addHomeCard">Add home card</button></section>`);
   Object.entries(data.pages).forEach(([route, page]) => {
-    sections.push(`<section><h2>${esc(page.title)} Page</h2>${field("Eyebrow", `pages.${route}.eyebrow`, data)}${field("Title", `pages.${route}.title`, data)}${field("Body", `pages.${route}.body`, data, "textarea")}${imageField("Banner image", `pages.${route}.bannerImage`, data)}</section>`);
+    sections.push(`<section><h2>${esc(page.title)} Page</h2>${field("Eyebrow", `pages.${route}.eyebrow`, data)}${field("Title", `pages.${route}.title`, data)}${field("Body", `pages.${route}.body`, data, "textarea")}${imageField("Banner image (desktop)", `pages.${route}.bannerImage`, data)}${imageField("Banner image mobile (800×1000px)", `pages.${route}.bannerImageMobile`, data)}</section>`);
     if (route === "/about") {
       sections.push(`<section><h2>About / News Header</h2>${field("News Section Title", "pages./about.aboutSection.title", data)}${field("Eyebrow", "pages./about.eyebrow", data)}${field("Available Units (same field as Property Details)", "pages./sustainability.details.availableUnits", data)}</section>`);
       (page.news || []).forEach((_, index) => {

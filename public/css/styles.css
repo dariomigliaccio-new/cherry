@@ -713,6 +713,7 @@ h3 {
   margin: 0 auto;
   padding: clamp(28px, 5vw, 74px);
   overflow: hidden;
+  background-image: var(--banner-desktop);
   background-position: center;
   background-size: cover;
 }
@@ -1649,6 +1650,7 @@ h3 {
     aspect-ratio: 800 / 1000;
     padding: 34px 18px 52px;
     align-items: flex-end;
+    background-image: var(--banner-mobile, var(--banner-desktop));
   }
 
   .page-banner-content h1 {
