@@ -559,7 +559,7 @@ app.get("/", (_req, res) => {
   const activeSlides = data.home.slides.filter((slide) => !slide.hidden);
   const slides = activeSlides
     .map(
-      (slide, index) => `<div class="slide${index === 0 ? " active" : ""}" style="background-image:url('${esc(slide.image)}')">
+      (slide, index) => `<div class="slide${index === 0 ? " active" : ""}" style="--banner-desktop:url('${esc(slide.image)}')${slide.imageMobile ? `;--banner-mobile:url('${esc(slide.imageMobile)}')` : ''}">
       <div class="hero-content">
         ${optionalTag("p", "eyebrow", slide.eyebrow)}
         ${optionalTag("h1", "", slide.title)}
@@ -715,7 +715,7 @@ app.get("/manager", requireAdmin, (_req, res) => {
   sections.push(`<section><h2>Scrolling Announcement</h2>${checkboxField("Show scrolling announcement", "announcement.enabled", data)}${field("Announcement text", "announcement.text", data, "textarea")}${field("Announcement link URL", "announcement.linkUrl", data)}${field("Speed in seconds", "announcement.speed", data, "number")}</section>`);
   sections.push(`<section><h2>Home Intro</h2>${field("Eyebrow", "home.intro.eyebrow", data)}${field("Title", "home.intro.title", data)}${field("Body", "home.intro.body", data, "textarea")}</section>`);
   data.home.slides.forEach((_, index) => {
-    sections.push(`<section><h2>Home Banner ${index + 1}</h2>${checkboxField("Remove this banner", "removeHomeSlides", { removeHomeSlides: false }).replace('value="true"', `value="${index}"`)}${field("Eyebrow", `home.slides.${index}.eyebrow`, data)}${field("Title", `home.slides.${index}.title`, data)}${field("Body", `home.slides.${index}.body`, data, "textarea")}${field("Button Label", `home.slides.${index}.buttonLabel`, data)}${field("Button URL", `home.slides.${index}.buttonUrl`, data)}${imageField("Banner image", `home.slides.${index}.image`, data)}</section>`);
+    sections.push(`<section><h2>Home Banner ${index + 1}</h2>${checkboxField("Remove this banner", "removeHomeSlides", { removeHomeSlides: false }).replace('value="true"', `value="${index}"`)}${field("Eyebrow", `home.slides.${index}.eyebrow`, data)}${field("Title", `home.slides.${index}.title`, data)}${field("Body", `home.slides.${index}.body`, data, "textarea")}${field("Button Label", `home.slides.${index}.buttonLabel`, data)}${field("Button URL", `home.slides.${index}.buttonUrl`, data)}${imageField("Banner image (desktop)", `home.slides.${index}.image`, data)}${imageField("Banner image mobile (800×1000px)", `home.slides.${index}.imageMobile`, data)}</section>`);
   });
   sections.push(`<section><h2>Home Banners</h2><button class="secondary-button" type="submit" name="adminAction" value="addHomeSlide">Add home banner</button></section>`);
   data.home.cards.forEach((_, index) => {

@@ -315,6 +315,7 @@ a {
   align-items: flex-end;
   padding: clamp(28px, 5vw, 74px);
   opacity: 0;
+  background-image: var(--banner-desktop);
   background-position: center;
   background-size: cover;
   transition: opacity 700ms ease;
@@ -1545,6 +1546,7 @@ h3 {
   .slide {
     align-items: flex-end;
     padding: 26px 18px 52px;
+    background-image: var(--banner-mobile, var(--banner-desktop));
     background-position: center;
   }
 
