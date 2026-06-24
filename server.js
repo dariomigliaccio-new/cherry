@@ -379,12 +379,21 @@ function formatNewsDate(dateStr) {
   return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 }
 
+function renderAboutHero(page) {
+  const section = page.aboutSection || {};
+  const title = section.title || page.title;
+  return `<section class="about-hero">
+    <div class="about-hero-content">
+      ${page.eyebrow ? `<p class="eyebrow">${esc(page.eyebrow)}</p>` : ""}
+      <h1>${esc(title)}</h1>
+    </div>
+  </section>`;
+}
+
 function renderNewsSection(page) {
   const items = (page.news || []).slice().sort((a, b) => (a.date > b.date ? -1 : a.date < b.date ? 1 : 0));
-  const sectionTitle = (page.aboutSection || {}).title || page.title;
-  const header = `<div class="news-header"><p class="eyebrow">${esc(page.eyebrow)}</p><h2>${esc(sectionTitle)}</h2></div>`;
   if (!items.length) {
-    return `<section class="news-section">${header}<div class="news-empty"><p>No updates yet. Check back soon.</p></div></section>`;
+    return `<section class="news-section"><div class="news-empty"><p>No updates yet. Check back soon.</p></div></section>`;
   }
   const [featured, ...rest] = items;
   const featuredImg = featured.image
@@ -406,7 +415,6 @@ function renderNewsSection(page) {
     return `<article class="news-card">${img}<div class="news-card-body">${meta ? `<div class="news-meta">${meta}</div>` : ""}<h3>${esc(item.title)}</h3><p>${esc(item.body)}</p>${moreBtn(item.link)}</div></article>`;
   }).join("");
   return `<section class="news-section">
-    ${header}
     <article class="news-featured">
       <div class="news-featured-image">${featuredImg}</div>
       <div class="news-featured-body">
@@ -627,13 +635,16 @@ Object.entries(readContent().pages).forEach(([route]) => {
                   ? ""
                   : `<section class="subpage-cards">${cardMarkup}</section>`;
 
-    const content = `<section class="page-banner" style="background-image:url('${esc(page.bannerImage)}')">
-        <div class="page-banner-content">
-          ${optionalTag("p", "eyebrow", page.eyebrow)}
-          ${optionalTag("h1", "", page.title)}
-          ${optionalTag("p", "", page.body)}
-        </div>
-      </section>
+    const heroBanner = route === "/about"
+      ? renderAboutHero(page)
+      : `<section class="page-banner" style="background-image:url('${esc(page.bannerImage)}')">
+          <div class="page-banner-content">
+            ${optionalTag("p", "eyebrow", page.eyebrow)}
+            ${optionalTag("h1", "", page.title)}
+            ${optionalTag("p", "", page.body)}
+          </div>
+        </section>`;
+    const content = `${heroBanner}
       ${bodyContent}
       ${floorPlanMarkup}
       ${route === "/contact" ? mapSection(data) : ""}`;
