@@ -13,9 +13,7 @@ const adminUser = process.env.ADMIN_USER || "dariomigliaccio@gmail.com";
 const adminPassword = process.env.ADMIN_PASSWORD || "site-content";
 const officialLogo = "/images/logo-1.png";
 const footerOfficialLogos = [
-  { label: "Equal Housing Opportunity", image: "/images/footer-logo-1.png", url: "https://hiphousing.org" },
-  { label: "Accessibility", image: "/images/footer-logo-2.png" },
-  { label: "Property Management", image: "/images/footer-logo-3.png" }
+  { label: "Equal Housing Opportunity", image: "/images/footer-logo-1.png", url: "https://hiphousing.org" }
 ];
 
 fs.mkdirSync(path.dirname(dataPath), { recursive: true });
