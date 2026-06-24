@@ -506,30 +506,71 @@ function renderEligibility(page, data) {
     </div>
     <div class="eligibility-grid">
       <article class="eligibility-panel">
-        <h3>${esc(info.incomeTitle)}</h3>
-        <p>${esc(info.incomeSubtitle)}</p>
-        ${renderContentTable(info.incomeTable)}
+        <h3>Occupancy Standards</h3>
+        <div class="responsive-table"><table>
+          <thead><tr><th>Bed Size</th><th>Minimum</th><th>Maximum</th></tr></thead>
+          <tbody>
+            <tr><td>1-Bedroom</td><td>1 Person</td><td>3 Persons</td></tr>
+            <tr><td>2-Bedroom</td><td>2 Persons</td><td>5 Persons</td></tr>
+            <tr><td>3-Bedroom</td><td>3 Persons</td><td>7 Persons</td></tr>
+          </tbody>
+        </table></div>
       </article>
       <article class="eligibility-panel">
-        <h3>${esc(info.rentTitle)}</h3>
-        <p>${esc(info.rentSubtitle)}</p>
-        ${renderContentTable(info.rentTable)}
+        <h3>Maximum Income Qualifications</h3>
+        <h4 class="ami-tier">30% AMI</h4>
+        <div class="responsive-table"><table>
+          <thead><tr><th>Household Size</th><th>Maximum Income</th></tr></thead>
+          <tbody>
+            <tr><td>1 Person</td><td>$44,130</td></tr>
+            <tr><td>2 People</td><td>$50,430</td></tr>
+            <tr><td>3 People</td><td>$56,730</td></tr>
+            <tr><td>4 People</td><td>$63,030</td></tr>
+            <tr><td>5 People</td><td>$68,100</td></tr>
+            <tr><td>6 People</td><td>$73,140</td></tr>
+            <tr><td>7 People</td><td>$78,180</td></tr>
+          </tbody>
+        </table></div>
+        <h4 class="ami-tier">50% AMI</h4>
+        <div class="responsive-table"><table>
+          <thead><tr><th>Household Size</th><th>Maximum Income</th></tr></thead>
+          <tbody>
+            <tr><td>1 Person</td><td>$73,550</td></tr>
+            <tr><td>2 People</td><td>$84,050</td></tr>
+            <tr><td>3 People</td><td>$94,550</td></tr>
+            <tr><td>4 People</td><td>$105,050</td></tr>
+            <tr><td>5 People</td><td>$113,500</td></tr>
+            <tr><td>6 People</td><td>$121,900</td></tr>
+            <tr><td>7 People</td><td>$130,300</td></tr>
+          </tbody>
+        </table></div>
+        <h4 class="ami-tier">60% AMI</h4>
+        <div class="responsive-table"><table>
+          <thead><tr><th>Household Size</th><th>Maximum Income</th></tr></thead>
+          <tbody>
+            <tr><td>1 Person</td><td>$88,260</td></tr>
+            <tr><td>2 People</td><td>$100,860</td></tr>
+            <tr><td>3 People</td><td>$113,460</td></tr>
+            <tr><td>4 People</td><td>$126,060</td></tr>
+            <tr><td>5 People</td><td>$136,200</td></tr>
+            <tr><td>6 People</td><td>$146,280</td></tr>
+            <tr><td>7 People</td><td>$156,360</td></tr>
+          </tbody>
+        </table></div>
       </article>
       <article class="eligibility-panel">
-        <h3>${esc(info.occupancyTitle)}</h3>
-        <p>${esc(info.occupancySubtitle)}</p>
-        ${renderContentTable(info.occupancyTable)}
+        <h3>Maximum Rent Amounts (2026 HUD Income &amp; Rent Limits)</h3>
+        <div class="responsive-table"><table>
+          <thead><tr><th>AMI</th><th>1 BR</th><th>2 BR</th><th>3 BR</th></tr></thead>
+          <tbody>
+            <tr><td>30%</td><td>$1,068</td><td>$1,263</td><td>$1,439</td></tr>
+            <tr><td>50%</td><td>$1,856</td><td>$2,208</td><td>$2,531</td></tr>
+            <tr><td>60%</td><td>$2,150</td><td>$2,681</td><td>$3,078</td></tr>
+          </tbody>
+        </table></div>
+        <p class="eligibility-note-text">The income limits and rents listed above are based on the 2026 Area Median Income Limits (AMI) and Rent Limits established by the U.S. Department of Housing &amp; Urban Development (HUD). Rent and income limits are subject to change at any time based on current and actual HUD published limits prior to move-in.</p>
       </article>
     </div>
-    <article class="eligibility-note">
-      <h2>${esc(info.limitsTitle)}</h2>
-      <p>${esc(info.limitsBody)}</p>
-      ${renderContentTable(info.availabilityTable)}
-    </article>
-    <article class="eligibility-note">
-      <h2>${esc(info.applyTitle)}</h2>
-      <p>${esc(info.applyBody)}</p>
-    </article>
     <div class="requirement-grid">${requirements}</div>
     <div class="eligibility-apply">
       <a class="primary-button apply-pulse" href="${esc(applyLink)}">${esc(data.site.applyLabel || "Apply now")}</a>
