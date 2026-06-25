@@ -244,16 +244,31 @@ small {
 .avail-admin-stat--open strong { color: var(--green); }
 .avail-admin-stat--taken strong { color: var(--muted); }
 
-.br-grid {
+.br-cols {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-top: 8px;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.br-col {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f9faf8;
+}
+
+.br-col-title {
+  margin: 0 0 12px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--green);
 }
 
 @media (max-width: 700px) {
   .avail-admin-stats,
-  .br-grid {
+  .br-cols {
     grid-template-columns: 1fr;
   }
 }

@@ -1021,32 +1021,65 @@ h3 {
 .avail-breakdown-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 14px;
 }
 
 .avail-br-item {
-  padding: 18px 14px;
+  padding: 18px 18px 14px;
   border: 1px solid var(--line);
   border-radius: 10px;
   background: var(--paper);
-  text-align: center;
 }
 
-.avail-br-item strong {
-  display: block;
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
-  font-weight: 900;
-  line-height: 1;
-  color: var(--green);
+.avail-br-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
-.avail-br-item span {
-  display: block;
-  margin-top: 6px;
-  font-size: 0.78rem;
-  font-weight: 700;
+.avail-br-type {
+  font-size: 0.82rem;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  color: var(--ink);
+}
+
+.avail-br-avail {
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.avail-br-item--1br .avail-br-avail { color: var(--green); }
+.avail-br-item--2br .avail-br-avail { color: var(--gold); }
+.avail-br-item--3br .avail-br-avail { color: var(--orange); }
+
+.avail-br-bar {
+  height: 8px;
+  border-radius: 99px;
+  background: var(--line);
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.avail-br-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 600ms ease;
+}
+
+.avail-br-item--1br .avail-br-bar-fill { background: var(--green); }
+.avail-br-item--2br .avail-br-bar-fill { background: var(--gold); }
+.avail-br-item--3br .avail-br-bar-fill { background: var(--orange); }
+
+.avail-br-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.76rem;
+  font-weight: 600;
   color: var(--muted);
 }
 
