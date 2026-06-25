@@ -415,16 +415,18 @@ function renderNewsSection(page) {
 function renderPropertyDetails(page) {
   const details = page.details || {};
   const total = parseInt(details.unitsValue || "0", 10);
-  const available = parseInt(details.availableUnits ?? details.unitsValue ?? "0", 10);
-  const taken = Math.max(0, total - available);
-  const pct = total > 0 ? Math.round((taken / total) * 100) : 0;
-
   const br1Total = parseInt(details.total1BR, 10);
   const br1Avail = parseInt(details.available1BR, 10);
   const br2Total = parseInt(details.total2BR, 10);
   const br2Avail = parseInt(details.available2BR, 10);
   const br3Total = parseInt(details.total3BR, 10);
   const br3Avail = parseInt(details.available3BR, 10);
+  const hasBedroomAvail = !isNaN(br1Avail) || !isNaN(br2Avail) || !isNaN(br3Avail);
+  const available = hasBedroomAvail
+    ? (!isNaN(br1Avail) ? br1Avail : 0) + (!isNaN(br2Avail) ? br2Avail : 0) + (!isNaN(br3Avail) ? br3Avail : 0)
+    : parseInt(details.availableUnits ?? details.unitsValue ?? "0", 10);
+  const taken = Math.max(0, total - available);
+  const pct = total > 0 ? Math.round((taken / total) * 100) : 0;
   const makeBrCard = (label, bTotal, bAvail, mod) => {
     if (isNaN(bTotal) || isNaN(bAvail)) return "";
     const bTaken = Math.max(0, bTotal - bAvail);
@@ -779,9 +781,15 @@ app.get("/manager", requireAdmin, (_req, res) => {
   const sections = [];
   const uDet = data.pages["/sustainability"]?.details || {};
   const uTotal = parseInt(uDet.unitsValue || "0", 10);
-  const uAvail = parseInt(uDet.availableUnits ?? uDet.unitsValue ?? "0", 10);
+  const _ua1 = parseInt(uDet.available1BR, 10);
+  const _ua2 = parseInt(uDet.available2BR, 10);
+  const _ua3 = parseInt(uDet.available3BR, 10);
+  const _hasUaBr = !isNaN(_ua1) || !isNaN(_ua2) || !isNaN(_ua3);
+  const uAvail = _hasUaBr
+    ? (!isNaN(_ua1) ? _ua1 : 0) + (!isNaN(_ua2) ? _ua2 : 0) + (!isNaN(_ua3) ? _ua3 : 0)
+    : parseInt(uDet.availableUnits ?? uDet.unitsValue ?? "0", 10);
   const uTaken = Math.max(0, uTotal - uAvail);
-  sections.push(`<section class="section-availability"><h2>Unit Availability</h2><div class="avail-admin-stats"><div class="avail-admin-stat avail-admin-stat--total"><strong>${uTotal}</strong><span>Total Units</span></div><div class="avail-admin-stat avail-admin-stat--open"><strong>${uAvail}</strong><span>Available Now</span></div><div class="avail-admin-stat avail-admin-stat--taken"><strong>${uTaken}</strong><span>Applications Filed</span></div></div>${field("Total Units", "pages./sustainability.details.unitsValue", data)}${field("Available Units", "pages./sustainability.details.availableUnits", data, "number")}<div class="br-cols"><div class="br-col"><h4 class="br-col-title">1 Bedroom</h4>${field("Total", "pages./sustainability.details.total1BR", data, "number")}${field("Available", "pages./sustainability.details.available1BR", data, "number")}</div><div class="br-col"><h4 class="br-col-title">2 Bedrooms</h4>${field("Total", "pages./sustainability.details.total2BR", data, "number")}${field("Available", "pages./sustainability.details.available2BR", data, "number")}</div><div class="br-col"><h4 class="br-col-title">3 Bedrooms</h4>${field("Total", "pages./sustainability.details.total3BR", data, "number")}${field("Available", "pages./sustainability.details.available3BR", data, "number")}</div></div></section>`);
+  sections.push(`<section class="section-availability"><h2>Unit Availability</h2><div class="avail-admin-stats"><div class="avail-admin-stat avail-admin-stat--total"><strong>${uTotal}</strong><span>Total Units</span></div><div class="avail-admin-stat avail-admin-stat--open"><strong>${uAvail}</strong><span>Available Now</span></div><div class="avail-admin-stat avail-admin-stat--taken"><strong>${uTaken}</strong><span>Applications Filed</span></div></div>${field("Total Units", "pages./sustainability.details.unitsValue", data)}<p class="avail-admin-note">Available Now and Applications Filed are calculated automatically from the bedroom totals below.</p><div class="br-cols"><div class="br-col"><h4 class="br-col-title">1 Bedroom</h4>${field("Total", "pages./sustainability.details.total1BR", data, "number")}${field("Available", "pages./sustainability.details.available1BR", data, "number")}</div><div class="br-col"><h4 class="br-col-title">2 Bedrooms</h4>${field("Total", "pages./sustainability.details.total2BR", data, "number")}${field("Available", "pages./sustainability.details.available2BR", data, "number")}</div><div class="br-col"><h4 class="br-col-title">3 Bedrooms</h4>${field("Total", "pages./sustainability.details.total3BR", data, "number")}${field("Available", "pages./sustainability.details.available3BR", data, "number")}</div></div></section>`);
   sections.push(`<section><h2>Site</h2>${field("Name", "site.name", data)}${field("Tagline", "site.tagline", data)}${field("Brand initials", "site.brandInitials", data)}${svgField("Header logo SVG", "site.logoImage", data)}${svgField("Hamburger menu SVG", "site.menuIcon", data)}${field("Apply button label", "site.applyLabel", data)}${field("Apply button URL", "site.applyUrl", data)}</section>`);
   sections.push(`<section><h2>Scrolling Announcement</h2>${checkboxField("Show scrolling announcement", "announcement.enabled", data)}${field("Announcement text", "announcement.text", data, "textarea")}${field("Announcement link URL", "announcement.linkUrl", data)}${field("Speed in seconds", "announcement.speed", data, "number")}</section>`);
   sections.push(`<section><h2>Home Intro</h2>${field("Eyebrow", "home.intro.eyebrow", data)}${field("Title", "home.intro.title", data)}${field("Body", "home.intro.body", data, "textarea")}</section>`);
@@ -942,6 +950,15 @@ app.post("/manager", requireAdmin, upload.any(), (req, res) => {
   data.location.lat = Number(data.location.lat);
   data.location.lng = Number(data.location.lng);
   data.location.zoom = Number(data.location.zoom);
+  const _pd = data.pages["/sustainability"]?.details;
+  if (_pd) {
+    const _pa1 = parseInt(_pd.available1BR, 10);
+    const _pa2 = parseInt(_pd.available2BR, 10);
+    const _pa3 = parseInt(_pd.available3BR, 10);
+    if (!isNaN(_pa1) || !isNaN(_pa2) || !isNaN(_pa3)) {
+      _pd.availableUnits = String((!isNaN(_pa1) ? _pa1 : 0) + (!isNaN(_pa2) ? _pa2 : 0) + (!isNaN(_pa3) ? _pa3 : 0));
+    }
+  }
   writeContent(data);
   res.redirect("/manager?saved=1");
 });

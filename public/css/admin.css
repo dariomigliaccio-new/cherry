@@ -244,6 +244,17 @@ small {
 .avail-admin-stat--open strong { color: var(--green); }
 .avail-admin-stat--taken strong { color: var(--muted); }
 
+.avail-admin-note {
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  background: rgba(40, 97, 76, 0.08);
+  color: var(--green);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
 .br-cols {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
