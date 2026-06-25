@@ -93,7 +93,6 @@ function normalizeContent(data) {
     { label: "Home", href: "/" },
     { label: "About", href: "/about" },
     { label: "Property Details", href: "/sustainability" },
-    { label: "Amenities", href: "/community" },
     { label: "Eligibility", href: "/eligibility" },
     { label: "Neighborhood", href: "/neiborhub" },
     { label: "Floor Plans", href: "/floor-plans" },
@@ -101,7 +100,6 @@ function normalizeContent(data) {
   ];
   data.nav.forEach((item) => {
     if (item.href === "/sustainability" && ["Sustainability", "PROPERTY DETAILS"].includes(item.label)) item.label = "Property Details";
-    if (item.href === "/community" && item.label === "Community") item.label = "Amenities";
     if (item.href === "/contact") item.label = "Apply now";
   });
   desiredNav.forEach((item) => {
@@ -112,6 +110,7 @@ function normalizeContent(data) {
     const bIndex = desiredNav.findIndex((item) => item.href === b.href);
     return (aIndex === -1 ? 99 : aIndex) - (bIndex === -1 ? 99 : bIndex);
   });
+  data.nav = data.nav.filter((item) => item.href !== "/community");
   data.footer.officialLogos = footerOfficialLogos.map((item, index) => ({
     ...data.footer.officialLogos?.[index],
     label: item.label,
@@ -122,11 +121,6 @@ function normalizeContent(data) {
     data.pages["/sustainability"].title = "Property Details";
     data.pages["/sustainability"].eyebrow = "Property information";
     data.pages["/sustainability"].body = "Explore the property details and in-home features planned for Cherry Street Commons.";
-  }
-  if (data.pages["/community"]?.title === "Community") {
-    data.pages["/community"].title = "Amenities";
-    data.pages["/community"].eyebrow = "Community amenities";
-    data.pages["/community"].body = "Amenities that support convenience, connection, security, and everyday resident life.";
   }
   const amenities = data.pages["/community"]?.amenities;
   if (amenities && (!Array.isArray(amenities.items) || !amenities.items.length)) {
@@ -625,6 +619,10 @@ app.get("/", (_req, res) => {
 });
 
 Object.entries(readContent().pages).forEach(([route]) => {
+  if (route === "/community") {
+    app.get(route, (_req, res) => res.redirect(301, "/sustainability"));
+    return;
+  }
   app.get(route, (_req, res) => {
     const data = readContent();
     const page = data.pages[route];
@@ -655,16 +653,14 @@ Object.entries(readContent().pages).forEach(([route]) => {
       route === "/about"
         ? renderNewsSection(page)
         : route === "/sustainability"
-          ? renderPropertyDetails(page)
-          : route === "/community"
-            ? renderAmenities(page)
-            : route === "/eligibility"
-              ? renderEligibility(page, data)
-              : route === "/neiborhub"
-                ? renderNeighborhood(page)
-                : route === "/floor-plans"
-                  ? ""
-                  : `<section class="subpage-cards">${cardMarkup}</section>`;
+          ? renderPropertyDetails(page) + renderAmenities(data.pages["/community"])
+          : route === "/eligibility"
+            ? renderEligibility(page, data)
+            : route === "/neiborhub"
+              ? renderNeighborhood(page)
+              : route === "/floor-plans"
+                ? ""
+                : `<section class="subpage-cards">${cardMarkup}</section>`;
 
     const heroBanner = route === "/about"
       ? renderAboutHero(page)
@@ -754,6 +750,7 @@ app.get("/manager", requireAdmin, (_req, res) => {
   });
   sections.push(`<section><h2>Home Cards</h2><button class="secondary-button" type="submit" name="adminAction" value="addHomeCard">Add home card</button></section>`);
   Object.entries(data.pages).forEach(([route, page]) => {
+    if (route === "/community") return;
     sections.push(`<section><h2>${esc(page.title)} Page</h2>${field("Eyebrow", `pages.${route}.eyebrow`, data)}${field("Title", `pages.${route}.title`, data)}${field("Body", `pages.${route}.body`, data, "textarea")}${imageField("Banner image (desktop)", `pages.${route}.bannerImage`, data)}${imageField("Banner image mobile (800×1000px)", `pages.${route}.bannerImageMobile`, data)}</section>`);
     if (route === "/about") {
       sections.push(`<section><h2>About / News Header</h2>${field("News Section Title", "pages./about.aboutSection.title", data)}${field("Eyebrow", "pages./about.eyebrow", data)}${field("Available Units (same field as Property Details)", "pages./sustainability.details.availableUnits", data)}</section>`);
@@ -764,10 +761,9 @@ app.get("/manager", requireAdmin, (_req, res) => {
     }
     if (route === "/sustainability") {
       sections.push(`<section><h2>Property Details</h2>${field("Main Title", "pages./sustainability.details.title", data)}${field("Subtitle", "pages./sustainability.details.subtitle", data, "textarea")}${field("Units Label", "pages./sustainability.details.unitsLabel", data)}${field("Total Units", "pages./sustainability.details.unitsValue", data)}${field("Available Units (decreases as applicants are approved)", "pages./sustainability.details.availableUnits", data)}${field("Features Title", "pages./sustainability.details.featuresTitle", data)}${field("Unit Features", "pages./sustainability.details.featuresText", data, "textarea")}</section>`);
-    }
-    if (route === "/community") {
+      const amenitiesPage = data.pages["/community"];
       sections.push(`<section><h2>Amenities</h2>${field("Title", "pages./community.amenities.title", data)}${field("Subtitle", "pages./community.amenities.subtitle", data)}${field("Amenities List", "pages./community.amenities.itemsText", data, "textarea")}</section>`);
-      (page.amenities.items || []).forEach((_, index) => {
+      (amenitiesPage.amenities.items || []).forEach((_, index) => {
         sections.push(`<section><h2>Amenity ${index + 1}</h2>${checkboxField("Remove this amenity", "removeAmenityItems", { removeAmenityItems: false }).replace('value="true"', `value="${index}"`)}${field("Title", `pages./community.amenities.items.${index}.title`, data)}${svgField("Icon SVG", `pages./community.amenities.items.${index}.icon`, data)}</section>`);
       });
       sections.push(`<section><h2>Amenities</h2><button class="secondary-button" type="submit" name="adminAction" value="addAmenityItem">Add amenity</button></section>`);
