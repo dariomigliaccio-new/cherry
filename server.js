@@ -12,6 +12,9 @@ const uploadsDir = path.join(__dirname, "public", "uploads");
 const adminUser = process.env.ADMIN_USER || "dariomigliaccio@gmail.com";
 const adminPassword = process.env.ADMIN_PASSWORD || "site-content";
 const officialLogo = "/images/logo-1.png";
+const BR1_TOTAL = 15;
+const BR2_TOTAL = 9;
+const BR3_TOTAL = 9;
 const footerOfficialLogos = [
   { label: "Equal Housing Opportunity", image: "/images/footer-logo-1.png", url: "https://hiphousing.org" },
   { label: "Accessibility", image: "/images/footer-logo-2.png" }
@@ -415,11 +418,11 @@ function renderNewsSection(page) {
 function renderPropertyDetails(page) {
   const details = page.details || {};
   const total = parseInt(details.unitsValue || "0", 10);
-  const br1Total = parseInt(details.total1BR, 10);
+  const br1Total = BR1_TOTAL;
   const br1Avail = parseInt(details.available1BR, 10);
-  const br2Total = parseInt(details.total2BR, 10);
+  const br2Total = BR2_TOTAL;
   const br2Avail = parseInt(details.available2BR, 10);
-  const br3Total = parseInt(details.total3BR, 10);
+  const br3Total = BR3_TOTAL;
   const br3Avail = parseInt(details.available3BR, 10);
   const hasBedroomAvail = !isNaN(br1Avail) || !isNaN(br2Avail) || !isNaN(br3Avail);
   const available = hasBedroomAvail
@@ -789,7 +792,7 @@ app.get("/manager", requireAdmin, (_req, res) => {
     ? (!isNaN(_ua1) ? _ua1 : 0) + (!isNaN(_ua2) ? _ua2 : 0) + (!isNaN(_ua3) ? _ua3 : 0)
     : parseInt(uDet.availableUnits ?? uDet.unitsValue ?? "0", 10);
   const uTaken = Math.max(0, uTotal - uAvail);
-  sections.push(`<section class="section-availability"><h2>Unit Availability</h2><div class="avail-admin-stats"><div class="avail-admin-stat avail-admin-stat--total"><strong>${uTotal}</strong><span>Total Units</span></div><div class="avail-admin-stat avail-admin-stat--open"><strong>${uAvail}</strong><span>Available Now</span></div><div class="avail-admin-stat avail-admin-stat--taken"><strong>${uTaken}</strong><span>Applications Filed</span></div></div>${field("Total Units", "pages./sustainability.details.unitsValue", data)}<p class="avail-admin-note">Available Now and Applications Filed are calculated automatically from the bedroom totals below.</p><div class="br-cols"><div class="br-col"><h4 class="br-col-title">1 Bedroom</h4>${field("Total", "pages./sustainability.details.total1BR", data, "number")}${field("Available", "pages./sustainability.details.available1BR", data, "number")}</div><div class="br-col"><h4 class="br-col-title">2 Bedrooms</h4>${field("Total", "pages./sustainability.details.total2BR", data, "number")}${field("Available", "pages./sustainability.details.available2BR", data, "number")}</div><div class="br-col"><h4 class="br-col-title">3 Bedrooms</h4>${field("Total", "pages./sustainability.details.total3BR", data, "number")}${field("Available", "pages./sustainability.details.available3BR", data, "number")}</div></div></section>`);
+  sections.push(`<section class="section-availability"><h2>Unit Availability</h2><div class="avail-admin-stats"><div class="avail-admin-stat avail-admin-stat--total"><strong>${uTotal}</strong><span>Total Units</span></div><div class="avail-admin-stat avail-admin-stat--open"><strong>${uAvail}</strong><span>Available Now</span></div><div class="avail-admin-stat avail-admin-stat--taken"><strong>${uTaken}</strong><span>Applications Filed</span></div></div>${field("Total Units", "pages./sustainability.details.unitsValue", data)}<p class="avail-admin-note">Enter how many units are still available per bedroom type. Applications Filed and Available Now update automatically.</p><div class="br-cols"><div class="br-col"><h4 class="br-col-title">1 Bedroom <span class="br-col-fixed">${BR1_TOTAL} total</span></h4>${field("Available", "pages./sustainability.details.available1BR", data, "number")}</div><div class="br-col"><h4 class="br-col-title">2 Bedrooms <span class="br-col-fixed">${BR2_TOTAL} total</span></h4>${field("Available", "pages./sustainability.details.available2BR", data, "number")}</div><div class="br-col"><h4 class="br-col-title">3 Bedrooms <span class="br-col-fixed">${BR3_TOTAL} total</span></h4>${field("Available", "pages./sustainability.details.available3BR", data, "number")}</div></div></section>`);
   sections.push(`<section><h2>Site</h2>${field("Name", "site.name", data)}${field("Tagline", "site.tagline", data)}${field("Brand initials", "site.brandInitials", data)}${svgField("Header logo SVG", "site.logoImage", data)}${svgField("Hamburger menu SVG", "site.menuIcon", data)}${field("Apply button label", "site.applyLabel", data)}${field("Apply button URL", "site.applyUrl", data)}</section>`);
   sections.push(`<section><h2>Scrolling Announcement</h2>${checkboxField("Show scrolling announcement", "announcement.enabled", data)}${field("Announcement text", "announcement.text", data, "textarea")}${field("Announcement link URL", "announcement.linkUrl", data)}${field("Speed in seconds", "announcement.speed", data, "number")}</section>`);
   sections.push(`<section><h2>Home Intro</h2>${field("Eyebrow", "home.intro.eyebrow", data)}${field("Title", "home.intro.title", data)}${field("Body", "home.intro.body", data, "textarea")}</section>`);
@@ -958,6 +961,9 @@ app.post("/manager", requireAdmin, upload.any(), (req, res) => {
     if (!isNaN(_pa1) || !isNaN(_pa2) || !isNaN(_pa3)) {
       _pd.availableUnits = String((!isNaN(_pa1) ? _pa1 : 0) + (!isNaN(_pa2) ? _pa2 : 0) + (!isNaN(_pa3) ? _pa3 : 0));
     }
+    _pd.total1BR = String(BR1_TOTAL);
+    _pd.total2BR = String(BR2_TOTAL);
+    _pd.total3BR = String(BR3_TOTAL);
   }
   writeContent(data);
   res.redirect("/manager?saved=1");

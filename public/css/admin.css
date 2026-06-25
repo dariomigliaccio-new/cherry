@@ -290,11 +290,25 @@ small {
 }
 
 .br-col-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin: 0 0 12px;
   font-size: 0.8rem;
   font-weight: 800;
   text-transform: uppercase;
   color: var(--green);
+}
+
+.br-col-fixed {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: none;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 6px;
 }
 
 @media (max-width: 700px) {
