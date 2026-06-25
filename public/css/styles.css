@@ -885,6 +885,7 @@ h3 {
 
 .amenities-section {
   padding-top: 0;
+  padding-bottom: 40px;
 }
 
 .about-detail-section {
@@ -1849,6 +1850,7 @@ h3 {
 
   .amenities-section {
     padding-top: 0;
+    padding-bottom: 28px;
   }
 
   .details-features ul,
