@@ -419,6 +419,20 @@ function renderPropertyDetails(page) {
   const taken = Math.max(0, total - available);
   const pct = total > 0 ? Math.round((taken / total) * 100) : 0;
 
+  const br1 = parseInt(details.available1BR, 10);
+  const br2 = parseInt(details.available2BR, 10);
+  const br3 = parseInt(details.available3BR, 10);
+  const hasBreakdown = !isNaN(br1) || !isNaN(br2) || !isNaN(br3);
+  const breakdownBlock = hasBreakdown ? `
+      <div class="avail-breakdown">
+        <p class="avail-breakdown-label">Available by bedroom type</p>
+        <div class="avail-breakdown-grid">
+          ${!isNaN(br1) ? `<div class="avail-br-item"><strong>${br1}</strong><span>1 Bedroom</span></div>` : ""}
+          ${!isNaN(br2) ? `<div class="avail-br-item"><strong>${br2}</strong><span>2 Bedrooms</span></div>` : ""}
+          ${!isNaN(br3) ? `<div class="avail-br-item"><strong>${br3}</strong><span>3 Bedrooms</span></div>` : ""}
+        </div>
+      </div>` : "";
+
   const availBlock = total > 0 ? `
     <div class="avail-counter">
       <div class="avail-numbers">
@@ -441,6 +455,7 @@ function renderPropertyDetails(page) {
         <div class="avail-bar-fill" style="width:${pct}%"></div>
       </div>
       <p class="avail-note">${available > 0 ? `<strong>${esc(String(available))}</strong> unit${available === 1 ? "" : "s"} still available — apply today!` : "All units are currently spoken for. Join the waitlist."}</p>
+      ${breakdownBlock}
     </div>` : "";
 
   const checkSvg = `<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8.5l3.5 3.5 7-7"/></svg>`;
@@ -738,6 +753,11 @@ app.post("/manager/logout", (req, res) => {
 app.get("/manager", requireAdmin, (_req, res) => {
   const data = readContent();
   const sections = [];
+  const uDet = data.pages["/sustainability"]?.details || {};
+  const uTotal = parseInt(uDet.unitsValue || "0", 10);
+  const uAvail = parseInt(uDet.availableUnits ?? uDet.unitsValue ?? "0", 10);
+  const uTaken = Math.max(0, uTotal - uAvail);
+  sections.push(`<section class="section-availability"><h2>Unit Availability</h2><div class="avail-admin-stats"><div class="avail-admin-stat avail-admin-stat--total"><strong>${uTotal}</strong><span>Total Units</span></div><div class="avail-admin-stat avail-admin-stat--open"><strong>${uAvail}</strong><span>Available Now</span></div><div class="avail-admin-stat avail-admin-stat--taken"><strong>${uTaken}</strong><span>Applications Filed</span></div></div>${field("Total Units", "pages./sustainability.details.unitsValue", data)}${field("Available Units", "pages./sustainability.details.availableUnits", data, "number")}<div class="br-grid">${field("1-Bedroom Available", "pages./sustainability.details.available1BR", data, "number")}${field("2-Bedroom Available", "pages./sustainability.details.available2BR", data, "number")}${field("3-Bedroom Available", "pages./sustainability.details.available3BR", data, "number")}</div></section>`);
   sections.push(`<section><h2>Site</h2>${field("Name", "site.name", data)}${field("Tagline", "site.tagline", data)}${field("Brand initials", "site.brandInitials", data)}${svgField("Header logo SVG", "site.logoImage", data)}${svgField("Hamburger menu SVG", "site.menuIcon", data)}${field("Apply button label", "site.applyLabel", data)}${field("Apply button URL", "site.applyUrl", data)}</section>`);
   sections.push(`<section><h2>Scrolling Announcement</h2>${checkboxField("Show scrolling announcement", "announcement.enabled", data)}${field("Announcement text", "announcement.text", data, "textarea")}${field("Announcement link URL", "announcement.linkUrl", data)}${field("Speed in seconds", "announcement.speed", data, "number")}</section>`);
   sections.push(`<section><h2>Home Intro</h2>${field("Eyebrow", "home.intro.eyebrow", data)}${field("Title", "home.intro.title", data)}${field("Body", "home.intro.body", data, "textarea")}</section>`);

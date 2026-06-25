@@ -1,5 +1,6 @@
 (function () {
   var TABS = [
+    { key: 'units', label: 'Unit Availability', test: function (t) { return /^Unit Availability/.test(t); } },
     { key: 'site',   label: 'Site',         test: function (t) { return /^(Site$|Scrolling)/.test(t); } },
     { key: 'home',   label: 'Home',         test: function (t) { return /^Home/.test(t); } },
     { key: 'news',   label: 'About & News', test: function (t) { return /^(About|News)/.test(t); } },

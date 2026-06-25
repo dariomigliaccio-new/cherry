@@ -198,6 +198,66 @@ small {
   background: var(--green);
 }
 
+.section-availability {
+  border-color: var(--green);
+  border-width: 2px;
+  background: #f2faf6;
+}
+
+.section-availability h2 {
+  color: var(--green);
+  font-size: 1.1rem;
+}
+
+.avail-admin-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.avail-admin-stat {
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  text-align: center;
+}
+
+.avail-admin-stat strong {
+  display: block;
+  font-size: 2rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.avail-admin-stat span {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.avail-admin-stat--open strong { color: var(--green); }
+.avail-admin-stat--taken strong { color: var(--muted); }
+
+.br-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 8px;
+}
+
+@media (max-width: 700px) {
+  .avail-admin-stats,
+  .br-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .login-panel {
   width: min(420px, calc(100% - 36px));
   margin: 12vh auto 0;
