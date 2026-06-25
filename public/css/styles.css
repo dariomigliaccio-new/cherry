@@ -883,6 +883,10 @@ h3 {
   padding: 62px clamp(18px, 5vw, 40px) 82px;
 }
 
+.amenities-section {
+  padding-top: 0;
+}
+
 .about-detail-section {
   text-align: center;
 }
@@ -1841,6 +1845,10 @@ h3 {
     padding-left: 18px;
     padding-right: 18px;
     padding-bottom: 54px;
+  }
+
+  .amenities-section {
+    padding-top: 0;
   }
 
   .details-features ul,
