@@ -1575,6 +1575,23 @@ h3 {
   text-align: center;
 }
 
+@media (min-width: 761px) {
+  .eligibility-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .eligibility-section .requirement-grid {
+    order: -1;
+    margin-top: 0;
+    margin-bottom: 52px;
+  }
+
+  .eligibility-section .section-heading { order: 0; }
+  .eligibility-section .eligibility-grid  { order: 1; }
+  .eligibility-section .eligibility-apply { order: 2; }
+}
+
 @media (max-width: 1180px) {
   .desktop-nav {
     display: none;
