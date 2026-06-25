@@ -957,7 +957,23 @@ h3 {
 
 .avail-item--total strong { color: var(--ink); }
 .avail-item--open strong  { color: var(--green); }
-.avail-item--taken strong { color: var(--muted); }
+.avail-item--taken strong { color: #b94040 !important; }
+.avail-item--taken span   { color: #b94040 !important; }
+
+.avail-item--taken {
+  animation: siteFiledPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes siteFiledPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 0.72;
+  }
+}
 
 .avail-item span {
   display: block;
