@@ -244,24 +244,22 @@ small {
 .avail-admin-stat--open strong { color: var(--green); }
 
 .avail-admin-stat--taken {
-  background: #fdf2f2 !important;
   border-color: rgba(185, 64, 64, 0.4) !important;
   animation: takenPulse 2.2s ease-in-out infinite;
-  will-change: transform, box-shadow, background;
 }
 
-.avail-admin-stat--taken strong { color: #b94040; }
-.avail-admin-stat--taken span { color: #b94040; }
+.avail-admin-stat--taken strong { color: #b94040 !important; }
+.avail-admin-stat--taken span { color: #b94040 !important; }
 
 @keyframes takenPulse {
   0%, 100% {
     transform: scale(1);
-    background: #fdf2f2 !important;
+    background: #fdf2f2;
     box-shadow: 0 0 0 0 rgba(185, 64, 64, 0);
   }
   50% {
     transform: scale(1.05);
-    background: rgba(210, 80, 70, 0.22) !important;
+    background: rgba(210, 80, 70, 0.22);
     box-shadow: 0 0 0 6px rgba(185, 64, 64, 0.18), 0 8px 28px rgba(185, 64, 64, 0.28);
   }
 }
