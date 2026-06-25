@@ -596,8 +596,7 @@ h3 {
 }
 
 .eligibility-panel,
-.eligibility-note,
-.requirement-grid article {
+.eligibility-note {
   border: 1px solid var(--line);
   border-radius: 6px;
   background: var(--surface);
@@ -682,8 +681,63 @@ h3 {
   margin-top: 24px;
 }
 
+@keyframes req-card-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: var(--card-shadow-rest);
+  }
+  50% {
+    transform: scale(1.028);
+    box-shadow: var(--card-shadow-peak);
+  }
+}
+
 .requirement-grid article {
   padding: 24px;
+  border-radius: 12px;
+  animation: req-card-pulse 3.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+.requirement-grid article:nth-child(1) {
+  --card-shadow-rest: 0 8px 28px rgba(135, 209, 216, 0.32);
+  --card-shadow-peak: 0 20px 48px rgba(135, 209, 216, 0.62);
+  background: radial-gradient(ellipse at 28% 38%, rgba(135, 209, 216, 0.58) 0%, rgba(78, 178, 200, 0.22) 55%, rgba(237, 241, 245, 0.06) 100%);
+  border: 1px solid rgba(135, 209, 216, 0.52);
+  animation-delay: 0s;
+}
+
+.requirement-grid article:nth-child(2) {
+  --card-shadow-rest: 0 8px 28px rgba(39, 136, 189, 0.26);
+  --card-shadow-peak: 0 20px 48px rgba(39, 136, 189, 0.52);
+  background: radial-gradient(ellipse at 65% 32%, rgba(39, 136, 189, 0.42) 0%, rgba(39, 136, 189, 0.15) 55%, rgba(237, 241, 245, 0.06) 100%);
+  border: 1px solid rgba(39, 136, 189, 0.38);
+  animation-delay: 0.875s;
+}
+
+.requirement-grid article:nth-child(3) {
+  --card-shadow-rest: 0 8px 28px rgba(212, 137, 64, 0.28);
+  --card-shadow-peak: 0 20px 48px rgba(212, 137, 64, 0.54);
+  background: radial-gradient(ellipse at 38% 62%, rgba(212, 137, 64, 0.46) 0%, rgba(212, 137, 64, 0.16) 55%, rgba(237, 241, 245, 0.06) 100%);
+  border: 1px solid rgba(212, 137, 64, 0.42);
+  animation-delay: 1.75s;
+}
+
+.requirement-grid article:nth-child(4) {
+  --card-shadow-rest: 0 8px 28px rgba(165, 96, 34, 0.26);
+  --card-shadow-peak: 0 20px 48px rgba(165, 96, 34, 0.50);
+  background: radial-gradient(ellipse at 58% 42%, rgba(165, 96, 34, 0.4) 0%, rgba(165, 96, 34, 0.14) 55%, rgba(237, 241, 245, 0.06) 100%);
+  border: 1px solid rgba(165, 96, 34, 0.38);
+  animation-delay: 2.625s;
+}
+
+.requirement-grid article:nth-child(1) h3 { color: #3a9aad; }
+.requirement-grid article:nth-child(2) h3 { color: var(--green); }
+.requirement-grid article:nth-child(3) h3 { color: var(--orange-dark); }
+.requirement-grid article:nth-child(4) h3 { color: var(--clay); }
+
+@media (prefers-reduced-motion: reduce) {
+  .requirement-grid article { animation: none; }
 }
 
 .eligibility-apply {
