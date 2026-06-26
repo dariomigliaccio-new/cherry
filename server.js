@@ -954,6 +954,9 @@ app.post("/manager", requireAdmin, upload.any(), (req, res) => {
   data.location.zoom = Number(data.location.zoom);
   const _pd = data.pages["/sustainability"]?.details;
   if (_pd) {
+    if (isNaN(parseInt(_pd.available1BR, 10))) _pd.available1BR = String(BR1_TOTAL);
+    if (isNaN(parseInt(_pd.available2BR, 10))) _pd.available2BR = String(BR2_TOTAL);
+    if (isNaN(parseInt(_pd.available3BR, 10))) _pd.available3BR = String(BR3_TOTAL);
     const _pa1 = parseInt(_pd.available1BR, 10);
     const _pa2 = parseInt(_pd.available2BR, 10);
     const _pa3 = parseInt(_pd.available3BR, 10);
