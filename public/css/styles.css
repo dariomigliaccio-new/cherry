@@ -1438,7 +1438,7 @@ h3 {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 2px;
+  gap: 16px;
   margin-top: 16px;
   padding-top: 30px;
   border-top: 1px solid rgba(255, 255, 255, 0.12);
