@@ -1792,6 +1792,10 @@ h3 {
     margin: 0 16px;
   }
 
+  .avail-breakdown-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .eligibility-panel,
   .eligibility-note,
   .requirement-grid article {
@@ -1951,7 +1955,8 @@ h3 {
 
   .details-features ul,
   .amenities-section ul,
-  .requirement-grid {
+  .requirement-grid,
+  .avail-breakdown-grid {
     grid-template-columns: 1fr;
   }
 
