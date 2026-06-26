@@ -444,7 +444,6 @@ function renderPropertyDetails(page) {
       </div>
       <div class="avail-br-stats">
         <span>${bTotal} total</span>
-        <span>${bTaken} application${bTaken === 1 ? "" : "s"} filed</span>
       </div>
     </div>`;
   };
