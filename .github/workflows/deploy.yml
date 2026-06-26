@@ -17,4 +17,4 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H 2.24.96.87 >> ~/.ssh/known_hosts
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=30 root@2.24.96.87 \
-            "cd /var/www/cherry-street-commons && git pull origin main && pm2 restart cherry-street-commons"
+            "cd /var/www/cherry-street-commons && git fetch origin main && git reset --hard origin/main && pm2 restart cherry-street-commons"
