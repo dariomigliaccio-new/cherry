@@ -17,6 +17,7 @@ const BR2_TOTAL = 9;
 const BR3_TOTAL = 9;
 const footerOfficialLogos = [
   { label: "Equal Housing Opportunity", image: "/images/footer-logo-1.png", url: "https://hiphousing.org" },
+  { label: "Eden Housing", image: "/images/eden-logo-white.png" },
   { label: "Accessibility", image: "/images/footer-logo-2.png" }
 ];
 
