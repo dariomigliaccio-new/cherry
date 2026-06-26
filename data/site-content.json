@@ -1,70 +1,84 @@
 {
   "site": {
     "name": "Cherry Street Commons",
-    "tagline": "Affordable Homes",
+    "tagline": "",
     "description": "Affordable homes at Cherry Street Commons.",
     "brandInitials": "CS",
-    "logoImage": "",
-    "menuIcon": "",
     "applyUrl": "",
-    "applyLabel": "Apply now"
+    "applyLabel": "Apply now",
+    "logoImage": "/uploads/1781586069015-a1.jpg",
+    "menuIcon": ""
   },
   "nav": [
-    { "label": "Home", "href": "/" },
-    { "label": "About", "href": "/about" },
-    { "label": "Property Details", "href": "/sustainability" },
-    { "label": "Amenities", "href": "/community" },
-    { "label": "Eligibility", "href": "/eligibility" },
-    { "label": "Neighborhood", "href": "/neiborhub" },
-    { "label": "Floor Plans", "href": "/floor-plans" },
-    { "label": "Apply now", "href": "/contact" }
+    {
+      "label": "Home",
+      "href": "/"
+    },
+    {
+      "label": "About",
+      "href": "/about"
+    },
+    {
+      "label": "Property Details",
+      "href": "/sustainability"
+    },
+    {
+      "label": "Amenities",
+      "href": "/community"
+    },
+    {
+      "label": "Eligibility",
+      "href": "/eligibility"
+    },
+    {
+      "label": "Neighborhood",
+      "href": "/neiborhub"
+    },
+    {
+      "label": "Floor Plans",
+      "href": "/floor-plans"
+    },
+    {
+      "label": "Apply now",
+      "href": "/contact"
+    }
   ],
-  "announcement": {
-    "enabled": true,
-    "text": "Accepting applications June 22, 2026 thru July 7, 2026 * lottery application on July 8, 2026 *",
-    "linkUrl": "",
-    "speed": "90"
-  },
   "home": {
     "slides": [
       {
-        "eyebrow": "Affordable Homes",
+        "eyebrow": "Welcome home",
         "title": "Cherry Street Commons",
         "body": "Modern, welcoming homes designed for comfort, access, and community.",
-        "buttonLabel": "Apply now",
+        "buttonLabel": "Apply for the Property",
         "buttonUrl": "",
-        "hidden": false,
-        "image": "/assets/hero-cherry.png"
-      },
-      {
-        "eyebrow": "Now welcoming applicants",
-        "title": "A practical place to call home",
-        "body": "Thoughtful layouts, shared green space, and a location built around daily needs.",
-        "buttonLabel": "Apply now",
-        "buttonUrl": "",
-        "hidden": false,
-        "image": "/assets/hero-cherry.png"
-      },
-      {
-        "eyebrow": "Connected living",
-        "title": "Comfort with community nearby",
-        "body": "Explore affordable housing created for stability, belonging, and long-term value.",
-        "buttonLabel": "Apply now",
-        "buttonUrl": "",
-        "hidden": false,
-        "image": "/assets/hero-cherry.png"
+        "image": "/uploads/1781578889593-cherry-street-rendering-1600x700.jpg",
+        "hidden": false
       }
     ],
     "intro": {
       "eyebrow": "Welcome home",
-      "title": "Affordable homes planned around real life.",
+      "title": "Homes planned around real life.",
       "body": "Cherry Street Commons brings together comfortable residences, useful community spaces, and a simple path for applicants who want a clear next step."
     },
     "cards": [
-      { "number": "01", "title": "Affordable Living", "body": "Homes designed to support household budgets without sacrificing comfort.", "image": "" },
-      { "number": "02", "title": "Community Spaces", "body": "Outdoor and shared areas give residents room to connect and recharge.", "image": "" },
-      { "number": "03", "title": "Efficient Design", "body": "Durable finishes and efficient systems support responsible long-term living.", "image": "" },
-      { "number": "04", "title": "Easy Application", "body": "A direct application path helps residents understand eligibility and next steps.", "image": "" }
+      {
+        "number": "01",
+        "title": "Affordable Living",
+        "body": "Homes designed to support household budgets without sacrificing comfort.",
+        "image": "/uploads/1781579195170-wendell-falls-1920w.jpg"
+      },
+      {
+        "number": "02",
+        "title": "Community Spaces",
+        "body": "Outdoor and shared areas give residents room to connect and recharge.",
+        "image": "/uploads/1781579195171-altair-rendering-1920w.jpg"
+      },
+      {
+        "number": "03",
+        "title": "Efficient Design",
+        "body": "Durable finishes and efficient systems support responsible long-term living.",
+        "image": "/uploads/1781579195174-7k5a4115-1920w.jpg"
+      }
     ]
   },
   "location": {
@@ -82,60 +96,117 @@
       "eyebrow": "Affordable homes with everyday access",
       "body": "Cherry Street Commons is planned around practical, welcoming homes for residents who want stability, comfort, and connection. The property brings together thoughtful layouts, accessible paths, and shared spaces that support daily life.",
       "bannerImage": "/assets/hero-cherry.png",
+      "cards": [
+        {
+          "title": "Resident first",
+          "body": "Homes and common areas are arranged for clear navigation, comfort, and everyday convenience.",
+          "image": ""
+        },
+        {
+          "title": "Built for access",
+          "body": "The site emphasizes walkability, transit-friendly living, and approachable application guidance.",
+          "image": ""
+        },
+        {
+          "title": "Long-term value",
+          "body": "Durable materials and efficient systems help keep the community reliable over time.",
+          "image": ""
+        }
+      ],
       "aboutSection": {
         "title": "Affordable homes designed around daily life.",
         "subtitle": "Comfort, access, and community in San Carlos.",
         "body": "Use this space to describe Cherry Street Commons, the property mission, resident experience, and what makes the community distinct."
-      },
-      "cards": [
-        { "title": "Resident first", "body": "Homes and common areas are arranged for clear navigation, comfort, and everyday convenience.", "image": "" },
-        { "title": "Built for access", "body": "The site emphasizes walkability, transit-friendly living, and approachable application guidance.", "image": "" },
-        { "title": "Long-term value", "body": "Durable materials and efficient systems help keep the community reliable over time.", "image": "" }
-      ]
+      }
     },
     "/sustainability": {
       "title": "Property Details",
       "eyebrow": "Property information",
       "body": "Explore the property details and in-home features planned for Cherry Street Commons.",
       "bannerImage": "/assets/hero-cherry.png",
+      "cards": [
+        {
+          "title": "Energy smart",
+          "body": "Efficient fixtures and systems are intended to reduce waste and support resident affordability.",
+          "image": ""
+        },
+        {
+          "title": "Healthy grounds",
+          "body": "Landscaping is planned to provide shade, soften the site, and create a calmer street presence.",
+          "image": ""
+        },
+        {
+          "title": "Lower impact",
+          "body": "Shared amenities and compact layouts help make daily living more efficient.",
+          "image": ""
+        }
+      ],
       "details": {
         "title": "Property Details",
         "subtitle": "Designed with practical features for comfortable affordable living.",
         "unitsLabel": "Number of Units",
         "unitsValue": "33",
         "featuresTitle": "Unit Features",
-        "featuresText": "Air Conditioning\nAppliances\nBlinds\nBroadband Internet Access\nCable Ready\nCarpet and Vinyl Flooring\nElectric cooktop stove and range\nEnergy Star rated appliances\nHigh efficiency light fixtures and appliances\nRefrigerator and Range\nSewer\nSmoke Free Community\nTrash and recycle chutes\nWater\nWindow Coverings"
-      },
-      "cards": [
-        { "title": "Energy smart", "body": "Efficient fixtures and systems are intended to reduce waste and support resident affordability.", "image": "" },
-        { "title": "Healthy grounds", "body": "Landscaping is planned to provide shade, soften the site, and create a calmer street presence.", "image": "" },
-        { "title": "Lower impact", "body": "Shared amenities and compact layouts help make daily living more efficient.", "image": "" }
-      ]
+        "featuresText": "Air Conditioning\r\nAppliances\r\nBlinds\r\nBroadband Internet Access\r\nCable Ready\r\nCarpet and Vinyl Flooring\r\nElectric cooktop stove and range\r\nEnergy Star rated appliances\r\nHigh efficiency light fixtures and appliances\r\nRefrigerator and Range\r\nSewer\r\nSmoke Free Community\r\nTrash and recycle chutes\r\nWater\r\nWindow Coverings"
+      }
     },
     "/community": {
       "title": "Amenities",
       "eyebrow": "Community amenities",
       "body": "Amenities that support convenience, connection, security, and everyday resident life.",
       "bannerImage": "/assets/hero-cherry.png",
+      "cards": [
+        {
+          "title": "Gathering areas",
+          "body": "Shared spaces encourage neighborly connection without overwhelming private residential life.",
+          "image": ""
+        },
+        {
+          "title": "Neighborhood scale",
+          "body": "The property is designed to feel grounded in the surrounding community.",
+          "image": ""
+        },
+        {
+          "title": "Everyday support",
+          "body": "Clear contact paths help applicants and residents get information when they need it.",
+          "image": ""
+        }
+      ],
       "amenities": {
         "title": "Amenities",
         "subtitle": "Resident-focused features for daily life.",
-        "itemsText": "After-school program\nBicycle Storage\nElectric Vehicle Charging Stations\nGated Parking\nKey Fob Security\nLaundry Room\nPlayground",
+        "itemsText": "After-school program\r\nBicycle Storage\r\nElectric Vehicle Charging Stations\r\nGated Parking\r\nKey Fob Security\r\nLaundry Room\r\nPlayground",
         "items": [
-          { "title": "After-school program", "icon": "" },
-          { "title": "Bicycle Storage", "icon": "" },
-          { "title": "Electric Vehicle Charging Stations", "icon": "" },
-          { "title": "Gated Parking", "icon": "" },
-          { "title": "Key Fob Security", "icon": "" },
-          { "title": "Laundry Room", "icon": "" },
-          { "title": "Playground", "icon": "" }
+          {
+            "title": "After-school program",
+            "icon": ""
+          },
+          {
+            "title": "Bicycle Storage",
+            "icon": ""
+          },
+          {
+            "title": "Electric Vehicle Charging Stations",
+            "icon": ""
+          },
+          {
+            "title": "Gated Parking",
+            "icon": ""
+          },
+          {
+            "title": "Key Fob Security",
+            "icon": ""
+          },
+          {
+            "title": "Laundry Room",
+            "icon": ""
+          },
+          {
+            "title": "Playground",
+            "icon": ""
+          }
         ]
-      },
-      "cards": [
-        { "title": "Gathering areas", "body": "Shared spaces encourage neighborly connection without overwhelming private residential life.", "image": "" },
-        { "title": "Neighborhood scale", "body": "The property is designed to feel grounded in the surrounding community.", "image": "" },
-        { "title": "Everyday support", "body": "Clear contact paths help applicants and residents get information when they need it.", "image": "" }
-      ]
+      }
     },
     "/floor-plans": {
       "title": "Floor Plans",
@@ -143,14 +214,64 @@
       "body": "Floor plan details can be presented by bedroom count, availability, and household needs. Applicants can contact the property team for current availability and eligibility requirements.",
       "bannerImage": "/assets/hero-cherry.png",
       "cards": [
-        { "title": "One bedroom", "body": "Efficient private homes for individuals or smaller households.", "image": "" },
-        { "title": "Two bedroom", "body": "Balanced layouts with more room for daily routines.", "image": "" },
-        { "title": "Accessible options", "body": "Select homes may support accessibility needs. Contact the property team for details.", "image": "" }
+        {
+          "title": "One bedroom",
+          "body": "Efficient private homes for individuals or smaller households.",
+          "image": ""
+        },
+        {
+          "title": "Two bedroom",
+          "body": "Balanced layouts with more room for daily routines.",
+          "image": ""
+        },
+        {
+          "title": "Accessible options",
+          "body": "Select homes may support accessibility needs. Contact the property team for details.",
+          "image": ""
+        }
       ],
       "floorPlans": [
-        { "title": "One Bedroom Plan", "label": "1 BR", "body": "Floor plan image and apartment details can be added here.", "image": "" },
-        { "title": "Two Bedroom Plan", "label": "2 BR", "body": "Floor plan image and apartment details can be added here.", "image": "" },
-        { "title": "Accessible Plan", "label": "ADA", "body": "Accessible layout image and availability notes can be added here.", "image": "" }
+        {
+          "title": "One Bedroom Plan",
+          "label": "1 BR",
+          "body": "Floor plan image and apartment details can be added here.",
+          "image": ""
+        },
+        {
+          "title": "Two Bedroom Plan",
+          "label": "2 BR",
+          "body": "Floor plan image and apartment details can be added here.",
+          "image": ""
+        },
+        {
+          "title": "Accessible Plan",
+          "label": "ADA",
+          "body": "Accessible layout image and availability notes can be added here.",
+          "image": ""
+        }
+      ]
+    },
+    "/contact": {
+      "title": "Contact",
+      "eyebrow": "Apply or ask a question",
+      "body": "Use the application button or contact the property team to learn about availability, income guidelines, required documents, and next steps for Cherry Street Commons.",
+      "bannerImage": "/assets/hero-cherry.png",
+      "cards": [
+        {
+          "title": "Apply online",
+          "body": "Start the application process and receive next-step instructions.",
+          "image": ""
+        },
+        {
+          "title": "Ask about eligibility",
+          "body": "Confirm household, income, and document requirements before applying.",
+          "image": ""
+        },
+        {
+          "title": "Visit the property",
+          "body": "Use the map to locate Cherry Street Commons and plan your visit.",
+          "image": ""
+        }
       ]
     },
     "/eligibility": {
@@ -163,36 +284,75 @@
         "introSubtitle": "Learn about our affordable housing requirements.",
         "incomeTitle": "Maximum Income Qualifications",
         "incomeSubtitle": "Based on current HUD AMI limits.",
-        "incomeTable": "AMI|1 Person|2 Person|3 Person\n30%|Add amount|Add amount|N/A\n50%|Add amount|Add amount|N/A\n80%|Add amount|Add amount|Add amount",
+        "incomeTable": "AMI|1 Person|2 Person|3 Person\r\n30%|Add amount|Add amount|N/A\r\n50%|Add amount|Add amount|N/A\r\n80%|Add amount|Add amount|Add amount",
         "rentTitle": "Rental Amounts",
         "rentSubtitle": "Affordable housing rates.",
-        "rentTable": "No. Of Units|Square Footage|Unit Type|AMI Level|Monthly Rent\nAdd units|Add sq ft|Studio|30%|Add rent\nAdd units|Add sq ft|1 Bedroom|80%|Add rent",
+        "rentTable": "No. Of Units|Square Footage|Unit Type|AMI Level|Monthly Rent\r\nAdd units|Add sq ft|Studio|30%|Add rent\r\nAdd units|Add sq ft|1 Bedroom|80%|Add rent",
         "occupancyTitle": "Occupancy at Move-In",
         "occupancySubtitle": "Household size guidelines.",
-        "occupancyTable": "Bed Size|Minimum|Maximum\nStudio Unit|1 Person|2 Persons\n1-Bedroom Unit|1 Person|3 Persons",
+        "occupancyTable": "Bed Size|Minimum|Maximum\r\nStudio Unit|1 Person|2 Persons\r\n1-Bedroom Unit|1 Person|3 Persons",
         "limitsTitle": "Income Limits & Rent Information",
         "limitsBody": "Income limits and rents are subject to change based on current published program limits prior to move-in.",
-        "availabilityTable": "Unit Type|AMI Level|Total Units|Currently Available\nStudio|30% AMI|Add total|Add available\n1 Bedroom|80% AMI|Add total|Add available",
+        "availabilityTable": "Unit Type|AMI Level|Total Units|Currently Available\r\nStudio|30% AMI|Add total|Add available\r\n1 Bedroom|80% AMI|Add total|Add available",
         "applyTitle": "How to Apply",
         "applyBody": "To apply for housing at Cherry Street Commons, please contact the leasing office. Staff can discuss eligibility and answer questions about the affordable housing program.",
         "requirements": [
-          { "title": "Documentation Required", "body": "Proof of income, identification, and employment verification." },
-          { "title": "Background Check", "body": "All applicants must pass the standard background screening." },
-          { "title": "Credit Review", "body": "Credit history may be reviewed as part of the application process." },
-          { "title": "Income Verification", "body": "Annual income must fall within the applicable AMI requirements." }
+          {
+            "title": "Documentation Required",
+            "body": "Proof of income, identification, and employment verification."
+          },
+          {
+            "title": "Background Check",
+            "body": "All applicants must pass the standard background screening."
+          },
+          {
+            "title": "Credit Review",
+            "body": "Credit history may be reviewed as part of the application process."
+          },
+          {
+            "title": "Income Verification",
+            "body": "Annual income must fall within the applicable AMI requirements."
+          }
         ],
         "readyTitle": "Ready to Apply?",
         "readySubtitle": "Complete your application or contact the leasing office for assistance.",
         "readyCards": [
-          { "title": "Apply Online", "body": "Fill out the online form and submit your application.", "buttonLabel": "Pre-Application Form", "buttonUrl": "" },
-          { "title": "Book a Visit", "body": "Schedule a visit or ask questions about the property.", "buttonLabel": "Schedule Tour", "buttonUrl": "" },
-          { "title": "Questions?", "body": "Contact the leasing office for assistance.", "buttonLabel": "(555) 555-5555", "buttonUrl": "" }
+          {
+            "title": "Apply Online",
+            "body": "Fill out the online form and submit your application.",
+            "buttonLabel": "Pre-Application Form",
+            "buttonUrl": ""
+          },
+          {
+            "title": "Book a Visit",
+            "body": "Schedule a visit or ask questions about the property.",
+            "buttonLabel": "Schedule Tour",
+            "buttonUrl": ""
+          },
+          {
+            "title": "Questions?",
+            "body": "Contact the leasing office for assistance.",
+            "buttonLabel": "(555) 555-5555",
+            "buttonUrl": ""
+          }
         ]
       },
       "cards": [
-        { "title": "Income guidelines", "body": "Add income limits, household size requirements, and any program-specific qualification notes here.", "image": "" },
-        { "title": "Required documents", "body": "List the documents applicants should prepare before applying.", "image": "" },
-        { "title": "Application review", "body": "Explain the review process, timing, and next steps for applicants.", "image": "" }
+        {
+          "title": "Income guidelines",
+          "body": "Add income limits, household size requirements, and any program-specific qualification notes here.",
+          "image": ""
+        },
+        {
+          "title": "Required documents",
+          "body": "List the documents applicants should prepare before applying.",
+          "image": ""
+        },
+        {
+          "title": "Application review",
+          "body": "Explain the review process, timing, and next steps for applicants.",
+          "image": ""
+        }
       ]
     },
     "/neiborhub": {
@@ -206,20 +366,21 @@
         "body": "Use this section to describe transportation, shopping, schools, parks, services, and destinations around Cherry Street Commons."
       },
       "cards": [
-        { "title": "Transit and access", "body": "Describe nearby public transportation, major roads, and walkable access points.", "image": "" },
-        { "title": "Daily needs", "body": "Add nearby grocery stores, pharmacies, medical offices, and everyday services.", "image": "" },
-        { "title": "Parks and community", "body": "Highlight parks, schools, libraries, recreation, and community resources nearby.", "image": "" }
-      ]
-    },
-    "/contact": {
-      "title": "Contact",
-      "eyebrow": "Apply or ask a question",
-      "body": "Use the application button or contact the property team to learn about availability, income guidelines, required documents, and next steps for Cherry Street Commons.",
-      "bannerImage": "/assets/hero-cherry.png",
-      "cards": [
-        { "title": "Apply online", "body": "Start the application process and receive next-step instructions.", "image": "" },
-        { "title": "Ask about eligibility", "body": "Confirm household, income, and document requirements before applying.", "image": "" },
-        { "title": "Visit the property", "body": "Use the map to locate Cherry Street Commons and plan your visit.", "image": "" }
+        {
+          "title": "Transit and access",
+          "body": "Describe nearby public transportation, major roads, and walkable access points.",
+          "image": ""
+        },
+        {
+          "title": "Daily needs",
+          "body": "Add nearby grocery stores, pharmacies, medical offices, and everyday services.",
+          "image": ""
+        },
+        {
+          "title": "Parks and community",
+          "body": "Highlight parks, schools, libraries, recreation, and community resources nearby.",
+          "image": ""
+        }
       ]
     }
   },
@@ -229,14 +390,32 @@
     "address": "1244 Cherry Street, San Carlos, CA",
     "phone": "(555) 555-5555",
     "email": "leasing@1244cherry.com",
-    "ctaLabel": "Apply now",
+    "ctaLabel": "Apply for the Property",
     "ctaUrl": "/contact",
     "copyright": "2026 Cherry Street Commons. All rights reserved.",
     "logoImage": "",
     "officialLogos": [
-      { "label": "Equal Housing Opportunity", "image": "/images/footer-logo-1.png", "url": "https://hiphousing.org" },
-      { "label": "Accessibility", "image": "/images/footer-logo-2.png", "url": "" },
-      { "label": "Property Management", "image": "/images/footer-logo-3.png", "url": "" }
+      {
+        "label": "Equal Housing Opportunity",
+        "image": "/images/footer-logo-1.png",
+        "url": "https://hiphousing.org"
+      },
+      {
+        "label": "Accessibility",
+        "image": "/images/footer-logo-2.png",
+        "url": ""
+      },
+      {
+        "label": "Property Management",
+        "image": "/images/footer-logo-3.png",
+        "url": ""
+      }
     ]
+  },
+  "announcement": {
+    "enabled": "true",
+    "text": "Accepting applications June 22, 2026 thru July 7, 2026 * lottery application on July 8, 2026 *",
+    "linkUrl": "",
+    "speed": "90"
   }
 }
