@@ -1,5 +1,6 @@
 node_modules/
 .next/
+data/site-content.json
 data/site-content.production.json
 public/uploads/
 .env
