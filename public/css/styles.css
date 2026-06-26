@@ -2016,6 +2016,7 @@ h3 {
 
   .site-footer > .footer-column:nth-child(2) nav {
     display: flex;
+    flex-wrap: nowrap;
     width: 100%;
     overflow-x: auto;
     overflow-y: visible;
