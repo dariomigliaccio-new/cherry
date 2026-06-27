@@ -47,21 +47,6 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  const previewHosts = new Set(["logmed.cloud", "www.logmed.cloud"]);
-  const allowedAssets = new Set([
-    "/css/styles.css",
-    "/assets/cherry-street-rendering-1600x700.jpg"
-  ]);
-  if (previewHosts.has(req.hostname.toLowerCase())) {
-    return next();
-  }
-  if (req.method === "GET" && allowedAssets.has(req.path)) {
-    return next();
-  }
-  return res.status(503).send(renderConstructionPage(readContent()));
-});
-
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/images", express.static(path.join(__dirname, "images")));
 
