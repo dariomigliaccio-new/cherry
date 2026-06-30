@@ -582,7 +582,7 @@ function renderEligibility(page, data) {
             <tr><td>60%</td><td>$2,150</td><td>$2,681</td><td>$3,078</td></tr>
           </tbody>
         </table></div>
-        <p class="eligibility-note-text">The income limits and rents listed above are based on the 2026 Area Median Income Limits (AMI) and Rent Limits established by the U.S. Department of Housing &amp; Urban Development (HUD). Rent and income limits are subject to change at any time based on current and actual HUD published limits prior to move-in.</p>
+        <p class="eligibility-note-text">The income limits and rents listed above are based on the 2026 Area Median Income Limits (AMI) and Rent Limits established by the California Tax Credit Allocation Committee (CTCAC). Rent and income limits are subject to change at any time based on current and actual CTCAC published limits prior to move-in.</p>
       </article>
     </div>
     <div class="requirement-grid">${requirements}</div>
